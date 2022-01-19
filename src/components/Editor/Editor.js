@@ -28,7 +28,7 @@ const Editor = function (props) {
     try {
       const cards = await getCards(id);
       setCards(cards);
-      console.log([].push(cards.entries()));
+      console.log();
       const decks = await getDecksAndIDs();
       const deckName = decks[deckId];
       setName(deckName);
@@ -36,6 +36,13 @@ const Editor = function (props) {
       console.log(error);
     }
   };
+
+  const cardElements = (cardsMap) => {
+    const elements = [];
+    cardsMap.forEach((valeu, key) => {
+      elements.push(<)
+    })
+  }
 
   const handleAddCard = async () => {
     try {
