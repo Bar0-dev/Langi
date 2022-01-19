@@ -105,11 +105,15 @@ export const getCards = async (deckId) => {
       query: `deck:"${deckName}"`,
     });
     const cards = await getCardsInfo(cardIds);
-    const cardsParsed = cards.map((card) => ({
-      id: card.noteId,
-      sourceText: card.fields.Front.value,
-      targetText: card.fields.Back.value,
-    }));
+    const cardsParsed = {};
+    cards.forEach(
+      (card) =>
+        (cardsParsed[deckId] = {
+          sourceText: card.fields.Front.value,
+          targetText: card.fields.Back.value,
+        })
+    );
+    console.log(cardsParsed);
     return cardsParsed;
   } catch (error) {
     console.log(error);

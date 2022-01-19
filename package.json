@@ -1,4 +1,5 @@
 {
+  "homepage": "https://Bar0-dev.github.io/Langi",
   "name": "client",
   "version": "0.1.0",
   "private": true,
@@ -14,6 +15,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.24.0",
+    "gh-pages": "^3.2.3",
     "immer": "^9.0.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -29,7 +31,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
