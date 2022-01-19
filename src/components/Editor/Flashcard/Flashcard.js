@@ -12,12 +12,6 @@ const Flashcard = function (props) {
   const [sourceText, setSourceText] = useState(props.data.sourceText);
   const [targetText, setTargetText] = useState(props.data.targetText);
 
-  props.getCardsData({
-    id: props.data.id,
-    sourceText: sourceText,
-    targetText: targetText,
-  });
-
   return (
     <Zoom in={true}>
       <Card key={props.data.id} sx={styles.card}>

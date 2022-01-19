@@ -28,6 +28,7 @@ const Editor = function (props) {
     try {
       const cards = await getCards(id);
       setCards(cards);
+      console.log([].push(cards.entries()));
       const decks = await getDecksAndIDs();
       const deckName = decks[deckId];
       setName(deckName);
@@ -58,10 +59,6 @@ const Editor = function (props) {
     }
   };
 
-  const getCardsData = (data) => {
-    console.log(data);
-  };
-
   const handleSave = async () => {
     try {
       const cardsInAnki = await getCards(deckId);
@@ -85,17 +82,7 @@ const Editor = function (props) {
       <SideMenu></SideMenu>
       <EditorHeader deckName={name}></EditorHeader>
       <Divider />
-      <List>
-        {Object.values(cards).map((entry) => (
-          <ListItem key={entry.id}>
-            <Flashcard
-              data={entry}
-              removeSelf={handleDeleteCard}
-              getCardsData={getCardsData}
-            />
-          </ListItem>
-        ))}
-      </List>
+      <List>{}</List>
       <IconButton sx={styles.iconAdd} onClick={handleAddCard}>
         <AddCircleIcon fontSize="large"></AddCircleIcon>
       </IconButton>
