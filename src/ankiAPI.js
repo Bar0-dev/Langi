@@ -12,19 +12,22 @@ const ankiAPI = (action, params) => {
 };
 
 const noteTemplate = (data) => {
-  const {
-    name,
-    sourceText,
-    targetText,
-    options,
-    pictureData,
-    audioData,
-    videoData,
-    tags, //array
-  } = data;
+  const [
+    id,
+    {
+      deckName,
+      sourceText,
+      targetText,
+      options,
+      pictureData,
+      audioData,
+      videoData,
+      tags, //array
+    },
+  ] = data;
 
   return {
-    deckName: name,
+    deckName: deckName,
     modelName: "Basic",
     fields: {
       Front: sourceText,
@@ -60,6 +63,13 @@ export const getDecksAndIDs = async () => {
   }
 };
 
+export const getCardsInfo = async (IDarr) => {
+  try {
+    const data = await ankiAPI("notesInfo", { notes: IDarr });
+    return data;
+  } catch (error) {}
+};
+
 export const getDeckNameByCardID = async (cardId) => {
   try {
     const response = await ankiAPI("getDecks", { cards: [cardId] });
@@ -81,19 +91,36 @@ export const addCards = async (cardsData) => {
   }
 };
 
-export const deleteCard = async (id) => {
+export const deleteCards = async (IDs) => {
   try {
-    await ankiAPI("deleteNotes", { notes: [id] });
+    await ankiAPI("deleteNotes", { notes: IDs });
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getCardsInfo = async (IDarr) => {
+export const updateCard = async (data) => {
   try {
-    const data = await ankiAPI("notesInfo", { notes: IDarr });
-    return data;
-  } catch (error) {}
+    const [
+      id,
+      { deckName, sourceText, targetText, audioData, videoData, pictureData },
+    ] = data;
+    const response = await ankiAPI("updateNoteFields", {
+      note: {
+        id: id,
+        fields: {
+          Front: sourceText,
+          Back: targetText,
+        },
+        audio: [audioData],
+        video: [videoData],
+        picture: [pictureData],
+      },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 //Using ankiConnect API it is only possible to search for a deck by name
@@ -108,6 +135,7 @@ export const getCards = async (deckId) => {
     const cardsParsed = new Map();
     cards.forEach((card) =>
       cardsParsed.set(card.noteId, {
+        deckName: deckName,
         sourceText: card.fields.Front.value,
         targetText: card.fields.Back.value,
       })

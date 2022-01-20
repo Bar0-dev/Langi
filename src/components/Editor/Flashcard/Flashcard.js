@@ -9,20 +9,28 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 const chips = ["castle", "lock", "chateau"];
 
 const Flashcard = function (props) {
-  const [sourceText, setSourceText] = useState(props.data.sourceText);
-  const [targetText, setTargetText] = useState(props.data.targetText);
-
+  const { sourceText, targetText } = props.data;
   return (
     <Zoom in={true}>
-      <Card key={props.data.id} sx={styles.card}>
+      <Card key={props.id} sx={styles.card}>
         <TextField
           value={sourceText}
-          onChange={(e) => setSourceText(e.target.value)}
+          onChange={(e) =>
+            props.handleChange({
+              id: props.id,
+              sourceText: e.target.value,
+            })
+          }
         ></TextField>
         <ArrowForwardIosIcon />
         <TextField
           value={targetText}
-          onChange={(e) => setTargetText(e.target.value)}
+          onChange={(e) =>
+            props.handleChange({
+              id: props.id,
+              targetText: e.target.value,
+            })
+          }
         ></TextField>
         {chips.map((value) => (
           <Chip key={value} label={value} onClick={() => {}}></Chip>
@@ -30,7 +38,7 @@ const Flashcard = function (props) {
 
         <IconButton
           onClick={() => {
-            props.removeSelf(props.data.id);
+            props.removeSelf(props.id);
           }}
         >
           <CloseIcon></CloseIcon>
