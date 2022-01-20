@@ -23,7 +23,7 @@ export default function Navbar(props) {
             component="div"
             sx={{ ml: "-15px" }}
           >
-            fcCreator
+            Langi
           </Typography>
           <LinkButton link={props.links.home} text="Home" />
           <LinkButton link={props.links.decks} text="Your decks" />
@@ -34,15 +34,6 @@ export default function Navbar(props) {
             defaultChecked={props.darkIsOn}
             onChange={props.toggleMode}
           />
-          <Button
-            onClick={() => {
-              console.log("clicked");
-            }}
-            sx={{ justifySelf: "end" }}
-            variant="contained"
-          >
-            Login
-          </Button>
         </Toolbar>
       </AppBar>
     </Box>

@@ -8,7 +8,7 @@ export default function Home(props) {
     <Paper>
       <Box sx={styles.hero}>
         <Typography align="center" variant="h4">
-          Welcome to fcCreator
+          Welcome to Langi
         </Typography>
         <Typography color="GrayText" align="center" variant="h5">
           Easy and responsive flashcards creator for Anki ecosystem

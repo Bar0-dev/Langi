@@ -196,7 +196,7 @@ const Editor = function (props) {
           variant="outlined"
           startIcon={<CancelIcon />}
         >
-          Discard
+          Close
         </Button>
       </FormControl>
     </Paper>
