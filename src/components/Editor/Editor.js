@@ -17,6 +17,7 @@ import { useParams } from "react-router";
 import EditorHeader from "./EditorHeader/EditorHeader";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { useSnackbar } from "notistack";
 import {
   addCards,
   deleteCards,
@@ -24,15 +25,14 @@ import {
   getCards,
   getDecksAndIDs,
 } from "../../ankiAPI";
-import AlertSnackbar from "../AlertSnackbar/AlertSnackbar";
+import { snackbarDispatcher } from "../../utilities";
 
-let alertData = { severity: "info", message: "placeholder" };
+let completedActions = [];
 
 const Editor = function (props) {
-  const [name, setName] = useState("");
+  const [deckName, setName] = useState("");
   const [cards, setCards] = useState(new Map());
-  const [alertOpen, setAlertOpen] = useState(false);
-
+  const { enqueueSnackbar } = useSnackbar();
   const deckId = useParams().deckId;
 
   const loadCards = useCallback(
@@ -67,28 +67,20 @@ const Editor = function (props) {
     return elements;
   };
 
-  const handleAddCard = async () => {
-    try {
-      const cardsNew = new Map(cards);
-      cardsNew.set(uuidv4(), {
-        deckName: name,
-        sourceText: "",
-        targetText: "",
-      });
-      setCards(cardsNew);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleAddCard = () => {
+    const cardsNew = new Map(cards);
+    cardsNew.set(uuidv4(), {
+      deckName: deckName,
+      sourceText: "",
+      targetText: "",
+    });
+    setCards(cardsNew);
   };
 
   const handleDeleteCard = (cardId) => {
-    try {
-      const cardsNew = new Map(cards);
-      cardsNew.delete(cardId);
-      setCards(cardsNew);
-    } catch (error) {
-      console.log(error);
-    }
+    const cardsNew = new Map(cards);
+    cardsNew.delete(cardId);
+    setCards(cardsNew);
   };
 
   const handleChange = (data) => {
@@ -116,14 +108,15 @@ const Editor = function (props) {
       const cardsToRemove = [...cardsInAnki]
         .filter(([key, value]) => !cards.has(key))
         .map(([key, value]) => key);
-      await deleteCards(cardsToRemove);
-      if (cardsToRemove.length)
-        sendAlert(
-          "info",
+      if (cardsToRemove.length) {
+        await deleteCards(cardsToRemove);
+        completedActions.push([
           `Removed ${cardsToRemove.length} ${
             cardsToRemove.length > 1 ? "cards" : "card"
-          }`
-        );
+          }`,
+          "info",
+        ]);
+      }
       //saving changes on existing cards
       const cardsChanged = [...cards]
         .filter(([key, value]) => cardsInAnki.has(key)) //take only already existing cards
@@ -131,27 +124,48 @@ const Editor = function (props) {
           ([key, value]) =>
             JSON.stringify(value) !== JSON.stringify(cardsInAnki.get(key))
         ); //compare stringified objects to detect any changes
-      await cardsChanged.forEach((card) => updateCard(card));
+      if (cardsChanged.length) {
+        await cardsChanged.forEach((card) => updateCard(card));
+        completedActions.push([
+          `Changed ${cardsChanged.length} ${
+            cardsChanged.length > 1 ? "cards" : "card"
+          }`,
+          "info",
+        ]);
+      }
       //saving new cards
       const cardsMerged = new Map([...cards, ...cardsInAnki]);
+      const newKeys = [];
       const cardsNew = [...cardsMerged].filter(
         ([key, value]) => !cardsInAnki.has(key)
       );
-      const response = await addCards(cardsNew);
-      if (response.length)
-        sendAlert(
-          "success",
-          `Saved ${response.length} ${response.length > 1 ? "cards" : "card"}`
-        );
-      if (!response.length) sendAlert("info", "No cards were saved");
+      cardsNew.forEach(([key, value]) => newKeys.push(key));
+      if (cardsNew.length) {
+        const response = await addCards(cardsNew);
+        if (response[0] !== null) {
+          const cardsNewIds = new Map(cards);
+          newKeys.forEach((key, index) => {
+            const value = cardsNewIds.get(key);
+            cardsNewIds.delete(key);
+            cardsNewIds.set(response[index], value);
+          });
+          setCards(cardsNewIds);
+          completedActions.push([
+            `Added ${cardsNew.length} ${
+              cardsNew.length > 1 ? "cards" : "card"
+            }`,
+            "success",
+          ]);
+        }
+      }
+      //notifications snackbars
+      if (!completedActions.length)
+        snackbarDispatcher([["Nothing was saved", "warning"]], enqueueSnackbar);
+      snackbarDispatcher(completedActions, enqueueSnackbar);
+      completedActions = [];
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const sendAlert = (severity, message) => {
-    alertData = { severity: severity, message: message };
-    setAlertOpen(true);
   };
 
   useEffect(() => {
@@ -160,7 +174,7 @@ const Editor = function (props) {
 
   return (
     <Paper sx={styles.paper}>
-      <EditorHeader deckName={name}></EditorHeader>
+      <EditorHeader deckName={deckName}></EditorHeader>
       <Divider />
       <List>{cardReactElements(cards)}</List>
       <IconButton sx={styles.iconAdd} onClick={handleAddCard}>
@@ -185,11 +199,6 @@ const Editor = function (props) {
           Discard
         </Button>
       </FormControl>
-      <AlertSnackbar
-        open={alertOpen}
-        setOpen={setAlertOpen}
-        alertData={alertData}
-      ></AlertSnackbar>
     </Paper>
   );
 };
