@@ -37,7 +37,7 @@ const Flashcard = function (props) {
 
         <IconButton
           onClick={() => {
-            props.removeSelf(props.id);
+            props.handleDeleteCard(props.id);
           }}
         >
           <CloseIcon></CloseIcon>
