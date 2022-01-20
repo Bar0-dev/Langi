@@ -24,10 +24,15 @@ import {
   getCards,
   getDecksAndIDs,
 } from "../../ankiAPI";
+import AlertSnackbar from "../AlertSnackbar/AlertSnackbar";
+
+let alertData = { severity: "info", message: "placeholder" };
 
 const Editor = function (props) {
   const [name, setName] = useState("");
   const [cards, setCards] = useState(new Map());
+  const [alertOpen, setAlertOpen] = useState(false);
+
   const deckId = useParams().deckId;
 
   const loadCards = useCallback(
@@ -112,6 +117,13 @@ const Editor = function (props) {
         .filter(([key, value]) => !cards.has(key))
         .map(([key, value]) => key);
       await deleteCards(cardsToRemove);
+      if (cardsToRemove.length)
+        sendAlert(
+          "info",
+          `Removed ${cardsToRemove.length} ${
+            cardsToRemove.length > 1 ? "cards" : "card"
+          }`
+        );
       //saving changes on existing cards
       const cardsChanged = [...cards]
         .filter(([key, value]) => cardsInAnki.has(key)) //take only already existing cards
@@ -125,10 +137,21 @@ const Editor = function (props) {
       const cardsNew = [...cardsMerged].filter(
         ([key, value]) => !cardsInAnki.has(key)
       );
-      await addCards(cardsNew);
+      const response = await addCards(cardsNew);
+      if (response.length)
+        sendAlert(
+          "success",
+          `Saved ${response.length} ${response.length > 1 ? "cards" : "card"}`
+        );
+      if (!response.length) sendAlert("info", "No cards were saved");
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const sendAlert = (severity, message) => {
+    alertData = { severity: severity, message: message };
+    setAlertOpen(true);
   };
 
   useEffect(() => {
@@ -162,6 +185,11 @@ const Editor = function (props) {
           Discard
         </Button>
       </FormControl>
+      <AlertSnackbar
+        open={alertOpen}
+        setOpen={setAlertOpen}
+        alertData={alertData}
+      ></AlertSnackbar>
     </Paper>
   );
 };
