@@ -2,7 +2,6 @@ import { Card, Chip, IconButton, TextField, Zoom } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./styles";
-import { useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 //PLACEHOLDER

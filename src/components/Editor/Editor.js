@@ -12,10 +12,10 @@ import Flashcard from "./Flashcard/Flashcard";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import styles from "./styles";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import EditorHeader from "./EditorHeader/EditorHeader";
-import SideMenu from "./SideMenu/SideMenu";
+import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import {
   addCards,
@@ -30,17 +30,20 @@ const Editor = function (props) {
   const [cards, setCards] = useState(new Map());
   const deckId = useParams().deckId;
 
-  const loadCards = async (id) => {
-    try {
-      const cards = await getCards(id);
-      setCards(cards);
-      const decks = await getDecksAndIDs();
-      const deckName = decks[deckId];
-      setName(deckName);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const loadCards = useCallback(
+    async (id) => {
+      try {
+        const cards = await getCards(id);
+        setCards(cards);
+        const decks = await getDecksAndIDs();
+        const deckName = decks[deckId];
+        setName(deckName);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [deckId]
+  );
 
   const cardReactElements = (cardsMap) => {
     const elements = [];
@@ -67,7 +70,6 @@ const Editor = function (props) {
         sourceText: "",
         targetText: "",
       });
-      console.log(cardsNew);
       setCards(cardsNew);
     } catch (error) {
       console.log(error);
@@ -131,11 +133,10 @@ const Editor = function (props) {
 
   useEffect(() => {
     loadCards(deckId);
-  }, []);
+  }, [deckId, loadCards]);
 
   return (
     <Paper sx={styles.paper}>
-      <SideMenu></SideMenu>
       <EditorHeader deckName={name}></EditorHeader>
       <Divider />
       <List>{cardReactElements(cards)}</List>
@@ -151,7 +152,13 @@ const Editor = function (props) {
         >
           Save
         </Button>
-        <Button size="large" variant="outlined" startIcon={<CancelIcon />}>
+        <Button
+          component={Link}
+          to="/decks"
+          size="large"
+          variant="outlined"
+          startIcon={<CancelIcon />}
+        >
           Discard
         </Button>
       </FormControl>
