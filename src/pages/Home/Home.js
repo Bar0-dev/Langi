@@ -1,7 +1,7 @@
 import { Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import styles from "./styles";
-import { LinkButton } from "../../utilities";
+import LinkButton from "../../components/common/LinkButton";
 
 export default function Home(props) {
   return (

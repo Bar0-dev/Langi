@@ -1,8 +1,13 @@
 import { ListItem } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 import Flashcard from "./Flashcard/Flashcard";
-import { addCards, deleteCards, updateCard, getCards } from "../../ankiAPI";
-import { snackbarDispatcher } from "../../utilities";
+import {
+  addCards,
+  deleteCards,
+  updateCard,
+  getCards,
+} from "../../utilities/ankiAPI";
+import { snackbarDispatcher } from "../../utilities/utilities";
 
 export const handleAddCard = (deckName, cards, setCards) => () => {
   const cardsNew = new Map(cards);

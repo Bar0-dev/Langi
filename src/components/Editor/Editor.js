@@ -13,9 +13,7 @@ import {
   handleSave,
 } from "./editorController";
 import { useSnackbar } from "notistack";
-import { getCards, getDecksAndIDs } from "../../ankiAPI";
-
-let completedActions = [];
+import { getCards, getDecksAndIDs } from "../../utilities/ankiAPI";
 
 const Editor = function (props) {
   const [deckName, setName] = useState("");

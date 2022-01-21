@@ -10,15 +10,30 @@ import { Box } from "@mui/system";
 import LoopIcon from "@mui/icons-material/Loop";
 import ComboBox from "./ComboBox/ComboBox";
 import styles from "./styles";
-
-//PLACEHOLDER
-const languagesPlaceholder = [
-  { label: "Polish" },
-  { label: "Swedish" },
-  { label: "English" },
-]; //This array to be reaplced with API response
+import { getSupportedLang } from "../../../utilities/translateAPI";
+import { useEffect, useState } from "react";
+import ISO6391 from "iso-639-1";
 
 const EditorHeader = function (props) {
+  const [languages, setLanguages] = useState([]);
+  //Translation API
+  const loadLanguages = async () => {
+    const { languagePairs } = await getSupportedLang();
+    const languagesParsed = [
+      ...new Set(languagePairs.map((pair) => ISO6391.getName(pair.source))),
+    ]
+      .filter((lang) => lang.length > 0)
+      .map((lang) => ({
+        label: lang,
+      }));
+
+    setLanguages(languagesParsed);
+  };
+
+  useEffect(() => {
+    loadLanguages();
+  }, []);
+
   return (
     <Card sx={styles.root}>
       <FormGroup>
@@ -29,11 +44,11 @@ const EditorHeader = function (props) {
           onChange={props.setName}
         ></TextField>
         <Box sx={styles.languiageSelectionBox}>
-          <ComboBox label="Source Text" languages={languagesPlaceholder} />
+          <ComboBox label="Source Language" languages={languages} />
           <IconButton>
             <LoopIcon></LoopIcon>
           </IconButton>
-          <ComboBox label="Target Text" languages={languagesPlaceholder} />
+          <ComboBox label="Target Language" languages={languages} />
         </Box>
 
         <FormControlLabel control={<Switch />} label="Automatic translation" />

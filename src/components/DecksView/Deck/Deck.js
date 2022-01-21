@@ -1,6 +1,6 @@
 import { Card, CardActions, CardContent, Typography } from "@mui/material";
 import styles from "./styles";
-import { LinkButton } from "../../../utilities";
+import LinkButton from "../../common/LinkButton";
 
 export default function Deck(props) {
   return (

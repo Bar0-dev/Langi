@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import StyleIcon from "@mui/icons-material/Style";
 import ModeSwitch from "./ModeSwitch/ModeSwitch";
-import { LinkButton } from "../../utilities";
+import LinkButton from "../common/LinkButton";
 import Button from "@mui/material/Button";
 
 export default function Navbar(props) {

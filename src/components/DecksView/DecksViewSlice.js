@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getIndexById } from "../../utilities";
-import { getDecksAndIDs } from "../../ankiAPI";
+import { getDecksAndIDs } from "../../utilities/ankiAPI";
+
+const getIndexById = (id, arr) => {
+  return arr.map((entry) => entry.id).indexOf(id);
+};
 
 const deckTemplate = (deckId, deckName) => ({
   id: deckId,
