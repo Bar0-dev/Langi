@@ -17,9 +17,10 @@ export const getVersion = async () => {
 export const getSupportedLang = async () => {
   try {
     const response = await axios(
-      createUrl("/resources/dictionary/supportedLanguages")
+      createUrl("/resources/dictionary/lookup/supportedLanguages")
     );
-    return response.data.languages;
+    console.log(response);
+    return response.data.languagePairs;
   } catch (error) {
     console.log(error);
   }

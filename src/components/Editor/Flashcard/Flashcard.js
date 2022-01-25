@@ -35,6 +35,7 @@ const Flashcard = function (props) {
   };
 
   const emmitRequest = (inputText) => {
+    console.log(inputText, srcLang, trgtLang);
     if (lastInputTimer) {
       window.clearTimeout(lastInputTimer);
       lastInputTimer = "null ";

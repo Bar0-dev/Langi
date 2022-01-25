@@ -14,6 +14,7 @@ import {
 } from "./editorController";
 import { useSnackbar } from "notistack";
 import { getCards, getDecksAndIDs } from "../../utilities/ankiAPI";
+import { getCache, setCache } from "../../utilities/utilities";
 
 const Editor = function (props) {
   const [deckName, setName] = useState("");
@@ -40,13 +41,23 @@ const Editor = function (props) {
 
   useEffect(() => {
     loadCards(deckId);
+    const settings = getCache("settings");
+    if (settings) {
+      setSrcLang(settings.srcLang);
+      setTrgtLang(settings.trgtLang);
+    } else {
+      console.log("setting cache");
+      setCache("settings", { srcLang: srcLang, trgtLang: trgtLang }, 7);
+    }
   }, [deckId, loadCards]);
 
   return (
     <Paper sx={styles.paper}>
       <EditorHeader
         deckName={deckName}
+        deckId={deckId}
         handleLangChange={{ setSrcLang, setTrgtLang }}
+        langs={{ srcLang, trgtLang }}
       ></EditorHeader>
       <List>{cardReactElements(cards, setCards, { srcLang, trgtLang })}</List>
       <IconButton
