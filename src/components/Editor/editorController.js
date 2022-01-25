@@ -9,6 +9,24 @@ import {
 } from "../../utilities/ankiAPI";
 import { snackbarDispatcher } from "../../utilities/utilities";
 
+export const cardReactElements = (cards, setCards, { srcLang, trgtLang }) => {
+  const elements = [];
+  cards.forEach((value, key) => {
+    elements.push(
+      <ListItem key={key}>
+        <Flashcard
+          id={key}
+          data={value}
+          handleChange={handleChange(cards, setCards)}
+          handleDeleteCard={handleDeleteCard(cards, setCards)}
+          languages={{ srcLang, trgtLang }}
+        />
+      </ListItem>
+    );
+  });
+  return elements;
+};
+
 export const handleAddCard = (deckName, cards, setCards) => () => {
   const cardsNew = new Map(cards);
   cardsNew.set(uuidv4(), {
@@ -41,23 +59,6 @@ const handleChange = (cards, setCards) => (data) => {
       targetText: data.targetText,
     });
   setCards(cardsNew);
-};
-
-export const cardReactElements = (cards, setCards) => {
-  const elements = [];
-  cards.forEach((value, key) => {
-    elements.push(
-      <ListItem key={key}>
-        <Flashcard
-          id={key}
-          data={value}
-          handleChange={handleChange(cards, setCards)}
-          handleDeleteCard={handleDeleteCard(cards, setCards)}
-        />
-      </ListItem>
-    );
-  });
-  return elements;
 };
 
 const handleSaveRemove = async (cardsInAnki, cards) => {

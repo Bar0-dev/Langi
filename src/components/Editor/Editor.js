@@ -18,6 +18,8 @@ import { getCards, getDecksAndIDs } from "../../utilities/ankiAPI";
 const Editor = function (props) {
   const [deckName, setName] = useState("");
   const [cards, setCards] = useState(new Map());
+  const [srcLang, setSrcLang] = useState("");
+  const [trgtLang, setTrgtLang] = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const deckId = useParams().deckId;
 
@@ -42,8 +44,11 @@ const Editor = function (props) {
 
   return (
     <Paper sx={styles.paper}>
-      <EditorHeader deckName={deckName}></EditorHeader>
-      <List>{cardReactElements(cards, setCards)}</List>
+      <EditorHeader
+        deckName={deckName}
+        handleLangChange={{ setSrcLang, setTrgtLang }}
+      ></EditorHeader>
+      <List>{cardReactElements(cards, setCards, { srcLang, trgtLang })}</List>
       <IconButton
         sx={styles.iconAdd}
         onClick={handleAddCard(deckName, cards, setCards)}

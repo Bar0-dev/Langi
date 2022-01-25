@@ -5,6 +5,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 export default function ComboBox(props) {
   return (
     <Autocomplete
+      onChange={props.onChange}
       disablePortal
       id={`select-language-${props.label}`}
       options={props.languages}

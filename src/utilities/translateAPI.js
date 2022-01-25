@@ -16,8 +16,10 @@ export const getVersion = async () => {
 
 export const getSupportedLang = async () => {
   try {
-    const response = await axios(createUrl("/translation/supportedLanguages"));
-    return response.data;
+    const response = await axios(
+      createUrl("/resources/dictionary/supportedLanguages")
+    );
+    return response.data.languages;
   } catch (error) {
     console.log(error);
   }
@@ -35,6 +37,24 @@ export const translateText = async (inputText, sourceLang, targetLang) => {
     );
     console.log(response);
     return response.data.outputs;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const lookupWord = async (inputText, sourceLang, targetLang) => {
+  try {
+    const response = await axios.post(
+      createUrl("/resources/dictionary/lookup"),
+      {
+        input: inputText,
+        source: sourceLang,
+        target: targetLang,
+      }
+    );
+    const [{ output }] = response.data.outputs;
+    const results = output.matches.map((entry) => entry.targets[0].lemma);
+    return results;
   } catch (error) {
     console.log(error);
   }

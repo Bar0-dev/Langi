@@ -16,18 +16,31 @@ import ISO6391 from "iso-639-1";
 
 const EditorHeader = function (props) {
   const [languages, setLanguages] = useState([]);
+  const { setSrcLang, setTrgtLang } = props.handleLangChange;
+
   //Translation API
   const loadLanguages = async () => {
-    const { languagePairs } = await getSupportedLang();
-    const languagesParsed = [
-      ...new Set(languagePairs.map((pair) => ISO6391.getName(pair.source))),
-    ]
+    const languages = await getSupportedLang();
+    const languagesExtended = languages
+      .map((langShort) => ISO6391.getName(langShort))
       .filter((lang) => lang.length > 0)
       .map((lang) => ({
         label: lang,
       }));
 
-    setLanguages(languagesParsed);
+    setLanguages(languagesExtended);
+  };
+
+  const handleSrcLangChange = (event, value) => {
+    if (value) {
+      setSrcLang(value.label);
+    } else setSrcLang("");
+  };
+
+  const handleTrgtLangChange = (event, value) => {
+    if (value) {
+      setTrgtLang(value.label);
+    } else setTrgtLang("");
   };
 
   useEffect(() => {
@@ -44,11 +57,19 @@ const EditorHeader = function (props) {
           onChange={props.setName}
         ></TextField>
         <Box sx={styles.languiageSelectionBox}>
-          <ComboBox label="Source Language" languages={languages} />
+          <ComboBox
+            onChange={handleSrcLangChange}
+            label="Source Language"
+            languages={languages}
+          />
           <IconButton>
             <LoopIcon></LoopIcon>
           </IconButton>
-          <ComboBox label="Target Language" languages={languages} />
+          <ComboBox
+            onChange={handleTrgtLangChange}
+            label="Target Language"
+            languages={languages}
+          />
         </Box>
 
         <FormControlLabel control={<Switch />} label="Automatic translation" />
