@@ -19,8 +19,8 @@ import { getCache, setCache } from "../../utilities/utilities";
 const Editor = function (props) {
   const [deckName, setName] = useState("");
   const [cards, setCards] = useState(new Map());
-  const [srcLang, setSrcLang] = useState("");
-  const [trgtLang, setTrgtLang] = useState("");
+  const [srcLang, setSrcLang] = useState(null);
+  const [trgtLang, setTrgtLang] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const deckId = useParams().deckId;
 

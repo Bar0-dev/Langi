@@ -6,10 +6,8 @@ import Decks from "./pages/Decks";
 import NewDeck from "./pages/NewDeck";
 import Learn from "./pages/Learn";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Provider } from "react-redux";
 import { useState } from "react";
 import { SnackbarProvider } from "notistack";
-import store from "./store";
 
 const appLocalStorage = window.localStorage;
 if (!appLocalStorage.getItem("mode")) appLocalStorage.setItem("mode", "light");
@@ -50,25 +48,23 @@ const App = function (props) {
   return (
     <BrowserRouter>
       <ThemeProvider theme={themeCreator(mode)}>
-        <Provider store={store}>
-          <SnackbarProvider maxSnack={3}>
-            <div>
-              <Navbar
-                links={links}
-                darkIsOn={mode === "dark" ? true : false}
-                toggleMode={toggleMode}
-              ></Navbar>
-            </div>
-            <Routes>
-              {Object.entries(comps).map(([path, comp]) => (
-                <Route key={path} path={path} element={comp} />
-              ))}
-              <Route path="/edit" element={<Edit />}>
-                <Route path=":deckId" element={<Edit />} />
-              </Route>
-            </Routes>
-          </SnackbarProvider>
-        </Provider>
+        <SnackbarProvider maxSnack={3}>
+          <div>
+            <Navbar
+              links={links}
+              darkIsOn={mode === "dark" ? true : false}
+              toggleMode={toggleMode}
+            ></Navbar>
+          </div>
+          <Routes>
+            {Object.entries(comps).map(([path, comp]) => (
+              <Route key={path} path={path} element={comp} />
+            ))}
+            <Route path="/edit" element={<Edit />}>
+              <Route path=":deckId" element={<Edit />} />
+            </Route>
+          </Routes>
+        </SnackbarProvider>
       </ThemeProvider>
     </BrowserRouter>
   );

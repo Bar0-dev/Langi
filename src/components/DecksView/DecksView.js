@@ -1,30 +1,32 @@
 import { Box, CircularProgress, Grid, Paper, Typography } from "@mui/material";
 import Deck from "./Deck/Deck";
-import { useSelector, useDispatch } from "react-redux";
-import { selectDecks, fetchDecks, decksStatus } from "./DecksViewSlice";
-import { useEffect } from "react";
+import { getDecksAndIDs } from "../../utilities/ankiAPI";
+import { useEffect, useState } from "react";
 
 export default function DecksView(props) {
-  const decks = useSelector(selectDecks);
-  const loadStatus = useSelector(decksStatus);
-  const dispatch = useDispatch();
+  const [decks, setDecks] = useState(null);
+
+  const loadDecks = async () => {
+    const response = await getDecksAndIDs();
+    setDecks(response);
+  };
   useEffect(() => {
-    if (loadStatus === "idle") {
-      dispatch(fetchDecks());
+    if (!decks) {
+      loadDecks();
     }
-  }, [loadStatus, dispatch]);
-  if (loadStatus === "idle" || loadStatus === "loading") {
-    return (
-      <Paper>
-        <Box
-          sx={{ display: "flex", justifyContent: "center", padding: "50px" }}
-        >
-          <CircularProgress />
-        </Box>
-      </Paper>
-    );
-  }
-  if (loadStatus === "failed") {
+  }, []);
+  // if (loadStatus === "idle" || loadStatus === "loading") {
+  //   return (
+  //     <Paper>
+  //       <Box
+  //         sx={{ display: "flex", justifyContent: "center", padding: "50px" }}
+  //       >
+  //         <CircularProgress />
+  //       </Box>
+  //     </Paper>
+  //   );
+  // }
+  if (!decks) {
     return (
       <Paper>
         <Typography>Could not connet to the anki app</Typography>
