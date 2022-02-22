@@ -1,5 +1,5 @@
 const styles = {
-  hero: { p: "50px" },
+  hero: { margin: (theme) => theme.spacing(2) },
   buttonGroup: {
     display: "flex",
     flexDirection: "column",

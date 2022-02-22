@@ -1,11 +1,11 @@
-import { Paper, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import styles from "./styles";
 import LinkButton from "../../components/common/LinkButton";
 
 export default function Home(props) {
   return (
-    <Paper>
+    <Container>
       <Box sx={styles.hero}>
         <Typography align="center" variant="h4">
           Welcome to Langi
@@ -21,6 +21,6 @@ export default function Home(props) {
         <LinkButton link="/" text="Learn" />
         <LinkButton link="/" text="About" />
       </Box>
-    </Paper>
+    </Container>
   );
 }

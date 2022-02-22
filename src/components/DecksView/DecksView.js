@@ -1,52 +1,79 @@
-import { Box, CircularProgress, Grid, Paper, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
+import { Box } from "@mui/system";
 import Deck from "./Deck/Deck";
 import { getDecksAndIDs } from "../../utilities/ankiAPI";
 import { useEffect, useState } from "react";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import styles from "./styles";
 
 export default function DecksView(props) {
   const [decks, setDecks] = useState(null);
+  const [status, setStatus] = useState("loading");
 
   const loadDecks = async () => {
     const response = await getDecksAndIDs();
-    setDecks(response);
+    if (!response) setStatus("failed");
+    if (response) {
+      setDecks(response);
+      setStatus("loaded");
+    }
   };
   useEffect(() => {
     if (!decks) {
       loadDecks();
     }
-  }, []);
-  // if (loadStatus === "idle" || loadStatus === "loading") {
-  //   return (
-  //     <Paper>
-  //       <Box
-  //         sx={{ display: "flex", justifyContent: "center", padding: "50px" }}
-  //       >
-  //         <CircularProgress />
-  //       </Box>
-  //     </Paper>
-  //   );
-  // }
-  if (!decks) {
+  }, [decks]);
+  if (status === "loading") {
     return (
-      <Paper>
-        <Typography>Could not connet to the anki app</Typography>
-      </Paper>
+      <Container maxWidth="md" sx={styles.mainContainer}>
+        <CircularProgress></CircularProgress>
+      </Container>
     );
   }
-  return (
-    <Paper>
-      <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-      >
-        {Object.entries(decks).map(([key, value]) => (
-          <Grid key={key} item xs={6}>
-            <Deck id={key} name={value}></Deck>
-          </Grid>
-        ))}
-      </Grid>
-    </Paper>
-  );
+  if (status === "failed") {
+    return (
+      <Container maxWidth="md" sx={styles.mainContainer}>
+        <Box sx={styles.errorIcon}>
+          <ErrorOutlineIcon fontSize="large"></ErrorOutlineIcon>
+        </Box>
+        <Typography align="center" variant="h5" gutterBottom>
+          App could not connect with Anki API
+        </Typography>
+        <Typography align="center" variant="h6" gutterBottom>
+          Learn more on how to connect your Anki application by following the
+          link below
+        </Typography>
+        <Box sx={styles.button}>
+          <Button href="/howtoconnect" variant="contained">
+            How to connect
+          </Button>
+        </Box>
+        <Typography align="center" variant="h6" gutterBottom>
+          or create new deck offline and export it later on
+        </Typography>
+        <Box sx={styles.button}>
+          <Button variant="outlined">New Deck</Button>
+        </Box>
+      </Container>
+    );
+  }
+  if (status === "loaded") {
+    return (
+      <Container maxWidth="md" sx={styles.mainContainer}>
+        <Grid container spacing={2} direction="row" justifyContent="center">
+          {Object.entries(decks).map(([key, value]) => (
+            <Grid item xs={"auto"} key={key}>
+              <Deck key={key} id={key} name={value}></Deck>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    );
+  }
 }

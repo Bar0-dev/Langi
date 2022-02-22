@@ -1,4 +1,10 @@
-import { IconButton, Paper, FormControl, Button, List } from "@mui/material";
+import {
+  IconButton,
+  FormControl,
+  Button,
+  List,
+  Container,
+} from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -49,10 +55,10 @@ const Editor = function (props) {
       console.log("setting cache");
       setCache("settings", { srcLang: srcLang, trgtLang: trgtLang }, 7);
     }
-  }, [deckId, loadCards]);
+  }, [deckId, srcLang, trgtLang, loadCards]);
 
   return (
-    <Paper sx={styles.paper}>
+    <Container maxWidth="md" sx={styles.mainContainer}>
       <EditorHeader
         deckName={deckName}
         deckId={deckId}
@@ -85,7 +91,7 @@ const Editor = function (props) {
           Close
         </Button>
       </FormControl>
-    </Paper>
+    </Container>
   );
 };
 

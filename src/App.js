@@ -8,6 +8,7 @@ import Learn from "./pages/Learn";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { SnackbarProvider } from "notistack";
+import { CssBaseline } from "@mui/material";
 
 const appLocalStorage = window.localStorage;
 if (!appLocalStorage.getItem("mode")) appLocalStorage.setItem("mode", "light");
@@ -46,8 +47,9 @@ const App = function (props) {
   };
 
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={themeCreator(mode)}>
+    <ThemeProvider theme={themeCreator(mode)}>
+      <CssBaseline />
+      <BrowserRouter>
         <SnackbarProvider maxSnack={3}>
           <div>
             <Navbar
@@ -65,8 +67,8 @@ const App = function (props) {
             </Route>
           </Routes>
         </SnackbarProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 

@@ -1,5 +1,5 @@
 const styles = {
-  paper: {
+  mainContainer: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
