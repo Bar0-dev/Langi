@@ -5,6 +5,7 @@ import Edit from "./pages/Edit";
 import Decks from "./pages/Decks";
 import NewDeck from "./pages/NewDeck";
 import Learn from "./pages/Learn";
+import HowToConnect from "./pages/HowToConnect/HowToConnect";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { SnackbarProvider } from "notistack";
@@ -28,6 +29,7 @@ const comps = {
   "/newDeck": <NewDeck />,
   "/decks": <Decks />,
   "/learn": <Learn />,
+  "/howtoconnect": <HowToConnect />,
 };
 
 const themeCreator = (currentMode) =>
