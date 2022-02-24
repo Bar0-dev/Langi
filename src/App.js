@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { SnackbarProvider } from "notistack";
 import { CssBaseline } from "@mui/material";
+import NotFound from "./pages/NotFound/NotFound";
 
 const appLocalStorage = window.localStorage;
 if (!appLocalStorage.getItem("mode")) appLocalStorage.setItem("mode", "light");
@@ -66,6 +67,9 @@ const App = function (props) {
             ))}
             <Route path="/edit" element={<Edit />}>
               <Route path=":deckId" element={<Edit />} />
+            </Route>
+            <Route path="*">
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </SnackbarProvider>

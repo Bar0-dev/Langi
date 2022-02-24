@@ -18,6 +18,7 @@ import {
   cardReactElements,
   handleSave,
 } from "./editorController";
+import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { getCards, getDecksAndIDs } from "../../utilities/ankiAPI";
 import { getCache, setCache } from "../../utilities/utilities";
@@ -27,17 +28,21 @@ const Editor = function (props) {
   const [cards, setCards] = useState(new Map());
   const [srcLang, setSrcLang] = useState(null);
   const [trgtLang, setTrgtLang] = useState(null);
+  const [status, setStatus] = useState("loading");
   const { enqueueSnackbar } = useSnackbar();
   const deckId = useParams().deckId;
+  const navigate = useNavigate();
 
   const loadCards = useCallback(
     async (id) => {
       try {
         const cards = await getCards(id);
         setCards(cards);
+        if (!cards.size) setStatus("failed");
         const decks = await getDecksAndIDs();
         const deckName = decks[deckId];
         setName(deckName);
+        if (cards.size && deckName.length) return setStatus("successful");
       } catch (error) {
         console.log(error);
       }
@@ -57,42 +62,50 @@ const Editor = function (props) {
     }
   }, [deckId, srcLang, trgtLang, loadCards]);
 
-  return (
-    <Container maxWidth="md" sx={styles.mainContainer}>
-      <EditorHeader
-        deckName={deckName}
-        deckId={deckId}
-        handleLangChange={{ setSrcLang, setTrgtLang }}
-        langs={{ srcLang, trgtLang }}
-      ></EditorHeader>
-      <List>{cardReactElements(cards, setCards, { srcLang, trgtLang })}</List>
-      <IconButton
-        sx={styles.iconAdd}
-        onClick={handleAddCard(deckName, cards, setCards)}
-      >
-        <AddCircleIcon fontSize="large"></AddCircleIcon>
-      </IconButton>
-      <FormControl sx={styles.formControl}>
-        <Button
-          size="large"
-          variant="contained"
-          onClick={handleSave(deckId, cards, setCards, enqueueSnackbar)}
-          startIcon={<SaveIcon />}
+  console.log(status);
+
+  if (status === "failed") {
+    navigate("../404", { replace: true });
+  }
+
+  if (status === "successful") {
+    return (
+      <Container maxWidth="md" sx={styles.mainContainer}>
+        <EditorHeader
+          deckName={deckName}
+          deckId={deckId}
+          handleLangChange={{ setSrcLang, setTrgtLang }}
+          langs={{ srcLang, trgtLang }}
+        ></EditorHeader>
+        <List>{cardReactElements(cards, setCards, { srcLang, trgtLang })}</List>
+        <IconButton
+          sx={styles.iconAdd}
+          onClick={handleAddCard(deckName, cards, setCards)}
         >
-          Save
-        </Button>
-        <Button
-          component={Link}
-          to="/decks"
-          size="large"
-          variant="outlined"
-          startIcon={<CancelIcon />}
-        >
-          Close
-        </Button>
-      </FormControl>
-    </Container>
-  );
+          <AddCircleIcon fontSize="large"></AddCircleIcon>
+        </IconButton>
+        <FormControl sx={styles.formControl}>
+          <Button
+            size="large"
+            variant="contained"
+            onClick={handleSave(deckId, cards, setCards, enqueueSnackbar)}
+            startIcon={<SaveIcon />}
+          >
+            Save
+          </Button>
+          <Button
+            component={Link}
+            to="/decks"
+            size="large"
+            variant="outlined"
+            startIcon={<CancelIcon />}
+          >
+            Close
+          </Button>
+        </FormControl>
+      </Container>
+    );
+  } else return <></>;
 };
 
 export default Editor;
