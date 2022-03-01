@@ -4,6 +4,7 @@ import {
   Button,
   List,
   Container,
+  CircularProgress,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SaveIcon from "@mui/icons-material/Save";
@@ -17,14 +18,17 @@ import {
   handleAddCard,
   cardReactElements,
   handleSave,
+  handleSetName,
 } from "./editorController";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { getCards, getDecksAndIDs } from "../../utilities/ankiAPI";
 import { getCache, setCache } from "../../utilities/utilities";
+import { Box } from "@mui/system";
 
 const Editor = function (props) {
   const [deckName, setName] = useState("");
+  let nameEditable = false;
   const [cards, setCards] = useState(new Map());
   const [srcLang, setSrcLang] = useState(null);
   const [trgtLang, setTrgtLang] = useState(null);
@@ -36,13 +40,22 @@ const Editor = function (props) {
   const loadCards = useCallback(
     async (id) => {
       try {
-        const cards = await getCards(id);
-        setCards(cards);
-        if (!cards.size) setStatus("failed");
-        const decks = await getDecksAndIDs();
-        const deckName = decks[deckId];
-        setName(deckName);
-        if (cards.size && deckName.length) return setStatus("successful");
+        if (deckId !== "newDeck") {
+          const response = await getCards(id);
+          setCards(response);
+          if (!response) {
+            setStatus("failed");
+            return false;
+          }
+          const decks = await getDecksAndIDs();
+          const deckName = decks[deckId];
+          setName(deckName);
+          if (deckName.length) return setStatus("successful");
+        } else {
+          setStatus("newDeck");
+          nameEditable = true;
+          setCards(new Map([]));
+        }
       } catch (error) {
         console.log(error);
       }
@@ -62,20 +75,27 @@ const Editor = function (props) {
     }
   }, [deckId, srcLang, trgtLang, loadCards]);
 
-  console.log(status);
-
   if (status === "failed") {
     navigate("../404", { replace: true });
   }
-
-  if (status === "successful") {
+  if (status === "loading") {
+    return (
+      <Container>
+        <Box sx={styles.circProg}>
+          <CircularProgress></CircularProgress>
+        </Box>
+      </Container>
+    );
+  }
+  if (status === "successful" || status === "newDeck") {
     return (
       <Container maxWidth="md" sx={styles.mainContainer}>
         <EditorHeader
-          deckName={deckName}
+          deckName={deckName ? deckName : ""}
           deckId={deckId}
           handleLangChange={{ setSrcLang, setTrgtLang }}
           langs={{ srcLang, trgtLang }}
+          handleSetName={handleSetName(setName, status)}
         ></EditorHeader>
         <List>{cardReactElements(cards, setCards, { srcLang, trgtLang })}</List>
         <IconButton
@@ -88,7 +108,14 @@ const Editor = function (props) {
           <Button
             size="large"
             variant="contained"
-            onClick={handleSave(deckId, cards, setCards, enqueueSnackbar)}
+            onClick={handleSave(
+              deckId,
+              deckName,
+              cards,
+              setCards,
+              enqueueSnackbar,
+              navigate
+            )}
             startIcon={<SaveIcon />}
           >
             Save
@@ -105,7 +132,7 @@ const Editor = function (props) {
         </FormControl>
       </Container>
     );
-  } else return <></>;
+  }
 };
 
 export default Editor;

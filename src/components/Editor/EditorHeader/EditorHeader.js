@@ -31,23 +31,23 @@ const EditorHeader = function (props) {
   const [supportTrgtLang, setSupportTrgtLang] = useState([]);
   const { setSrcLang, setTrgtLang } = props.handleLangChange;
 
-  //Translation API
-  const loadSupportLang = async () => {
-    try {
-      const savedLangPairs = getCache(deckId);
-      if (savedLangPairs) {
-        const srcLangNames = parseLangs(savedLangPairs);
-        setSupportSrcLang(srcLangNames);
-      } else {
-        const langPairs = await getSupportedLang();
-        setCache(deckId, langPairs, 7);
-        const srcLangNames = parseLangs(langPairs);
-        setSupportSrcLang(srcLangNames);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //Translation API (!!!TO BE UPDATED!!!)
+  // const loadSupportLang = async () => {
+  //   try {
+  //     const savedLangPairs = getCache(deckId);
+  //     if (savedLangPairs) {
+  //       const srcLangNames = parseLangs(savedLangPairs);
+  //       setSupportSrcLang(srcLangNames);
+  //     } else {
+  //       const langPairs = await getSupportedLang();
+  //       setCache(deckId, langPairs, 7);
+  //       const srcLangNames = parseLangs(langPairs);
+  //       setSupportSrcLang(srcLangNames);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleSrcLangChange = (event, value) => {
     if (value) {
@@ -72,7 +72,7 @@ const EditorHeader = function (props) {
   };
 
   useEffect(() => {
-    loadSupportLang();
+    // loadSupportLang();
   }, []);
 
   return (
@@ -82,7 +82,7 @@ const EditorHeader = function (props) {
           label="Deck name"
           value={deckName}
           variant="standard"
-          onChange={props.setName}
+          onChange={props.handleSetName}
         ></TextField>
         <Box sx={styles.languiageSelectionBox}>
           <ComboBox

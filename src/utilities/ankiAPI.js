@@ -63,11 +63,32 @@ export const getDecksAndIDs = async () => {
   }
 };
 
-export const getCardsInfo = async (IDarr) => {
+export const getDeckNameByID = async (deckId) => {
   try {
-    const data = await ankiAPI("notesInfo", { notes: IDarr });
-    return data;
-  } catch (error) {}
+    const decks = await getDecksAndIDs();
+    if (Object.keys(decks).includes(deckId)) {
+      return decks[deckId];
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteDeck = async (deckId) => {
+  try {
+    const deckName = await getDeckNameByID(deckId);
+    if (deckName) {
+      const response = await ankiAPI("deleteDeck", {
+        deck: deckName,
+        cardsToo: true,
+      });
+      return true;
+    } else return false;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getDeckNameByCardID = async (cardId) => {
@@ -78,6 +99,13 @@ export const getDeckNameByCardID = async (cardId) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const getCardsInfo = async (IDarr) => {
+  try {
+    const data = await ankiAPI("notesInfo", { notes: IDarr });
+    return data;
+  } catch (error) {}
 };
 
 export const addCards = async (cardsData) => {
@@ -126,21 +154,35 @@ export const updateCard = async (data) => {
 //Using ankiConnect API it is only possible to search for a deck by name
 export const getCards = async (deckId) => {
   try {
-    const decks = await getDecksAndIDs();
-    const deckName = decks[deckId];
-    const cardIds = await ankiAPI("findNotes", {
-      query: `deck:"${deckName}"`,
-    });
-    const cards = await getCardsInfo(cardIds);
-    const cardsParsed = new Map();
-    cards.forEach((card) =>
-      cardsParsed.set(card.noteId, {
-        deckName: deckName,
-        sourceText: card.fields.Front.value,
-        targetText: card.fields.Back.value,
-      })
-    );
-    return cardsParsed;
+    const deckName = await getDeckNameByID(deckId);
+    if (deckName) {
+      const cardIds = await ankiAPI("findNotes", {
+        query: `deck:"${deckName}"`,
+      });
+      const cards = await getCardsInfo(cardIds);
+      const cardsParsed = new Map();
+      cards.forEach((card) =>
+        cardsParsed.set(card.noteId, {
+          deckName: deckName,
+          sourceText: card.fields.Front.value,
+          targetText: card.fields.Back.value,
+        })
+      );
+      return cardsParsed;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createDeck = async (deckName) => {
+  try {
+    if (deckName) {
+      const deckId = await ankiAPI("createDeck", { deck: deckName });
+      return deckId;
+    } else return false;
   } catch (error) {
     console.log(error);
   }

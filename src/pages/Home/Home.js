@@ -15,7 +15,7 @@ export default function Home(props) {
         </Typography>
       </Box>
       <Box sx={styles.buttonGroup}>
-        <LinkButton link="/newDeck" text="New" />
+        <LinkButton link="/edit/newDeck" text="New" />
         <LinkButton link="/" text="Explore" />
         <LinkButton link="/" text="Import" />
         <LinkButton link="/" text="Learn" />

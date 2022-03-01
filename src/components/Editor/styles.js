@@ -1,3 +1,5 @@
+import { spacing } from "@mui/system";
+
 const styles = {
   mainContainer: {
     display: "flex",
@@ -18,6 +20,12 @@ const styles = {
     justifyContent: "flex-end",
     margin: (theme) => theme.spacing(2),
     mr: "100px",
+  },
+  circProg: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: (theme) => theme.spacing(10),
   },
 };
 
