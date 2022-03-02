@@ -8,6 +8,7 @@ export default async function dialogDispatcher(data, navigate) {
       return response;
     case "navigate":
       navigate(payload);
+      break;
     default:
       return false;
   }

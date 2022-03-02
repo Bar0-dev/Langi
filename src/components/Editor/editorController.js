@@ -12,6 +12,8 @@ import { snackbarDispatcher } from "../../utilities/utilities";
 
 let deckIsChanged = false;
 
+export const resetChangeFlag = () => (deckIsChanged = false);
+
 export const cardReactElements = (cards, setCards, { srcLang, trgtLang }) => {
   const elements = [];
   cards.forEach((value, key) => {
@@ -223,15 +225,13 @@ export const handleClose =
       setContent({
         title: "Confirm action",
         message: "Do you want to discard unsaved items?",
-        button1Cont: "Yes",
-        button2Cont: "No",
+        button1: "Yes",
+        button2: "No",
       });
       setData({ action: "navigate", payload: "./decks" });
       setDialogOpen(true);
-      deckIsChanged = false;
     } else {
       navigate("../decks");
-      deckIsChanged = false;
     }
   };
 

@@ -19,6 +19,7 @@ import {
   handleSave,
   handleSetName,
   handleClose,
+  resetChangeFlag,
 } from "./editorController";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
@@ -51,6 +52,7 @@ const Editor = function (props) {
           const decks = await getDecksAndIDs();
           const deckName = decks[deckId];
           setName(deckName);
+          resetChangeFlag();
           if (deckName.length) return setStatus("successful");
         } else {
           setStatus("newDeck");

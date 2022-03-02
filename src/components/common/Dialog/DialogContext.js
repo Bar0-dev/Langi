@@ -25,8 +25,8 @@ export function AppDialog(props) {
         <DialogContentText>{props.message}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleUserResponse}>{props.button1Cont}</Button>
-        <Button onClick={handleClose}>{props.button2Cont}</Button>
+        <Button onClick={props.handleUserResponse}>{props.button1}</Button>
+        <Button onClick={handleClose}>{props.button2}</Button>
       </DialogActions>
     </Dialog>
   );
@@ -37,8 +37,8 @@ export function DialogProvider({ children }) {
   const [content, setContent] = useState({
     title: "",
     message: "",
-    button1Cont: "",
-    button2Cont: "",
+    button1: "",
+    button2: "",
   });
   const [data, setData] = useState(null);
   const navigate = useNavigate();
@@ -56,8 +56,8 @@ export function DialogProvider({ children }) {
         setOpen={setOpen}
         title={content.title}
         message={content.message}
-        button1Cont={content.button1Cont ? content.button1Cont : "OK"}
-        button2Cont={content.button2Cont ? content.button2Cont : "Cancel"}
+        button1={content.button1 ? content.button1 : "OK"}
+        button2={content.button2 ? content.button2 : "Cancel"}
         handleUserResponse={handleUserResponse}
       ></AppDialog>
     </DialogContext.Provider>
