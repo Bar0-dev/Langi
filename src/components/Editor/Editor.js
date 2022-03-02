@@ -1,3 +1,6 @@
+import { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import {
   IconButton,
   FormControl,
@@ -10,10 +13,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import styles from "./styles";
-import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router";
 import EditorHeader from "./EditorHeader/EditorHeader";
-import { Link } from "react-router-dom";
 import {
   handleAddCard,
   cardReactElements,
@@ -42,11 +42,11 @@ const Editor = function (props) {
       try {
         if (deckId !== "newDeck") {
           const response = await getCards(id);
-          setCards(response);
           if (!response) {
-            setStatus("failed");
+            navigate("../404");
             return false;
           }
+          setCards(response);
           const decks = await getDecksAndIDs();
           const deckName = decks[deckId];
           setName(deckName);
@@ -54,7 +54,7 @@ const Editor = function (props) {
         } else {
           setStatus("newDeck");
           nameEditable = true;
-          setCards(new Map([]));
+          setCards(new Map());
         }
       } catch (error) {
         console.log(error);
@@ -73,11 +73,8 @@ const Editor = function (props) {
       console.log("setting cache");
       setCache("settings", { srcLang: srcLang, trgtLang: trgtLang }, 7);
     }
-  }, [deckId, srcLang, trgtLang, loadCards]);
+  }, [deckId, loadCards, status]);
 
-  if (status === "failed") {
-    navigate("../404", { replace: true });
-  }
   if (status === "loading") {
     return (
       <Container>
@@ -86,8 +83,7 @@ const Editor = function (props) {
         </Box>
       </Container>
     );
-  }
-  if (status === "successful" || status === "newDeck") {
+  } else if (status === "successful" || status === "newDeck") {
     return (
       <Container maxWidth="md" sx={styles.mainContainer}>
         <EditorHeader
@@ -132,6 +128,8 @@ const Editor = function (props) {
         </FormControl>
       </Container>
     );
+  } else {
+    return <></>;
   }
 };
 
