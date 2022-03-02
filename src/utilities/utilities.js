@@ -3,6 +3,7 @@ export const snackbarDispatcher = (actions, invokeSnackbar) => {
     invokeSnackbar(message, { variant: variant })
   );
 };
+
 export const setCache = (key, value, expiryDays) => {
   let expiryDate = new Date();
   expiryDate.setDate(expiryDate.getDate() + expiryDays);

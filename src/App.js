@@ -11,6 +11,7 @@ import { useState } from "react";
 import { SnackbarProvider } from "notistack";
 import { CssBaseline } from "@mui/material";
 import NotFound from "./pages/NotFound/NotFound";
+import { DialogProvider } from "./components/common/Dialog/DialogContext";
 
 const appLocalStorage = window.localStorage;
 if (!appLocalStorage.getItem("mode")) appLocalStorage.setItem("mode", "light");
@@ -54,24 +55,27 @@ const App = function (props) {
       <CssBaseline />
       <BrowserRouter>
         <SnackbarProvider maxSnack={3}>
-          <div>
-            <Navbar
-              links={links}
-              darkIsOn={mode === "dark" ? true : false}
-              toggleMode={toggleMode}
-            ></Navbar>
-          </div>
-          <Routes>
-            {Object.entries(comps).map(([path, comp]) => (
-              <Route key={path} path={path} element={comp} />
-            ))}
-            <Route path="/edit" element={<Edit />}>
-              <Route path=":deckId" element={<Edit />} />
-            </Route>
-            <Route path="*">
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
+          <DialogProvider>
+            {" "}
+            <div>
+              <Navbar
+                links={links}
+                darkIsOn={mode === "dark" ? true : false}
+                toggleMode={toggleMode}
+              ></Navbar>
+            </div>
+            <Routes>
+              {Object.entries(comps).map(([path, comp]) => (
+                <Route key={path} path={path} element={comp} />
+              ))}
+              <Route path="/edit" element={<Edit />}>
+                <Route path=":deckId" element={<Edit />} />
+              </Route>
+              <Route path="*">
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </DialogProvider>
         </SnackbarProvider>
       </BrowserRouter>
     </ThemeProvider>
