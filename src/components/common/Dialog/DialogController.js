@@ -1,9 +1,12 @@
 import { deleteDeck } from "../../../utilities/ankiAPI";
 
-export default function dialogDispatcher(data) {
+export default async function dialogDispatcher(data) {
   const { action, payload } = data;
   switch (action) {
     case "removeDeck":
-      deleteDeck(payload);
+      const response = await deleteDeck(payload);
+      return response;
+    default:
+      return false;
   }
 }
