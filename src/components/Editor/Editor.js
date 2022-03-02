@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Link } from "react-router-dom";
 import {
   IconButton,
   FormControl,
@@ -19,22 +18,24 @@ import {
   cardReactElements,
   handleSave,
   handleSetName,
+  handleClose,
 } from "./editorController";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { getCards, getDecksAndIDs } from "../../utilities/ankiAPI";
 import { getCache, setCache } from "../../utilities/utilities";
 import { Box } from "@mui/system";
+import { useDialog } from "../common/Dialog/DialogContext";
 
 const Editor = function (props) {
   const [deckName, setName] = useState("");
-  let nameEditable = false;
   const [cards, setCards] = useState(new Map());
   const [srcLang, setSrcLang] = useState(null);
   const [trgtLang, setTrgtLang] = useState(null);
   const [status, setStatus] = useState("loading");
   const { enqueueSnackbar } = useSnackbar();
   const deckId = useParams().deckId;
+  const { setOpen: setDialogOpen, setContent, setData } = useDialog();
   const navigate = useNavigate();
 
   const loadCards = useCallback(
@@ -53,26 +54,25 @@ const Editor = function (props) {
           if (deckName.length) return setStatus("successful");
         } else {
           setStatus("newDeck");
-          nameEditable = true;
           setCards(new Map());
         }
       } catch (error) {
         console.log(error);
       }
     },
-    [deckId]
+    [deckId, navigate]
   );
 
   useEffect(() => {
     loadCards(deckId);
     const settings = getCache("settings");
-    if (settings) {
-      setSrcLang(settings.srcLang);
-      setTrgtLang(settings.trgtLang);
-    } else {
-      console.log("setting cache");
-      setCache("settings", { srcLang: srcLang, trgtLang: trgtLang }, 7);
-    }
+    // if (settings) {
+    //   setSrcLang(settings.srcLang);
+    //   setTrgtLang(settings.trgtLang);
+    // } else {
+    //   console.log("setting cache");
+    //   setCache("settings", { srcLang: srcLang, trgtLang: trgtLang }, 7);
+    // }
   }, [deckId, loadCards, status]);
 
   if (status === "loading") {
@@ -117,10 +117,9 @@ const Editor = function (props) {
             Save
           </Button>
           <Button
-            component={Link}
-            to="/decks"
             size="large"
             variant="outlined"
+            onClick={handleClose(setDialogOpen, setContent, setData, navigate)}
             startIcon={<CancelIcon />}
           >
             Close

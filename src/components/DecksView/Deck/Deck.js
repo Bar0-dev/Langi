@@ -10,11 +10,13 @@ import LinkButton from "../../common/LinkButton";
 import { useDialog } from "../../common/Dialog/DialogContext";
 
 export default function Deck(props) {
-  const { setOpen, setTitle, setMessage, setData } = useDialog();
+  const { setOpen, setContent, setData } = useDialog();
 
   const handleDialogOpen = () => {
-    setTitle("Confirm remove");
-    setMessage(`Do you want to remove deck: ${props.name}`);
+    setContent({
+      title: "Confirm remove",
+      message: `Do you want to remove deck: ${props.name}`,
+    });
     setData({ action: "removeDeck", payload: props.id });
     setOpen(true);
   };

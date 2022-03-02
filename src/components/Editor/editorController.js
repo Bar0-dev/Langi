@@ -10,6 +10,8 @@ import {
 } from "../../utilities/ankiAPI";
 import { snackbarDispatcher } from "../../utilities/utilities";
 
+let deckIsChanged = false;
+
 export const cardReactElements = (cards, setCards, { srcLang, trgtLang }) => {
   const elements = [];
   cards.forEach((value, key) => {
@@ -36,12 +38,14 @@ export const handleAddCard = (deckName, cards, setCards) => () => {
     targetText: "",
   });
   setCards(cardsNew);
+  deckIsChanged = true;
 };
 
 const handleDeleteCard = (cards, setCards) => (cardId) => {
   const cardsNew = new Map(cards);
   cardsNew.delete(cardId);
   setCards(cardsNew);
+  deckIsChanged = true;
 };
 
 const handleChange = (cards, setCards) => (data) => {
@@ -60,6 +64,7 @@ const handleChange = (cards, setCards) => (data) => {
       targetText: data.targetText,
     });
   setCards(cardsNew);
+  deckIsChanged = true;
 };
 
 const handleSaveRemove = async (cardsInAnki, cards) => {
@@ -206,8 +211,27 @@ export const handleSave =
         snackbarDispatcher([["Nothing was saved", "warning"]], enqueueSnackbar);
       snackbarDispatcher(actions, enqueueSnackbar);
       actions = [];
+      deckIsChanged = false;
     } catch (error) {
       console.log(error);
+    }
+  };
+
+export const handleClose =
+  (setDialogOpen, setContent, setData, navigate) => async () => {
+    if (deckIsChanged) {
+      setContent({
+        title: "Confirm action",
+        message: "Do you want to discard unsaved items?",
+        button1Cont: "Yes",
+        button2Cont: "No",
+      });
+      setData({ action: "navigate", payload: "./decks" });
+      setDialogOpen(true);
+      deckIsChanged = false;
+    } else {
+      navigate("../decks");
+      deckIsChanged = false;
     }
   };
 
