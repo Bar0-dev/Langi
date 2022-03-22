@@ -12,6 +12,7 @@ import { SnackbarProvider } from "notistack";
 import { CssBaseline } from "@mui/material";
 import NotFound from "./pages/NotFound/NotFound";
 import { DialogProvider } from "./components/common/Dialog/DialogContext";
+import Footer from "./components/common/Footer/Footer";
 
 const appLocalStorage = window.localStorage;
 if (!appLocalStorage.getItem("mode")) appLocalStorage.setItem("mode", "light");
@@ -75,6 +76,7 @@ const App = function (props) {
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
+            <Footer />
           </DialogProvider>
         </SnackbarProvider>
       </BrowserRouter>
