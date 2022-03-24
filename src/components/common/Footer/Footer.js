@@ -7,13 +7,7 @@ import styles from "./styles";
 export default function Footer(props) {
   return (
     <Paper sx={styles.mainContainer}>
-      <Box sx={styles.logo}>
-        <StyleIcon fontSize="small"></StyleIcon>
-        <Typography variant="h6" component="label">
-          Langi
-        </Typography>
-      </Box>
-      <Box alignSelf={"flex-end"}>
+      <Box>
         <IconButton>
           <LinkedInIcon />
         </IconButton>

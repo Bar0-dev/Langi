@@ -5,7 +5,7 @@ const styles = {
     bottom: "0",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "end",
     alignItems: "center",
     gap: "10px",
     flexWrap: "wrap",
@@ -13,6 +13,7 @@ const styles = {
   logo: {
     display: "flex",
     flexDirection: "row",
+    flexGrow: 1,
     gap: (theme) => theme.spacing(1),
     justifyContent: "center",
     alignItems: "center",
