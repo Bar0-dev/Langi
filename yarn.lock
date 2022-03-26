@@ -2815,13 +2815,6 @@
   dependencies:
     "follow-redirects" "^1.14.4"
 
-"axios@^0.26.1":
-  "integrity" "sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA=="
-  "resolved" "https://registry.npmjs.org/axios/-/axios-0.26.1.tgz"
-  "version" "0.26.1"
-  dependencies:
-    "follow-redirects" "^1.14.8"
-
 "axobject-query@^2.2.0":
   "integrity" "sha512-Td525n+iPOOyUQIeBfcASuG6uJsDOITl7Mds5gFyerkWiX7qhUTdYUBlSgNMyVqtSJqwpt1kXGLdUt6SykLMRA=="
   "resolved" "https://registry.npmjs.org/axobject-query/-/axobject-query-2.2.0.tgz"
@@ -4727,7 +4720,7 @@
   "resolved" "https://registry.npmjs.org/flatted/-/flatted-3.2.5.tgz"
   "version" "3.2.5"
 
-"follow-redirects@^1.0.0", "follow-redirects@^1.14.4", "follow-redirects@^1.14.8":
+"follow-redirects@^1.0.0", "follow-redirects@^1.14.4":
   "integrity" "sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w=="
   "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.9.tgz"
   "version" "1.14.9"
@@ -9330,9 +9323,8 @@
   dependencies:
     "isexe" "^2.0.0"
 
-"wiktionary-translations@^0.0.1":
-  "integrity" "sha512-IPFuaLKs7YOSy5hbogIc5tt+eE8Ts5BA+NBAyny8+V7sRaG4yAv7j2kYxI5HaAA4wUNH76nbtT7GubowX7VkQQ=="
-  "resolved" "https://registry.npmjs.org/wiktionary-translations/-/wiktionary-translations-0.0.1.tgz"
+"wiktionary-translations@file:../../wiktionary-translations/package":
+  "resolved" "file:../../wiktionary-translations/package"
   "version" "0.0.1"
   dependencies:
     "axios" "^0.26.1"

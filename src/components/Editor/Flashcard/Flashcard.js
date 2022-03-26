@@ -3,8 +3,8 @@ import { Card, Chip, Grow, IconButton, TextField, Zoom } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { lookupWord } from "../../../utilities/translateAPI";
 import { useState } from "react";
+import getTranslations from "wiktionary-translations";
 import ISO6391 from "iso-639-1";
 
 //Translate API
@@ -40,18 +40,16 @@ const Flashcard = function (props) {
       lastInputTimer = "null ";
     }
     if (inputText && srcLang && trgtLang)
-      lastInputTimer = setTimeout(() => {
-        translate(
+      lastInputTimer = setTimeout(async () => {
+        const response = await getTranslations(
           inputText,
           ISO6391.getCode(srcLang),
           ISO6391.getCode(trgtLang)
         );
+        if (response) {
+          setSuggestions(response);
+        }
       }, 3000);
-  };
-
-  const translate = async (inputText, srcLang, trgtLang) => {
-    const response = await lookupWord(inputText, srcLang, trgtLang);
-    setSuggestions(response);
   };
 
   return (
