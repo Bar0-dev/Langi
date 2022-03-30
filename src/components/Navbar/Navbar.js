@@ -25,8 +25,8 @@ export default function Navbar(props) {
             Langi
           </Typography>
           <LinkButton link={props.links.home} text="Home" />
-          <LinkButton link={props.links.decks} text="Your decks" />
-          <LinkButton link={props.links.learn} text="Learn" />
+          <LinkButton link={props.links.newDeck} text="New Deck" />
+          <LinkButton link={props.links.decks} text="Local Decks" />
           <LinkButton link={props.links.about} text="About" />
           <Box sx={{ flexGrow: 1 }}></Box>
           <ModeSwitch

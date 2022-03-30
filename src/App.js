@@ -1,9 +1,9 @@
 import Navbar from "./components/Navbar/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home/Home";
+import About from "./pages/About/About";
 import Edit from "./pages/Edit";
 import Decks from "./pages/Decks";
-import NewDeck from "./pages/NewDeck";
 import Learn from "./pages/Learn";
 import HowToConnect from "./pages/HowToConnect/HowToConnect";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -20,8 +20,7 @@ if (!appLocalStorage.getItem("mode")) appLocalStorage.setItem("mode", "light");
 const links = {
   home: "/",
   edit: "/edit",
-  newDeck: "/newDeck",
-  learn: "/learn",
+  newDeck: "/edit/newDeck",
   decks: "/decks",
   about: "/about",
 };
@@ -29,10 +28,10 @@ const links = {
 const comps = {
   "/": <Home />,
   // "/edit": <Edit />, added as seperate
-  "/newDeck": <NewDeck />,
   "/decks": <Decks />,
   "/learn": <Learn />,
   "/howtoconnect": <HowToConnect />,
+  "/about": <About />,
 };
 
 const themeCreator = (currentMode) =>
