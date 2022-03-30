@@ -28,7 +28,7 @@ const links = {
 
 const comps = {
   "/": <Home />,
-  // "/edit": <Edit />,
+  // "/edit": <Edit />, added as seperate
   "/newDeck": <NewDeck />,
   "/decks": <Decks />,
   "/learn": <Learn />,
@@ -57,14 +57,11 @@ const App = function (props) {
       <BrowserRouter>
         <SnackbarProvider maxSnack={3}>
           <DialogProvider>
-            {" "}
-            <div>
-              <Navbar
-                links={links}
-                darkIsOn={mode === "dark" ? true : false}
-                toggleMode={toggleMode}
-              ></Navbar>
-            </div>
+            <Navbar
+              links={links}
+              darkIsOn={mode === "dark" ? true : false}
+              toggleMode={toggleMode}
+            ></Navbar>
             <Routes>
               {Object.entries(comps).map(([path, comp]) => (
                 <Route key={path} path={path} element={comp} />
