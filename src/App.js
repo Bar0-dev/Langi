@@ -7,7 +7,7 @@ import Decks from "./pages/Decks";
 import Learn from "./pages/Learn";
 import HowToConnect from "./pages/HowToConnect/HowToConnect";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { SnackbarProvider } from "notistack";
 import { CssBaseline } from "@mui/material";
 import NotFound from "./pages/NotFound/NotFound";
@@ -34,13 +34,6 @@ const comps = {
   "/about": <About />,
 };
 
-const themeCreator = (currentMode) =>
-  createTheme({
-    palette: {
-      mode: currentMode,
-    },
-  });
-
 const App = function (props) {
   const savedMode = appLocalStorage.getItem("mode");
   const [mode, setMode] = useState(savedMode);
@@ -50,8 +43,18 @@ const App = function (props) {
     appLocalStorage.setItem("mode", mode);
   };
 
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode]
+  );
+
   return (
-    <ThemeProvider theme={themeCreator(mode)}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
         <SnackbarProvider maxSnack={3}>

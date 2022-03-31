@@ -2,9 +2,10 @@ const styles = {
   mainContainer: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
   },
-  hero: { margin: (theme) => theme.spacing(4) },
+  hero: {
+    my: (theme) => theme.spacing(4),
+  },
   content: {
     width: "60%",
     display: "flex",
