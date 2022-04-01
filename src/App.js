@@ -13,6 +13,7 @@ import { CssBaseline } from "@mui/material";
 import NotFound from "./pages/NotFound/NotFound";
 import { DialogProvider } from "./components/common/Dialog/DialogContext";
 import Footer from "./components/common/Footer/Footer";
+import Import from "./pages/Import/Import";
 
 const appLocalStorage = window.localStorage;
 if (!appLocalStorage.getItem("mode")) appLocalStorage.setItem("mode", "light");
@@ -23,6 +24,7 @@ const links = {
   newDeck: "/edit/newDeck",
   decks: "/decks",
   about: "/about",
+  import: "/import",
 };
 
 const comps = {
@@ -32,6 +34,7 @@ const comps = {
   "/learn": <Learn />,
   "/howtoconnect": <HowToConnect />,
   "/about": <About />,
+  "/import": <Import></Import>,
 };
 
 const App = function (props) {

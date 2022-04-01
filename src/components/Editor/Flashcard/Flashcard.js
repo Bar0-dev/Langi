@@ -1,16 +1,15 @@
 import { Card, Chip, Grow, IconButton, TextField, Zoom } from "@mui/material";
-
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useState } from "react";
-import getTranslations from "wiktionary-translations";
 import ISO6391 from "iso-639-1";
+import { getTranslations } from "wiktionary-translations";
 
 //Translate API
 
 let lastInputTimer = null;
-const Flashcard = function (props) {
+const Flashcard = function(props) {
   const [sourceText, setSourceText] = useState(props.data.sourceText);
   const [targetText, setTargetText] = useState(props.data.targetText);
   const [suggestions, setSuggestions] = useState([]);
