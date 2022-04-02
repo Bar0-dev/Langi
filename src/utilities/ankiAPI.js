@@ -1,4 +1,5 @@
 import axios from "axios";
+import { saveAs } from "file-saver";
 
 const ankiAPI = async (action, params) => {
   const response = await axios
@@ -237,4 +238,15 @@ export const importDeckTxt = async (fileData, name) => {
   console.log(response);
 };
 
-export const exportDeckTxt = async (deckName) => {};
+export const exportDeckTxt = async (deckId) => {
+  const cards = await getCards(deckId);
+  const name = await getDeckNameByID(deckId);
+  const cardsParsed = [...cards].map(
+    ([id, { deckName, sourceText, targetText }]) => {
+      return `${sourceText}\t${targetText}`;
+    }
+  );
+  const cardsString = cardsParsed.join(" \n");
+  const blob = new Blob([cardsString], { type: "text/plain;charset=utf-8" });
+  saveAs(blob, `${name}.txt`);
+};
