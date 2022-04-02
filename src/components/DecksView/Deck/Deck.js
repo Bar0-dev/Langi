@@ -30,7 +30,13 @@ export default function Deck(props) {
       </CardContent>
       <CardActions>
         <LinkButton link={`/edit/${props.id}`} text="Edit" />
-        <LinkButton link="/" text="Export" />
+        <Button
+          onClick={() => {
+            props.handleExport(props.id);
+          }}
+        >
+          Export
+        </Button>
         <Button color="inherit" variant="text" onClick={handleDialogOpen}>
           Remove
         </Button>

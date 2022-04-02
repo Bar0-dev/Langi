@@ -7,7 +7,11 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import Deck from "./Deck/Deck";
-import { deleteDeck, getDecksAndIDs } from "../../utilities/ankiAPI";
+import {
+  deleteDeck,
+  exportDeckTxt,
+  getDecksAndIDs,
+} from "../../utilities/ankiAPI";
 import { useEffect, useState } from "react";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { useSnackbar } from "notistack";
@@ -78,6 +82,7 @@ export default function DecksView(props) {
                 id={key}
                 name={value}
                 handleDelete={deleteDeck}
+                handleExport={exportDeckTxt}
               ></Deck>
             </Grid>
           ))}
