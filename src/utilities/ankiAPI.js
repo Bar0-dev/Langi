@@ -196,8 +196,8 @@ export const importDeckApkg = async (path) => {
   try {
     if (!path) throw new Error("Invalid parameters in importDeck function");
     const response = await ankiAPI("importPackage", { path: path });
-    if (response.result) return response;
-    throw new Error("Import was unsuccessful");
+    if (!response) throw new Error("Import was unsuccessful");
+    return response;
   } catch (error) {
     console.log(error);
   }
