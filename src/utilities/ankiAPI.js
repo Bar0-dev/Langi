@@ -194,13 +194,9 @@ export const createDeck = async (deckName) => {
 
 export const importDeckApkg = async (path) => {
   try {
-    if (!path) throw new Error("Invalid parameters in importDeck function");
+    if (!path) throw new Error("Invalid parameters in importDeckApkg function");
     const response = await ankiAPI("importPackage", { path: path });
-<<<<<<< HEAD
-    if (!response) throw new Error("Importing was unsuccessful");
-=======
     if (!response) throw new Error("Import was unsuccessful");
->>>>>>> feature/export-import
     return response;
   } catch (error) {
     console.log(error);
@@ -210,21 +206,13 @@ export const importDeckApkg = async (path) => {
 export const exportDeckApkg = async (deckName, path) => {
   try {
     if (!path || !deckName)
-      throw new Error("Invalid parameters in importDeck function");
+      throw new Error("Invalid parameters in exportDeckApkg function");
     const response = await ankiAPI("exportPackage", {
       deck: deckName,
-<<<<<<< HEAD
-      path: path + `/${deckName.replace(/\s+/g, "")}.apkg`,
-      includeSched: true,
-    });
-    if (!response) throw new Error("Exporting was unsuccessful");
-=======
       path: path + `/${deckName}.apkg`,
       includeSched: true,
     });
-    console.log(response);
     if (!response) throw new Error("Export was unsuccessful");
->>>>>>> feature/export-import
     return response;
   } catch (error) {
     console.log(error);
