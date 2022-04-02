@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const ankiAPI = (action, params) => {
-  return axios
+const ankiAPI = async (action, params) => {
+  const response = await axios
     .post(
       "http://127.0.0.1:8765",
       JSON.stringify({ action: action, version: 6, params: params })
@@ -9,6 +9,7 @@ const ankiAPI = (action, params) => {
     .then((response) => {
       return response.data.result;
     });
+  return response;
 };
 
 const noteTemplate = (data) => {
@@ -34,7 +35,7 @@ const noteTemplate = (data) => {
       Back: targetText,
     },
     options: {
-      allowDuplicate: false,
+      allowDuplicate: true,
       duplicateScope: "deck",
       duplicateScopeOptions: {
         deckName: "Default",
@@ -78,14 +79,15 @@ export const getDeckNameByID = async (deckId) => {
 
 export const deleteDeck = async (deckId) => {
   try {
+    if (!deckId) throw new Error("Provide the deckId");
     const deckName = await getDeckNameByID(deckId);
-    if (deckName) {
-      const response = await ankiAPI("deleteDeck", {
-        deck: deckName,
-        cardsToo: true,
-      });
-      return true;
-    } else return false;
+    if (!deckName) throw new Error("Deck by this id does not exist");
+    const response = await ankiAPI("deleteDecks", {
+      decks: [deckName],
+      cardsToo: true,
+    });
+    if (!response) throw new Error("Deck deletion was unsuccessful");
+    return response;
   } catch (error) {
     console.log(error);
   }
@@ -110,9 +112,11 @@ export const getCardsInfo = async (IDarr) => {
 
 export const addCards = async (cardsData) => {
   try {
+    if (!cardsData) throw new Error("Provide cardsData array");
     const response = await ankiAPI("addNotes", {
       notes: cardsData.map((data) => noteTemplate(data)),
     });
+    if (!response) throw new Error("Adding cards action was unsuccessful");
     return response;
   } catch (error) {
     console.log(error);
@@ -179,38 +183,59 @@ export const getCards = async (deckId) => {
 
 export const createDeck = async (deckName) => {
   try {
-    if (deckName) {
-      const deckId = await ankiAPI("createDeck", { deck: deckName });
-      return deckId;
-    } else return false;
+    if (!deckName) throw new Error("Provide a deck name");
+    const deckId = await ankiAPI("createDeck", { deck: deckName });
+    if (!deckId) throw new Error("Deck creation unsuccessful");
+    return deckId;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const importDeck = async (path) => {
+export const importDeckApkg = async (path) => {
   try {
     if (!path) throw new Error("Invalid parameters in importDeck function");
     const response = await ankiAPI("importPackage", { path: path });
     if (response.result) return response;
-    throw new Error(response.error);
+    throw new Error("Import was unsuccessful");
   } catch (error) {
     console.log(error);
   }
 };
 
-export const exportDeck = async (deckName, path) => {
+export const exportDeckApkg = async (deckName, path) => {
   try {
     if (!path || !deckName)
       throw new Error("Invalid parameters in importDeck function");
     const response = await ankiAPI("exportPackage", {
-      deck: "Default",
-      path: "/data/Deck.apkg",
+      deck: deckName,
+      path: path + `/${deckName}.apkg`,
       includeSched: true,
     });
-    if (response.result) return response;
-    throw new Error(response.error);
+    console.log(response);
+    if (!response) throw new Error("Export was unsuccessful");
+    return response;
   } catch (error) {
     console.log(error);
   }
 };
+
+export const importDeckTxt = async (fileData, name) => {
+  const dataArr = fileData.split("\n");
+  const dataMap = new Map();
+  const parsedData = dataArr.map((entry) => entry.replaceAll(/\\t&/g, ""));
+  parsedData.forEach((entry, index) => {
+    const [srcTxt, trgtTxt] = entry.split("\t");
+    dataMap.set(index, {
+      deckName: name,
+      sourceText: srcTxt,
+      targetText: trgtTxt,
+    });
+  });
+  console.log([...dataMap]);
+  const deckId = await createDeck(name);
+  const response = await addCards([...dataMap]);
+  console.log(response);
+};
+
+export const exportDeckTxt = async (deckName) => {};
