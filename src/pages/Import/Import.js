@@ -1,17 +1,25 @@
 import { Button, Container } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { importDeckTxt } from "../../utilities/ankiAPI";
 
 export default function Import(props) {
   const filePicker = useRef(null);
-  const handleFilePick = (event) => {
+  const onSubmit = (event) => {
+    event.preventDefault();
+    console.log(event);
+  };
+  const handleFilePick = async (event) => {
     event.preventDefault();
     const [file] = event.target.files;
     console.log(file);
+    const name = file.name.replace(".txt", "");
+    const textData = await file.text();
+    importDeckTxt(textData, name);
   };
   return (
     <Container>
-      <form>
-        <input webkitdirectory="" type="file" onChange={handleFilePick} />
+      <form onSubmit={onSubmit}>
+        <input type="file" onChange={handleFilePick} />
         <button>Submit</button>
       </form>
       <Button onClick={() => {}}>Import</Button>
