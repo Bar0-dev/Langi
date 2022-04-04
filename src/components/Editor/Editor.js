@@ -11,6 +11,7 @@ import {
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
+import DownloadIcon from "@mui/icons-material/Download";
 import styles from "./styles";
 import EditorHeader from "./EditorHeader/EditorHeader";
 import {
@@ -117,6 +118,9 @@ const Editor = function (props) {
             startIcon={<SaveIcon />}
           >
             Save
+          </Button>
+          <Button variant="contained" startIcon={<DownloadIcon />}>
+            Export
           </Button>
           <Button
             size="large"
