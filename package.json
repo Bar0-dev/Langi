@@ -24,7 +24,8 @@
     "react-router-dom": "^6.0.2",
     "react-scripts": "5.0.0",
     "use-file-picker": "^1.4.2",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "wiktionary-translations": "^0.0.8"
   },
   "scripts": {
     "start": "react-scripts start",
