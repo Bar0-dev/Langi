@@ -3,11 +3,7 @@ import { useRef } from "react";
 import { importDeckTxt } from "../../utilities/ankiAPI";
 
 export default function Import(props) {
-  const filePicker = useRef(null);
-  const onSubmit = (event) => {
-    event.preventDefault();
-    console.log(event);
-  };
+  const handleBrowserOpen = useRef(null);
   const handleFilePick = async (event) => {
     event.preventDefault();
     const [file] = event.target.files;
@@ -16,13 +12,13 @@ export default function Import(props) {
     const textData = await file.text();
     importDeckTxt(textData, name);
   };
+  const handleClick = () => {
+    handleBrowserOpen.current.click();
+  }
   return (
     <Container>
-      <form onSubmit={onSubmit}>
-        <input type="file" onChange={handleFilePick} />
-        <button>Submit</button>
-      </form>
-      <Button onClick={() => {}}>Import</Button>
+        <input ref={handleBrowserOpen} type="file" accept=".txt" onChange={handleFilePick} style={{display:"none"}} />
+      <Button onClick={handleClick}>Import</Button>
     </Container>
   );
 }
