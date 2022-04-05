@@ -30,7 +30,7 @@ export default function Navbar(props) {
           <LinkButton link={props.links.about} text="About" />
           <Box sx={{ flexGrow: 1 }}></Box>
           <ModeSwitch
-            defaultChecked={props.darkIsOn}
+            checked={props.darkIsOn}
             onChange={props.toggleMode}
           />
         </Toolbar>
