@@ -1,6 +1,9 @@
-import { Button, Container } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
 import { useRef } from "react";
 import { importDeckTxt } from "../../utilities/ankiAPI";
+import { Box } from "@mui/system";
+import { SubHeader, Paragraph, Header } from "../../components/common/textComps";
+import styles from "./styles";
 
 export default function Import(props) {
   const handleBrowserOpen = useRef(null);
@@ -17,6 +20,14 @@ export default function Import(props) {
   }
   return (
     <Container>
+      <Box sx={styles.title}><Header>Importing</Header></Box>
+      
+      <SubHeader>File formatting</SubHeader>
+      <Paragraph>Text files should consist with each line as a single flashcard. Each word separated by a tab, where first one is a souce text, second target text and finally tags.</Paragraph>
+      <code>
+        example{'\t'}beispiel{'\t'}
+      </code>
+
         <input ref={handleBrowserOpen} type="file" accept=".txt" onChange={handleFilePick} style={{display:"none"}} />
       <Button onClick={handleClick}>Import</Button>
     </Container>

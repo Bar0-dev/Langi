@@ -1,31 +1,13 @@
 import { Container, Typography, Button, Link } from "@mui/material";
 import { Box } from "@mui/system";
 import styles from "./styles";
-import { styled } from "@mui/system";
-
-const SubHeader = (props) => {
-  return (
-    <Typography variant="h4" component="h2">
-      {props.children}
-    </Typography>
-  );
-};
-
-const Paragraph = (props) => {
-  return (
-    <Typography variant="h6" component="p">
-      {props.children}
-    </Typography>
-  );
-};
+import { SubHeader, Paragraph, Header } from "../../components/common/textComps";
 
 export default function Home(props) {
   return (
     <Container sx={styles.mainContainer}>
       <Box sx={styles.hero}>
-        <Typography variant="h3" component="h1">
-          Langi
-        </Typography>
+        <Header>Langi</Header>
         <Typography color="GrayText" variant="h5">
           Easy, responsive and intuitive for you to create language flashcards
           and decks faster.
@@ -39,14 +21,14 @@ export default function Home(props) {
         <Link href="/edit/newDeck">new deck</Link> and later export it to the
         file.
       </Paragraph>
-      <SubHeader variant="h4" component="h2">
+      <SubHeader>
         Importing
       </SubHeader>
       <Paragraph>
         If you already have existing decks but you don't want to connect your
         Anki app, you can use the <Link href="/import">import</Link> function.
       </Paragraph>
-      <SubHeader variant="h4" component="h2">
+      <SubHeader>
         Why langi?
       </SubHeader>
       <Paragraph>
