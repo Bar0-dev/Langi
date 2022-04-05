@@ -8,10 +8,10 @@ export default function Footer(props) {
   return (
     <Paper sx={styles.mainContainer}>
       <Box>
-        <IconButton>
+        <IconButton href="https://www.linkedin.com/in/bartoszpietrzak/">
           <LinkedInIcon />
         </IconButton>
-        <IconButton>
+        <IconButton href="https://github.com/Bar0-dev">
           <GitHubIcon />
         </IconButton>
       </Box>
