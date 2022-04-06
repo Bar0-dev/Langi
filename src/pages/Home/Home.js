@@ -1,7 +1,11 @@
 import { Container, Typography, Button, Link } from "@mui/material";
 import { Box } from "@mui/system";
 import styles from "./styles";
-import { SubHeader, Paragraph, Header } from "../../components/common/textComps";
+import {
+  SubHeader,
+  Paragraph,
+  Header,
+} from "../../components/common/textComps";
 
 export default function Home(props) {
   return (
@@ -21,16 +25,12 @@ export default function Home(props) {
         <Link href="/edit/newDeck">new deck</Link> and later export it to the
         file.
       </Paragraph>
-      <SubHeader>
-        Importing
-      </SubHeader>
+      <SubHeader>Importing</SubHeader>
       <Paragraph>
         If you already have existing decks but you don't want to connect your
         Anki app, you can use the <Link href="/import">import</Link> function.
       </Paragraph>
-      <SubHeader>
-        Why langi?
-      </SubHeader>
+      <SubHeader>Why langi?</SubHeader>
       <Paragraph>
         This application was built in order to facilitate working with Anki for
         language studying. It can be really tedious to use a plain Anki app and

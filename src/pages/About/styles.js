@@ -1,12 +1,10 @@
 const styles = {
-  hero: { margin: (theme) => theme.spacing(2) },
-  buttonGroup: {
+  mainContrainer: {
     display: "flex",
     flexDirection: "column",
-    jsutifyContent: "center",
-    alignItems: "center",
-    gap: "5px",
-    pb: "50px",
+  },
+  title: {
+    my: (theme) => theme.spacing(2),
   },
 };
 
