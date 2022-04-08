@@ -52,19 +52,24 @@ const handleDeleteCard = (cards, setCards) => (cardId) => {
 
 const handleChange = (cards, setCards) => (data) => {
   const cardsNew = new Map(cards);
-  if (typeof data.sourceText === "string") {
+  if (typeof data.sourceText === "string")
     cardsNew.set(data.id, {
-      deckName: cardsNew.get(data.id).deckName,
+      ...cardsNew.get(data.id),
       sourceText: data.sourceText,
-      targetText: cardsNew.get(data.id).targetText,
     });
-  }
+
   if (typeof data.targetText === "string")
     cardsNew.set(data.id, {
-      deckName: cardsNew.get(data.id).deckName,
-      sourceText: cardsNew.get(data.id).sourceText,
+      ...cardsNew.get(data.id),
       targetText: data.targetText,
     });
+
+  if (data.pictureData) {
+    cardsNew.set(data.id, {
+      ...cardsNew.get(data.id),
+      pictureData: data.pictureData,
+    });
+  }
   setCards(cardsNew);
   deckIsChanged = true;
 };

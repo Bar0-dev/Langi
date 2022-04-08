@@ -2797,13 +2797,6 @@
   dependencies:
     "follow-redirects" "^1.14.4"
 
-"axios@^0.26.1":
-  "integrity" "sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA=="
-  "resolved" "https://registry.npmjs.org/axios/-/axios-0.26.1.tgz"
-  "version" "0.26.1"
-  dependencies:
-    "follow-redirects" "^1.14.8"
-
 "axobject-query@^2.2.0":
   "integrity" "sha512-Td525n+iPOOyUQIeBfcASuG6uJsDOITl7Mds5gFyerkWiX7qhUTdYUBlSgNMyVqtSJqwpt1kXGLdUt6SykLMRA=="
   "resolved" "https://registry.npmjs.org/axobject-query/-/axobject-query-2.2.0.tgz"
@@ -4721,7 +4714,7 @@
   "resolved" "https://registry.npmjs.org/flatted/-/flatted-3.2.5.tgz"
   "version" "3.2.5"
 
-"follow-redirects@^1.0.0", "follow-redirects@^1.14.4", "follow-redirects@^1.14.8":
+"follow-redirects@^1.0.0", "follow-redirects@^1.14.4":
   "integrity" "sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w=="
   "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.9.tgz"
   "version" "1.14.9"
@@ -5527,7 +5520,7 @@
   "resolved" "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
   "version" "2.0.0"
 
-"iso-639-1@^2.1.12", "iso-639-1@^2.1.13":
+"iso-639-1@^2.1.12":
   "integrity" "sha512-stYt3u6OnVDNcK4IWARGXmTOOY5Wa5g4bUmBsttZp/55ZiEjDUibR3C59ZnorKoSS0tfJmFuGMST3ksnY1zu7Q=="
   "resolved" "https://registry.npmjs.org/iso-639-1/-/iso-639-1-2.1.13.tgz"
   "version" "2.1.13"
@@ -9324,9 +9317,8 @@
   dependencies:
     "isexe" "^2.0.0"
 
-"wiktionary-translations@^0.1.1":
-  "integrity" "sha512-ymHkGPcOMrU0Gx8/kwPNNPgkYfNBtA58YrE5ADXQGYq2E0K20BrYOccXiwFS0t+eAG+fO1efR//4aXt7mQL/Kw=="
-  "resolved" "https://registry.npmjs.org/wiktionary-translations/-/wiktionary-translations-0.1.1.tgz"
+"wiktionary-translations@file:../wiktionary-translations":
+  "resolved" "file:../wiktionary-translations"
   "version" "0.1.1"
   dependencies:
     "axios" "^0.26.1"
