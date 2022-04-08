@@ -32,8 +32,7 @@ import { useDialog } from "../common/Dialog/DialogContext";
 const Editor = function (props) {
   const [deckName, setName] = useState("");
   const [cards, setCards] = useState(new Map());
-  const [srcLang, setSrcLang] = useState(null);
-  const [trgtLang, setTrgtLang] = useState(null);
+  const [dict, setDict] = useState({});
   const [status, setStatus] = useState("loading");
   const { enqueueSnackbar } = useSnackbar();
   const deckId = useParams().deckId;
@@ -58,6 +57,7 @@ const Editor = function (props) {
         } else {
           setStatus("newDeck");
           setCards(new Map());
+          setName("");
         }
       } catch (error) {
         console.log(error);
@@ -68,15 +68,7 @@ const Editor = function (props) {
 
   useEffect(() => {
     loadCards(deckId);
-    const settings = getCache("settings");
-    // if (settings) {
-    //   setSrcLang(settings.srcLang);
-    //   setTrgtLang(settings.trgtLang);
-    // } else {
-    //   console.log("setting cache");
-    //   setCache("settings", { srcLang: srcLang, trgtLang: trgtLang }, 7);
-    // }
-  }, [deckId, loadCards, status]);
+  }, [deckId, loadCards]);
 
   if (status === "loading") {
     return (
@@ -92,11 +84,10 @@ const Editor = function (props) {
         <EditorHeader
           deckName={deckName ? deckName : ""}
           deckId={deckId}
-          handleLangChange={{ setSrcLang, setTrgtLang }}
-          langs={{ srcLang, trgtLang }}
+          setDict={setDict}
           handleSetName={handleSetName(setName, status)}
         ></EditorHeader>
-        <List>{cardReactElements(cards, setCards, { srcLang, trgtLang })}</List>
+        <List>{cardReactElements(cards, setCards, dict)}</List>
         <IconButton
           sx={styles.iconAdd}
           onClick={handleAddCard(deckName, cards, setCards)}

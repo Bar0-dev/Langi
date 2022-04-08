@@ -12,55 +12,51 @@ import ComboBox from "./ComboBox/ComboBox";
 import styles from "./styles";
 import { useEffect, useState } from "react";
 import { getCache, setCache } from "../../../utilities/utilities";
+import WiktTransl from "wiktionary-translations";
+import ISO6391 from "iso-639-1";
 
-// const parseLangs = (arr) => {
-//   const uniqueCodes = [...new Set(arr.map((pair) => pair.source))];
-//   const names = uniqueCodes
-//     .map((langCode) => ISO6391.getName(langCode))
-//     .filter((langName) => langName.length > 0);
-//   return names;
-// };
+//PLACEHOLDER
+const supportedLangs = [
+  "English",
+  "Spanish",
+  "French",
+  "German",
+  "Japanese",
+  "Italian",
+  "Korean",
+  "Swedish",
+];
+//PLACEHOLDER
 
 const EditorHeader = function (props) {
   const deckName = props.deckName;
   const deckId = props.deckId;
-  const { srcLang, trgtLang } = props.langs;
-  const [supportSrcLang, setSupportSrcLang] = useState([]);
-  const [supportTrgtLang, setSupportTrgtLang] = useState([]);
-  const { setSrcLang, setTrgtLang } = props.handleLangChange;
-
-  //PLACEHOLDER
-  const supportedLangs = [
-    "English",
-    "Spanish",
-    "French",
-    "German",
-    "Japanese",
-    "Italian",
-    "Korean",
-    "Swedish",
-  ];
-  //PLACEHOLDER
+  const [srcLang, setSrcLang] = useState(null);
+  const [trgtLang, setTrgtLang] = useState(null);
+  const [supportSrcLang, setSupportSrcLang] = useState(supportedLangs);
+  const [supportTrgtLang, setSupportTrgtLang] = useState(supportedLangs);
 
   const handleSrcLangChange = (event, value) => {
     if (value) {
       setSrcLang(value);
       const tempTrgtLangs = supportedLangs.filter((lang) => lang !== value);
       setSupportTrgtLang(tempTrgtLangs);
-    }
+    } else setSrcLang(null);
   };
 
   const handleTrgtLangChange = (event, value) => {
     if (value) {
       setTrgtLang(value);
       // setCache("settings", { ...getCache("settings"), trgtLang: value }, 7);
-    } else setTrgtLang("");
+    } else setTrgtLang(null);
   };
 
   useEffect(() => {
-    setSupportSrcLang(supportedLangs);
-    setSupportTrgtLang(supportedLangs);
-  }, []);
+    if (srcLang && trgtLang)
+      props.setDict(
+        new WiktTransl(ISO6391.getCode(srcLang), ISO6391.getCode(trgtLang))
+      );
+  }, [srcLang, trgtLang]);
 
   return (
     <Card sx={styles.root}>

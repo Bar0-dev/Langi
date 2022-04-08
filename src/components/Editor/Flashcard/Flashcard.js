@@ -3,8 +3,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import styles from "./styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useState, useEffect } from "react";
-import ISO6391 from "iso-639-1";
-import WiktTransl from "wiktionary-translations";
 
 //Translate API
 
@@ -13,9 +11,6 @@ const Flashcard = function (props) {
   const [sourceText, setSourceText] = useState(props.data.sourceText);
   const [targetText, setTargetText] = useState(props.data.targetText);
   const [suggestions, setSuggestions] = useState([]);
-  const [srcLang, setSrcLang] = useState(props.languages.srcLang);
-  const [trgtLang, setTrgtLang] = useState(props.languages.trgtLang);
-  const [WikiDict, setWikiDict] = useState({});
 
   const handleSrcTxtChange = (e) => {
     setSourceText(e.target.value);
@@ -40,24 +35,14 @@ const Flashcard = function (props) {
       window.clearTimeout(lastInputTimer);
       lastInputTimer = "null ";
     }
-    if (inputText && srcLang && trgtLang)
+    if (inputText)
       lastInputTimer = setTimeout(async () => {
-        const response = await WiktTransl.getTranslations(inputText);
+        const response = await props.dict.getTranslations(inputText);
         if (response) {
           setSuggestions(response);
         }
       }, 3000);
   };
-  useEffect(() => {
-    setSrcLang(props.languages.srcLang);
-    setTrgtLang(props.languages.trgtLang);
-    console.log(srcLang);
-    if (srcLang && trgtLang) {
-      setWikiDict(
-        new WiktTransl(ISO6391.getCode(srcLang), ISO6391.getCode(trgtLang))
-      );
-    }
-  }, [srcLang, trgtLang, setWikiDict]);
 
   return (
     <Zoom in={true}>
