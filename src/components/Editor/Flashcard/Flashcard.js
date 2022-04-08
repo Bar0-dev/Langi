@@ -25,7 +25,7 @@ const Flashcard = function (props) {
   const [addImg, setAddImg] = useState(false);
 
   const handleSetImgUrl = async () => {
-    if (!addImg) {
+    if (!addImg && !isEmpty(props.dict)) {
       const [imgurl] = await props.dict.getImageUrls(sourceText);
       props.handleChange({
         id: props.id,
