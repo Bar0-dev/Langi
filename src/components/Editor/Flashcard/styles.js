@@ -5,7 +5,13 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     gap: "10px",
-    padding: (theme) => theme.spacing(2),
+    padding: (theme) => theme.spacing(4),
+  },
+  inputs: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "20px",
   },
 };
 

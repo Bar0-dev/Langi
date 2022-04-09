@@ -1,9 +1,7 @@
 import {
+  Box,
   Card,
-  Checkbox,
   Chip,
-  FormControlLabel,
-  FormGroup,
   Grow,
   IconButton,
   TextField,
@@ -17,26 +15,14 @@ import { isEmpty } from "lodash";
 
 //Translate API
 
-let lastInputTimer = null;
+let inputTimer = null;
 const Flashcard = function (props) {
   const [sourceText, setSourceText] = useState(props.data.sourceText);
   const [targetText, setTargetText] = useState(props.data.targetText);
   const [suggestions, setSuggestions] = useState([]);
-  const [addImg, setAddImg] = useState(false);
+  const settings = props.settings;
 
-  const handleSetImgUrl = async () => {
-    if (!addImg && !isEmpty(props.dict)) {
-      const [imgurl] = await props.dict.getImageUrls(sourceText);
-      props.handleChange({
-        id: props.id,
-        pictureData: {
-          url: imgurl,
-          filename: `${sourceText}.jpg`,
-          fields: ["Back"],
-        },
-      });
-    }
-  };
+  const handleSetImgUrl = async () => {};
 
   const handleSrcTxtChange = (e) => {
     setSourceText(e.target.value);
@@ -57,16 +43,34 @@ const Flashcard = function (props) {
   };
 
   const emmitRequest = (inputText) => {
-    if (lastInputTimer) {
-      window.clearTimeout(lastInputTimer);
-      lastInputTimer = "null ";
+    if (inputTimer) {
+      window.clearTimeout(inputTimer);
+      inputTimer = "null ";
     }
     if (!isEmpty(props.dict)) {
       if (inputText)
-        lastInputTimer = setTimeout(async () => {
-          const response = await props.dict.getTranslations(inputText);
-          if (response) {
-            setSuggestions(response);
+        inputTimer = setTimeout(async () => {
+          if (settings.suggestions) {
+            const sugRes = await props.dict.getTranslations(inputText);
+            if (sugRes) {
+              setSuggestions(sugRes);
+            }
+          }
+          if (settings.addImg) {
+            const [imgurl] = await props.dict.getImageUrls(
+              inputText,
+              "thumbnail",
+              300
+            );
+            props.handleChange({
+              id: props.id,
+              sourceText: inputText,
+              pictureData: {
+                url: imgurl,
+                filename: `${inputText}.jpg`,
+                fields: ["Back"],
+              },
+            });
           }
         }, 3000);
     }
@@ -75,7 +79,7 @@ const Flashcard = function (props) {
   return (
     <Zoom in={true}>
       <Card key={props.id} sx={styles.card}>
-        <div>
+        <Box style={styles.inputs}>
           <TextField
             value={sourceText}
             onChange={handleSrcTxtChange}
@@ -85,7 +89,14 @@ const Flashcard = function (props) {
             value={targetText}
             onChange={handleTrgtTxtChange}
           ></TextField>
-        </div>
+          <IconButton
+            onClick={() => {
+              props.handleDeleteCard(props.id);
+            }}
+          >
+            <CloseIcon></CloseIcon>
+          </IconButton>
+        </Box>
         <div>
           {suggestions.map((value) => (
             <Grow key={value} in={true} style={{ timeout: 1000 }}>
@@ -97,24 +108,6 @@ const Flashcard = function (props) {
             </Grow>
           ))}
         </div>
-        <FormGroup>
-          <FormControlLabel
-            onChange={() => {
-              setAddImg(addImg ? false : true);
-              handleSetImgUrl();
-            }}
-            control={<Checkbox />}
-            label="Add image if exists"
-          />
-        </FormGroup>
-
-        <IconButton
-          onClick={() => {
-            props.handleDeleteCard(props.id);
-          }}
-        >
-          <CloseIcon></CloseIcon>
-        </IconButton>
       </Card>
     </Zoom>
   );

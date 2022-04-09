@@ -14,7 +14,7 @@ let deckIsChanged = false;
 
 export const resetChangeFlag = () => (deckIsChanged = false);
 
-export const cardReactElements = (cards, setCards, dict) => {
+export const cardReactElements = (cards, setCards, dict, settings) => {
   const elements = [];
   cards.forEach((value, key) => {
     elements.push(
@@ -25,6 +25,7 @@ export const cardReactElements = (cards, setCards, dict) => {
           handleChange={handleChange(cards, setCards)}
           handleDeleteCard={handleDeleteCard(cards, setCards)}
           dict={dict}
+          settings={settings}
         />
       </ListItem>
     );

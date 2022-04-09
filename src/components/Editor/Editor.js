@@ -34,6 +34,11 @@ const Editor = function (props) {
   const [cards, setCards] = useState(new Map());
   const [dict, setDict] = useState({});
   const [status, setStatus] = useState("loading");
+  const [settings, setSettings] = useState({
+    suggestions: false,
+    addImg: false,
+    addPron: false,
+  });
   const { enqueueSnackbar } = useSnackbar();
   const deckId = useParams().deckId;
   const { setOpen: setDialogOpen, setContent, setData } = useDialog();
@@ -86,8 +91,10 @@ const Editor = function (props) {
           deckId={deckId}
           setDict={setDict}
           handleSetName={handleSetName(setName, status)}
+          settings={settings}
+          setSettings={setSettings}
         ></EditorHeader>
-        <List>{cardReactElements(cards, setCards, dict)}</List>
+        <List>{cardReactElements(cards, setCards, dict, settings)}</List>
         <IconButton
           sx={styles.iconAdd}
           onClick={handleAddCard(deckName, cards, setCards)}

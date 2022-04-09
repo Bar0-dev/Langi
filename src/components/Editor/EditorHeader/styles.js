@@ -10,20 +10,21 @@ const styles = {
     marginTop: "20px",
   },
   form: {
-    width: "100%",
-    // flexGrow: 1,
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "center",
     alignItems: "center",
     mt: "10px",
     padding: "30px",
   },
-  languiageSelectionBox: {
+  langPicker: {
     display: "flex",
-    justifyContent: "space-around",
+    justifyContent: "center",
     alignItems: "center",
     gap: "10px",
+  },
+  config: {
+    mt: (theme) => theme.spacing(2),
   },
 };
 

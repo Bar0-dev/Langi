@@ -5,9 +5,11 @@ import {
   FormControlLabel,
   IconButton,
   Card,
+  Collapse,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import LoopIcon from "@mui/icons-material/Loop";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ComboBox from "./ComboBox/ComboBox";
 import styles from "./styles";
 import { useEffect, useState } from "react";
@@ -67,7 +69,7 @@ const EditorHeader = function (props) {
           variant="standard"
           onChange={props.handleSetName}
         ></TextField>
-        <Box sx={styles.languiageSelectionBox}>
+        <Box sx={styles.langPicker}>
           <ComboBox
             value={srcLang}
             onChange={handleSrcLangChange}
@@ -84,11 +86,33 @@ const EditorHeader = function (props) {
             languages={supportTrgtLang}
           />
         </Box>
-
-        <FormControlLabel
-          control={<Switch />}
-          label="Translation suggestions"
-        />
+        <Box sx={styles.config}>
+          <FormControlLabel
+            control={<Switch />}
+            checked={props.settings.suggestions}
+            onChange={(event, value) =>
+              props.setSettings({ ...props.settings, suggestions: value })
+            }
+            label="suggestions"
+          />
+          <FormControlLabel
+            control={<Switch />}
+            checked={props.settings.addImg}
+            onChange={(event, value) =>
+              props.setSettings({ ...props.settings, addImg: value })
+            }
+            label="add image"
+          />
+          <FormControlLabel
+            control={<Switch />}
+            checked={props.settings.addPron}
+            onChange={(event, value) =>
+              props.setSettings({ ...props.settings, addPron: value })
+            }
+            disabled={true}
+            label="add pronunciation"
+          />
+        </Box>
       </FormGroup>
     </Card>
   );
