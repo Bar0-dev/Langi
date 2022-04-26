@@ -156,6 +156,37 @@ export const updateCard = async (data) => {
   }
 };
 
+const parseCardsContent = (cards, deckName) => {
+  const htmlParser = new DOMParser();
+
+  const getContentObject = (value) => {
+    const nodes = htmlParser.parseFromString(value, "text/html").body
+      .childNodes;
+    const content = { text: nodes[0].data };
+    if (nodes.length > 1) content.img = nodes[1].outerHTML;
+
+    return content;
+  };
+
+  const cardsMap = new Map();
+  cards.forEach((card) => {
+    const { text: textFront, img: imageFront } = getContentObject(
+      card.fields.Front.value
+    );
+    const { text: textBack, img: imageBack } = getContentObject(
+      card.fields.Back.value
+    );
+    cardsMap.set(card.noteId, {
+      deckName: deckName,
+      sourceText: textFront,
+      targetText: textBack,
+      tags: card.tags,
+      img: { imageFront: imageFront ?? false, imageBack: imageBack ?? false },
+    });
+  });
+  return cardsMap;
+};
+
 //Using ankiConnect API it is only possible to search for a deck by name
 export const getCards = async (deckId) => {
   try {
@@ -165,14 +196,7 @@ export const getCards = async (deckId) => {
         query: `deck:"${deckName}"`,
       });
       const cards = await getCardsInfo(cardIds);
-      const cardsParsed = new Map();
-      cards.forEach((card) =>
-        cardsParsed.set(card.noteId, {
-          deckName: deckName,
-          sourceText: card.fields.Front.value,
-          targetText: card.fields.Back.value,
-        })
-      );
+      const cardsParsed = parseCardsContent(cards);
       return cardsParsed;
     } else {
       return false;
