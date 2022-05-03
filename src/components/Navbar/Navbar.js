@@ -27,12 +27,8 @@ export default function Navbar(props) {
           <LinkButton link={props.links.home} text="Home" />
           <LinkButton link={props.links.newDeck} text="New Deck" />
           <LinkButton link={props.links.decks} text="Local Decks" />
-          <LinkButton link={props.links.about} text="About" />
           <Box sx={{ flexGrow: 1 }}></Box>
-          <ModeSwitch
-            checked={props.darkIsOn}
-            onChange={props.toggleMode}
-          />
+          <ModeSwitch checked={props.darkIsOn} onChange={props.toggleMode} />
         </Toolbar>
       </AppBar>
     </Box>

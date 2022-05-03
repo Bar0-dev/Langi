@@ -13,6 +13,22 @@ const styles = {
     alignItems: "center",
     gap: "20px",
   },
+  results: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+  },
+  suggestions: {
+    display: "flex",
+    gap: "1rem",
+    alignItems: "center",
+  },
+  image: {
+    display: "flex",
+    gap: "1rem",
+    alignItems: "centet",
+  },
 };
 
 export default styles;

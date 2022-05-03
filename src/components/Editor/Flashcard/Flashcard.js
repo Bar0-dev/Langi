@@ -4,7 +4,9 @@ import {
   Chip,
   Grow,
   IconButton,
+  Link,
   TextField,
+  Typography,
   Zoom,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -13,16 +15,39 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useState, useEffect } from "react";
 import { isEmpty } from "lodash";
 
-//Translate API
+const ResultViewer = (props) => {
+  return (
+    <Box sx={styles.results}>
+      <Box sx={styles.suggestions}>
+        <Typography variant="body">Suggestions: </Typography>
+
+        {props.suggestions.length > 0
+          ? props.suggestions.map((value) => (
+              <Grow key={value} in={true} style={{ timeout: 1000 }}>
+                <Chip
+                  key={value}
+                  label={value}
+                  onClick={props.handleTrgtTxtChange}
+                ></Chip>
+              </Grow>
+            ))
+          : "nothing found"}
+      </Box>
+      <Box sx={styles.image}>
+        <Typography>Image:</Typography>
+        {props.imgUrl ? <Link href={props.imgUrl}>open</Link> : "nothing found"}
+      </Box>
+    </Box>
+  );
+};
 
 let inputTimer = null;
 const Flashcard = function (props) {
   const [sourceText, setSourceText] = useState(props.data.sourceText);
   const [targetText, setTargetText] = useState(props.data.targetText);
   const [suggestions, setSuggestions] = useState([]);
+  const [imgUrl, setImgUrl] = useState("");
   const settings = props.settings;
-
-  const handleSetImgUrl = async () => {};
 
   const handleSrcTxtChange = (e) => {
     setSourceText(e.target.value);
@@ -62,6 +87,7 @@ const Flashcard = function (props) {
               "thumbnail",
               300
             );
+            setImgUrl(imgurl);
             props.handleChange({
               id: props.id,
               sourceText: inputText,
@@ -97,17 +123,13 @@ const Flashcard = function (props) {
             <CloseIcon></CloseIcon>
           </IconButton>
         </Box>
-        <div>
-          {suggestions.map((value) => (
-            <Grow key={value} in={true} style={{ timeout: 1000 }}>
-              <Chip
-                key={value}
-                label={value}
-                onClick={handleTrgtTxtChange}
-              ></Chip>
-            </Grow>
-          ))}
-        </div>
+        {settings.suggestions || settings.addImg ? (
+          <ResultViewer
+            suggestions={suggestions}
+            imgUrl={imgUrl}
+            handleTrgtTxtChange={handleTrgtTxtChange}
+          ></ResultViewer>
+        ) : null}
       </Card>
     </Zoom>
   );

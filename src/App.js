@@ -23,7 +23,7 @@ const links = {
   edit: "/edit",
   newDeck: "/edit/newDeck",
   decks: "/decks",
-  about: "/about",
+  // about: "/about",
   import: "/import",
 };
 
@@ -33,8 +33,8 @@ const comps = {
   "/decks": <Decks />,
   "/learn": <Learn />,
   "/howtoconnect": <HowToConnect />,
-  "/about": <About />,
-  "/import": <Import></Import>,
+  // "/about": <About />,
+  "/import": <Import />,
 };
 
 const App = function (props) {
