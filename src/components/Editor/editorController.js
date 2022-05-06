@@ -39,6 +39,11 @@ export const handleAddCard = (deckName, cards, setCards) => () => {
     deckName: deckName,
     sourceText: "",
     targetText: "",
+    pictureData: {
+      url: undefined,
+      filename: undefined,
+      fields: ["Back"],
+    },
   });
   setCards(cardsNew);
   deckIsChanged = true;
@@ -93,13 +98,13 @@ const handleSaveRemove = async (cardsInAnki, cards) => {
 const handleSaveChange = async (cardsInAnki, cards) => {
   try {
     const cardsChanged = [...cards]
-      .filter(([key, value]) => cardsInAnki.has(key)) //take only already existing cards
+      .filter(([key]) => cardsInAnki.has(key)) //take only already existing cards
       .filter(
         ([key, value]) =>
           JSON.stringify(value) !== JSON.stringify(cardsInAnki.get(key))
       ); //compare stringified objects to detect any changes
     if (cardsChanged.length) {
-      await cardsChanged.forEach((card) => updateCard(card));
+      cardsChanged.forEach((card) => updateCard(card));
       return cardsChanged;
     }
     return false;
@@ -122,10 +127,8 @@ const handleSaveNew = async (cardsInAnki, cards, setCards) => {
   try {
     const cardsMerged = new Map([...cards, ...cardsInAnki]);
     const newKeys = [];
-    const cardsNew = [...cardsMerged].filter(
-      ([key, value]) => !cardsInAnki.has(key)
-    );
-    cardsNew.forEach(([key, value]) => newKeys.push(key));
+    const cardsNew = [...cardsMerged].filter(([key]) => !cardsInAnki.has(key));
+    cardsNew.forEach(([key]) => newKeys.push(key));
     if (cardsNew.length) {
       const response = await addCards(cardsNew);
       if (response[0] !== null) {
@@ -141,88 +144,100 @@ const handleSaveNew = async (cardsInAnki, cards, setCards) => {
   }
 };
 
+const handleSaveExistingDeck = async (deckId, cards, setCards) => {
+  try {
+    const actions = [];
+    const cardsInAnki = await getCards(deckId);
+    //deleting removed cards from anki
+    const removeResult = await handleSaveRemove(cardsInAnki, cards);
+    if (removeResult) {
+      actions.push([
+        `Removed ${removeResult.length} ${
+          removeResult.length > 1 ? "cards" : "card"
+        }`,
+        "info",
+      ]);
+    }
+
+    //saving changes on existing cards
+    console.log(cardsInAnki, cards);
+    const changeResult = await handleSaveChange(cardsInAnki, cards);
+    if (changeResult) {
+      actions.push([
+        `Changed ${changeResult.length} ${
+          changeResult.length > 1 ? "cards" : "card"
+        }`,
+        "info",
+      ]);
+    }
+
+    //saving new cards
+    const newCardsResult = await handleSaveNew(cardsInAnki, cards, setCards);
+    if (newCardsResult) {
+      actions.push([
+        `Added ${newCardsResult.length} ${
+          newCardsResult.length > 1 ? "cards" : "card"
+        }`,
+        "success",
+      ]);
+    }
+    return actions;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const handleSaveNewDeck = async (deckName, cards, setCards, navigate) => {
+  try {
+    const actions = [];
+    const newDeckId = await createDeck(deckName);
+    if (newDeckId) {
+      //saving new cards
+      const newCardsResult = await handleSaveNew(new Map(), cards, setCards);
+      if (newCardsResult) {
+        actions.push([
+          `Added ${newCardsResult.length} ${
+            newCardsResult.length > 1 ? "cards" : "card"
+          }`,
+          "success",
+        ]);
+      }
+      actions.push(["Deck created"]);
+      navigate(`edit/${newDeckId}`, { replace: true });
+    }
+    if (deckName === "") actions.push(["Deck name can not be empty", "error"]);
+    if (deckName && !newDeckId) {
+      actions.push(["Can not save if the Anki app is not connected", "error"]);
+    }
+    return actions;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const handleSave =
   (deckId, deckName, cards, setCards, enqueueSnackbar, navigate) =>
   async () => {
-    try {
-      let actions = [];
-      if (deckId !== "newDeck") {
-        const cardsInAnki = await getCards(deckId);
-        //deleting removed cards from anki
-        const removeResult = await handleSaveRemove(cardsInAnki, cards);
-        if (removeResult) {
-          actions.push([
-            `Removed ${removeResult.length} ${
-              removeResult.length > 1 ? "cards" : "card"
-            }`,
-            "info",
-          ]);
-        }
-
-        //saving changes on existing cards
-        const changeResult = await handleSaveChange(cardsInAnki, cards);
-        if (changeResult) {
-          actions.push([
-            `Changed ${changeResult.length} ${
-              changeResult.length > 1 ? "cards" : "card"
-            }`,
-            "info",
-          ]);
-        }
-
-        //saving new cards
-        const newCardsResult = await handleSaveNew(
-          cardsInAnki,
-          cards,
-          setCards
-        );
-        if (newCardsResult) {
-          actions.push([
-            `Added ${newCardsResult.length} ${
-              newCardsResult.length > 1 ? "cards" : "card"
-            }`,
-            "success",
-          ]);
-        }
-      } else {
-        const newDeckId = await createDeck(deckName);
-        if (newDeckId) {
-          //saving new cards
-          const newCardsResult = await handleSaveNew(
-            new Map(),
-            cards,
-            setCards
-          );
-          if (newCardsResult) {
-            actions.push([
-              `Added ${newCardsResult.length} ${
-                newCardsResult.length > 1 ? "cards" : "card"
-              }`,
-              "success",
-            ]);
-          }
-          actions.push(["Deck created"]);
-          navigate(`./${newDeckId}`, { replace: true });
-        }
-        if (deckName === "")
-          actions.push(["Deck name can not be empty", "error"]);
-        if (deckName && !newDeckId) {
-          actions.push([
-            "Can not save if the Anki app is not connected",
-            "error",
-          ]);
-        }
-      }
-
-      //notifications snackbars
-      if (!actions.length)
-        snackbarDispatcher([["Nothing was saved", "warning"]], enqueueSnackbar);
-      snackbarDispatcher(actions, enqueueSnackbar);
-      actions = [];
-      deckIsChanged = false;
-    } catch (error) {
-      console.log(error);
+    let allActions = [];
+    if (deckId === "newDeck") {
+      const actions = await handleSaveNewDeck(
+        deckName,
+        cards,
+        setCards,
+        navigate
+      );
+      allActions.push(...actions);
+    } else {
+      const actions = await handleSaveExistingDeck(deckId, cards, setCards);
+      allActions.push(...actions);
     }
+
+    //notifications snackbars
+    if (!allActions.length)
+      snackbarDispatcher([["Nothing was saved", "warning"]], enqueueSnackbar);
+    snackbarDispatcher(allActions, enqueueSnackbar);
+    allActions = [];
+    deckIsChanged = false;
   };
 
 export const handleClose =
@@ -241,6 +256,6 @@ export const handleClose =
     }
   };
 
-export const handleSetName = (setName, status) => (event) => {
-  if (status === "newDeck") setName(event.target.value);
+export const handleSetName = (setName, deckId) => (event) => {
+  if (deckId === "newDeck") setName(event.target.value);
 };

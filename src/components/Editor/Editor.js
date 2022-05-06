@@ -1,18 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import {
-  IconButton,
-  FormControl,
-  Button,
-  List,
-  Container,
-  CircularProgress,
-} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { IconButton, List, Container } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Cancel";
-import DownloadIcon from "@mui/icons-material/Download";
-import styles from "./styles";
 import EditorHeader from "./EditorHeader/EditorHeader";
 import {
   handleAddCard,
@@ -22,14 +12,17 @@ import {
   handleClose,
   resetChangeFlag,
 } from "./editorController";
-import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { getCards, getDecksAndIDs } from "../../utilities/ankiAPI";
-import { getCache, setCache } from "../../utilities/utilities";
-import { Box } from "@mui/system";
 import { useDialog } from "../common/Dialog/DialogContext";
+import ButtonsMenu from "./ButtonsMenu/ButtonsMenu";
+import InLoading from "../common/InLoading/InLoading";
+// import { getCache, setCache } from "../../utilities/utilities";
+
+import styles from "./styles";
 
 const Editor = function (props) {
+  const [deckId, setDeckId] = useState(useParams().deckId);
   const [deckName, setName] = useState("");
   const [cards, setCards] = useState(new Map());
   const [dict, setDict] = useState({});
@@ -40,30 +33,23 @@ const Editor = function (props) {
     addPron: false,
   });
   const { enqueueSnackbar } = useSnackbar();
-  const deckId = useParams().deckId;
   const { setOpen: setDialogOpen, setContent, setData } = useDialog();
   const navigate = useNavigate();
 
   const loadCards = useCallback(
     async (id) => {
       try {
-        if (deckId !== "newDeck") {
-          const response = await getCards(id);
-          if (!response) {
-            navigate("../404");
-            return false;
-          }
-          setCards(response);
-          const decks = await getDecksAndIDs();
-          const deckName = decks[deckId];
-          setName(deckName);
-          resetChangeFlag();
-          if (deckName.length) return setStatus("successful");
-        } else {
-          setStatus("newDeck");
-          setCards(new Map());
-          setName("");
+        const response = await getCards(id);
+        if (!response) {
+          navigate("../404");
+          return false;
         }
+        setCards(response);
+        const decks = await getDecksAndIDs();
+        const deckName = decks[deckId];
+        setName(deckName);
+        resetChangeFlag();
+        if (deckName.length) return setStatus("successful");
       } catch (error) {
         console.log(error);
       }
@@ -72,25 +58,26 @@ const Editor = function (props) {
   );
 
   useEffect(() => {
-    loadCards(deckId);
-  }, [deckId, loadCards]);
+    if (props.newDeck) {
+      setDeckId("newDeck");
+      setName("");
+      setCards(new Map());
+      setStatus("successful");
+    } else {
+      loadCards(deckId);
+    }
+  }, [deckId, loadCards, props.newDeck]);
 
   if (status === "loading") {
-    return (
-      <Container>
-        <Box sx={styles.circProg}>
-          <CircularProgress></CircularProgress>
-        </Box>
-      </Container>
-    );
-  } else if (status === "successful" || status === "newDeck") {
+    return <InLoading />;
+  }
+  if (status === "successful") {
     return (
       <Container maxWidth="md" sx={styles.mainContainer}>
         <EditorHeader
           deckName={deckName ? deckName : ""}
-          deckId={deckId}
           setDict={setDict}
-          handleSetName={handleSetName(setName, status)}
+          handleSetName={handleSetName(setName, deckId)}
           settings={settings}
           setSettings={setSettings}
         ></EditorHeader>
@@ -101,38 +88,24 @@ const Editor = function (props) {
         >
           <AddCircleIcon fontSize="large"></AddCircleIcon>
         </IconButton>
-        <FormControl sx={styles.formControl}>
-          <Button
-            size="large"
-            variant="contained"
-            onClick={handleSave(
-              deckId,
-              deckName,
-              cards,
-              setCards,
-              enqueueSnackbar,
-              navigate
-            )}
-            startIcon={<SaveIcon />}
-          >
-            Save
-          </Button>
-          <Button variant="contained" startIcon={<DownloadIcon />}>
-            Export
-          </Button>
-          <Button
-            size="large"
-            variant="outlined"
-            onClick={handleClose(setDialogOpen, setContent, setData, navigate)}
-            startIcon={<CancelIcon />}
-          >
-            Close
-          </Button>
-        </FormControl>
+        <ButtonsMenu
+          handleClose={handleClose(
+            setDialogOpen,
+            setContent,
+            setData,
+            navigate
+          )}
+          handleSave={handleSave(
+            deckId,
+            deckName,
+            cards,
+            setCards,
+            enqueueSnackbar,
+            navigate
+          )}
+        ></ButtonsMenu>
       </Container>
     );
-  } else {
-    return <></>;
   }
 };
 

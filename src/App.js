@@ -1,7 +1,7 @@
 import Navbar from "./components/Navbar/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home/Home";
-import About from "./pages/About/About";
+// import About from "./pages/About/About";
 import Edit from "./pages/Edit";
 import Decks from "./pages/Decks";
 import Learn from "./pages/Learn";
@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import { DialogProvider } from "./components/common/Dialog/DialogContext";
 import Footer from "./components/common/Footer/Footer";
 import Import from "./pages/Import/Import";
+import NewDeck from "./pages/NewDeck/NewDeck";
 
 const appLocalStorage = window.localStorage;
 if (!appLocalStorage.getItem("mode")) appLocalStorage.setItem("mode", "light");
@@ -21,7 +22,7 @@ if (!appLocalStorage.getItem("mode")) appLocalStorage.setItem("mode", "light");
 const links = {
   home: "/",
   edit: "/edit",
-  newDeck: "/edit/newDeck",
+  newDeck: "/newDeck",
   decks: "/decks",
   // about: "/about",
   import: "/import",
@@ -31,6 +32,7 @@ const comps = {
   "/": <Home />,
   // "/edit": <Edit />, added as seperate
   "/decks": <Decks />,
+  "/newDeck": <NewDeck />,
   "/learn": <Learn />,
   "/howtoconnect": <HowToConnect />,
   // "/about": <About />,

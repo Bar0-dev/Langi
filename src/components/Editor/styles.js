@@ -1,5 +1,3 @@
-import { spacing } from "@mui/system";
-
 const styles = {
   mainContainer: {
     display: "flex",
@@ -11,21 +9,6 @@ const styles = {
   iconAdd: {
     margin: (theme) => theme.spacing(2),
     ml: "-2%",
-  },
-  formControl: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    gap: "10px",
-    justifyContent: "flex-end",
-    margin: (theme) => theme.spacing(2),
-    mr: "100px",
-  },
-  circProg: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    margin: (theme) => theme.spacing(10),
   },
 };
 

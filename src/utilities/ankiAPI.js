@@ -134,10 +134,8 @@ export const deleteCards = async (IDs) => {
 
 export const updateCard = async (data) => {
   try {
-    const [
-      id,
-      { deckName, sourceText, targetText, audioData, videoData, pictureData },
-    ] = data;
+    const [id, { sourceText, targetText, audioData, videoData, pictureData }] =
+      data;
     const response = await ankiAPI("updateNoteFields", {
       note: {
         id: id,
@@ -162,18 +160,22 @@ const parseCardsContent = (cards, deckName) => {
   const getContentObject = (value) => {
     const nodes = htmlParser.parseFromString(value, "text/html").body
       .childNodes;
-    const content = { text: nodes[0].data };
-    if (nodes.length > 1) content.img = nodes[1].outerHTML;
+    const content = {
+      text: nodes[0].data,
+      pictureData: {
+        url: nodes[1] ? nodes[1].outerHTML : undefined,
+      },
+    };
 
     return content;
   };
 
   const cardsMap = new Map();
   cards.forEach((card) => {
-    const { text: textFront, img: imageFront } = getContentObject(
+    const { text: textFront, pictureData: pictureDataFront } = getContentObject(
       card.fields.Front.value
     );
-    const { text: textBack, img: imageBack } = getContentObject(
+    const { text: textBack, pictureData: pictureDataBack } = getContentObject(
       card.fields.Back.value
     );
     cardsMap.set(card.noteId, {
@@ -181,7 +183,10 @@ const parseCardsContent = (cards, deckName) => {
       sourceText: textFront,
       targetText: textBack,
       tags: card.tags,
-      img: { imageFront: imageFront ?? false, imageBack: imageBack ?? false },
+      pictureData: {
+        url: pictureDataBack.url ?? pictureDataFront.url,
+        filename: undefined,
+      },
     });
   });
   return cardsMap;
@@ -196,7 +201,7 @@ export const getCards = async (deckId) => {
         query: `deck:"${deckName}"`,
       });
       const cards = await getCardsInfo(cardIds);
-      const cardsParsed = parseCardsContent(cards);
+      const cardsParsed = parseCardsContent(cards, deckName);
       return cardsParsed;
     } else {
       return false;

@@ -9,11 +9,10 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import LoopIcon from "@mui/icons-material/Loop";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ComboBox from "./ComboBox/ComboBox";
 import styles from "./styles";
 import { useEffect, useState } from "react";
-import { getCache, setCache } from "../../../utilities/utilities";
+// import { getCache, setCache } from "../../../utilities/utilities";
 import WiktTransl from "wiktionary-translations";
 import ISO6391 from "iso-639-1";
 
@@ -32,7 +31,6 @@ const supportedLangs = [
 
 const EditorHeader = function (props) {
   const deckName = props.deckName;
-  const deckId = props.deckId;
   const [srcLang, setSrcLang] = useState(null);
   const [trgtLang, setTrgtLang] = useState(null);
   const [supportSrcLang, setSupportSrcLang] = useState(supportedLangs);
