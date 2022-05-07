@@ -14,6 +14,7 @@ import styles from "./styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useState, useEffect } from "react";
 import { isEmpty } from "lodash";
+import { useMap } from "../../../utilities/utilities";
 
 const ResultViewer = (props) => {
   return (
@@ -43,29 +44,16 @@ const ResultViewer = (props) => {
 
 let inputTimer = null;
 const Flashcard = function (props) {
-  const card = new Map();
-  const [sourceText, setSourceText] = useState(props.data.sourceText);
-  const [targetText, setTargetText] = useState(props.data.targetText);
-  const [suggestions, setSuggestions] = useState([]);
-  const [imgUrl, setImgUrl] = useState("");
+  const [card, setCardValue] = useMap();
   const settings = props.settings;
 
-  const handleSrcTxtChange = (e) => {
-    setSourceText(e.target.value);
-    props.handleChange({
-      id: props.id,
-      sourceText: e.target.value,
-    });
+  const handleFrontChange = (e) => {
+    setCardValue("front", e.target.value);
     emmitRequest(e.target.value);
   };
 
-  const handleTrgtTxtChange = (e) => {
-    const value = e.target.value ? e.target.value : e.target.textContent;
-    setTargetText(value);
-    props.handleChange({
-      id: props.id,
-      targetText: value,
-    });
+  const handleBackChange = (e) => {
+    setCardValue("back", e.target.value);
   };
 
   const emmitRequest = (inputText) => {
@@ -79,7 +67,7 @@ const Flashcard = function (props) {
           if (settings.suggestions) {
             const sugRes = await props.dict.getTranslations(inputText);
             if (sugRes) {
-              setSuggestions(sugRes);
+              setCardValue("suggestions", sugRes);
             }
           }
           if (settings.addImg) {
@@ -88,33 +76,28 @@ const Flashcard = function (props) {
               "thumbnail",
               300
             );
-            setImgUrl(imgurl);
-            props.handleChange({
-              id: props.id,
-              sourceText: inputText,
-              pictureData: {
-                url: imgurl,
-                filename: `${inputText}.jpg`,
-                fields: ["Back"],
-              },
-            });
+            setCardValue("picture", { url: imgurl });
           }
         }, 3000);
     }
   };
+
+  useEffect(() => {
+    props.handleChange(props.id, card);
+  }, [card]);
 
   return (
     <Zoom in={true}>
       <Card key={props.id} sx={styles.card}>
         <Box style={styles.inputs}>
           <TextField
-            value={sourceText}
-            onChange={handleSrcTxtChange}
+            value={card.get("front")}
+            onChange={handleFrontChange}
           ></TextField>
           <ArrowForwardIosIcon />
           <TextField
-            value={targetText}
-            onChange={handleTrgtTxtChange}
+            value={card.get("back")}
+            onChange={handleBackChange}
           ></TextField>
           <IconButton
             onClick={() => {
@@ -126,9 +109,9 @@ const Flashcard = function (props) {
         </Box>
         {settings.suggestions || settings.addImg ? (
           <ResultViewer
-            suggestions={suggestions}
-            imgUrl={imgUrl}
-            handleTrgtTxtChange={handleTrgtTxtChange}
+            suggestions={card.get("suggestions")}
+            imgUrl={card.get("picture").url}
+            handleTrgtTxtChange={handleBackChange}
           ></ResultViewer>
         ) : null}
       </Card>

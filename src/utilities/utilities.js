@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export const snackbarDispatcher = (actions, invokeSnackbar) => {
   actions.forEach(([message, variant]) =>
     invokeSnackbar(message, { variant: variant })
@@ -24,4 +26,24 @@ export const getCache = (key) => {
     return null;
   }
   return item.value;
+};
+
+const cardTemplate = () => {
+  const card = new Map();
+  card.set("front", "");
+  card.set("back", "");
+  card.set("suggestions", []);
+  card.set("picture", {});
+
+  return card;
+};
+
+export const useMap = (initMap = cardTemplate()) => {
+  const [myMap, setMyMap] = useState(new Map(initMap));
+
+  const setValue = (key, value) => {
+    setMyMap(new Map(myMap).set(key, value));
+  };
+
+  return [myMap, setValue];
 };
