@@ -43,6 +43,7 @@ const ResultViewer = (props) => {
 
 let inputTimer = null;
 const Flashcard = function (props) {
+  const card = new Map();
   const [sourceText, setSourceText] = useState(props.data.sourceText);
   const [targetText, setTargetText] = useState(props.data.targetText);
   const [suggestions, setSuggestions] = useState([]);
