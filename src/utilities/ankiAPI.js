@@ -1,5 +1,6 @@
 import axios from "axios";
 import { saveAs } from "file-saver";
+import { cardTemplate } from "./utilities";
 
 const ankiAPI = async (action, params) => {
   const response = await axios
@@ -14,26 +15,14 @@ const ankiAPI = async (action, params) => {
 };
 
 const noteTemplate = (data) => {
-  const [
-    id,
-    {
-      deckName,
-      sourceText,
-      targetText,
-      options,
-      pictureData,
-      audioData,
-      videoData,
-      tags, //array
-    },
-  ] = data;
+  const [id, card] = data;
 
   return {
-    deckName: deckName,
+    deckName: card.get("deckName"),
     modelName: "Basic",
     fields: {
-      Front: sourceText,
-      Back: targetText,
+      Front: card.get("front"),
+      Back: card.get("back"),
     },
     options: {
       allowDuplicate: true,
@@ -44,10 +33,10 @@ const noteTemplate = (data) => {
         checkAllModels: false,
       },
     },
-    tags: tags,
-    audio: [audioData],
-    video: [videoData],
-    picture: [pictureData],
+    tags: card.get("tags"),
+    audio: [card.get("audio")],
+    video: [card.get("video") ?? []],
+    picture: [card.get("picture")],
   };
 };
 
@@ -117,6 +106,7 @@ export const addCards = async (cardsData) => {
     const response = await ankiAPI("addNotes", {
       notes: cardsData.map((data) => noteTemplate(data)),
     });
+    console.log(noteTemplate(cardsData[0]));
     if (!response) throw new Error("Adding cards action was unsuccessful");
     return response;
   } catch (error) {
@@ -134,18 +124,17 @@ export const deleteCards = async (IDs) => {
 
 export const updateCard = async (data) => {
   try {
-    const [id, { sourceText, targetText, audioData, videoData, pictureData }] =
-      data;
+    const [id, cardData] = data;
     const response = await ankiAPI("updateNoteFields", {
       note: {
         id: id,
         fields: {
-          Front: sourceText,
-          Back: targetText,
+          Front: cardData.get("front"),
+          Back: cardData.get("back"),
         },
-        audio: [audioData],
-        video: [videoData],
-        picture: [pictureData],
+        audio: [cardData.get("audio")],
+        video: [cardData.get("video")],
+        picture: [cardData.get("picture")],
       },
     });
     return response;
@@ -172,22 +161,26 @@ const parseCardsContent = (cards, deckName) => {
 
   const cardsMap = new Map();
   cards.forEach((card) => {
-    const { text: textFront, pictureData: pictureDataFront } = getContentObject(
+    const { text: front, pictureData: pictureFront } = getContentObject(
       card.fields.Front.value
     );
-    const { text: textBack, pictureData: pictureDataBack } = getContentObject(
+    const { text: back, pictureData: pictureBack } = getContentObject(
       card.fields.Back.value
     );
-    cardsMap.set(card.noteId, {
-      deckName: deckName,
-      sourceText: textFront,
-      targetText: textBack,
-      tags: card.tags,
-      pictureData: {
-        url: pictureDataBack.url ?? pictureDataFront.url,
-        filename: undefined,
-      },
-    });
+
+    cardsMap.set(
+      card.noteId,
+      cardTemplate({
+        deckName: deckName,
+        front: front,
+        back: back,
+        tags: card.tags,
+        picture: {
+          url: pictureBack.url ?? pictureFront.url,
+          filename: "",
+        },
+      })
+    );
   });
   return cardsMap;
 };

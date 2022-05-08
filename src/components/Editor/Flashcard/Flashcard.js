@@ -44,7 +44,7 @@ const ResultViewer = (props) => {
 
 let inputTimer = null;
 const Flashcard = function (props) {
-  const [card, setCardValue] = useMap();
+  const [card, setCardValue] = useMap(props.data);
   const settings = props.settings;
 
   const handleFrontChange = (e) => {

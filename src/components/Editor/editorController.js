@@ -8,7 +8,8 @@ import {
   getCards,
   createDeck,
 } from "../../utilities/ankiAPI";
-import { snackbarDispatcher } from "../../utilities/utilities";
+import { cardTemplate, snackbarDispatcher } from "../../utilities/utilities";
+import _ from "lodash";
 
 let deckIsChanged = false;
 
@@ -35,16 +36,7 @@ export const cardReactElements = (cards, setCards, dict, settings) => {
 
 export const handleAddCard = (deckName, cards, setCards) => () => {
   const cardsNew = new Map(cards);
-  cardsNew.set(uuidv4(), {
-    deckName: deckName,
-    sourceText: "",
-    targetText: "",
-    pictureData: {
-      url: undefined,
-      filename: undefined,
-      fields: ["Back"],
-    },
-  });
+  cardsNew.set(uuidv4(), cardTemplate({ deckName: deckName }));
   setCards(cardsNew);
   deckIsChanged = true;
 };
@@ -59,6 +51,7 @@ const handleDeleteCard = (cards, setCards) => (cardId) => {
 const handleChange = (cards, setCards) => (id, data) => {
   const cardsNew = new Map(cards);
   cardsNew.set(id, data);
+  setCards(cardsNew);
   deckIsChanged = true;
 };
 
@@ -81,10 +74,7 @@ const handleSaveChange = async (cardsInAnki, cards) => {
   try {
     const cardsChanged = [...cards]
       .filter(([key]) => cardsInAnki.has(key)) //take only already existing cards
-      .filter(
-        ([key, value]) =>
-          JSON.stringify(value) !== JSON.stringify(cardsInAnki.get(key))
-      ); //compare stringified objects to detect any changes
+      .filter(([key, value]) => !_.isEqual(value, cardsInAnki.get(key))); //compare stringified objects to detect any changes
     if (cardsChanged.length) {
       cardsChanged.forEach((card) => updateCard(card));
       return cardsChanged;
@@ -142,7 +132,6 @@ const handleSaveExistingDeck = async (deckId, cards, setCards) => {
     }
 
     //saving changes on existing cards
-    console.log(cardsInAnki, cards);
     const changeResult = await handleSaveChange(cardsInAnki, cards);
     if (changeResult) {
       actions.push([

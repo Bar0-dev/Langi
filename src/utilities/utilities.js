@@ -28,12 +28,21 @@ export const getCache = (key) => {
   return item.value;
 };
 
-const cardTemplate = () => {
+export const cardTemplate = ({
+  deckName = "",
+  front = "",
+  back = "",
+  suggestions = [],
+  picture = { url: "" },
+  tags = [],
+}) => {
   const card = new Map();
-  card.set("front", "");
-  card.set("back", "");
-  card.set("suggestions", []);
-  card.set("picture", {});
+  card.set("deckName", deckName);
+  card.set("front", front);
+  card.set("back", back);
+  card.set("suggestions", suggestions);
+  card.set("picture", picture);
+  card.set("tags", tags);
 
   return card;
 };
