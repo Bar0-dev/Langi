@@ -49,7 +49,6 @@ const Flashcard = function (props) {
 
   const handleFrontChange = (e) => {
     setCardValue("front", e.target.value);
-    emmitRequest(e.target.value);
   };
 
   const handleBackChange = (e) => {
@@ -76,6 +75,7 @@ const Flashcard = function (props) {
               "thumbnail",
               300
             );
+            console.log(card);
             setCardValue("picture", { url: imgurl });
           }
         }, 3000);
@@ -84,6 +84,7 @@ const Flashcard = function (props) {
 
   useEffect(() => {
     props.handleChange(props.id, card);
+    emmitRequest(card.get("front"));
   }, [card]);
 
   return (
