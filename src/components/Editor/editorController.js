@@ -174,7 +174,7 @@ const handleSaveNewDeck = async (deckName, cards, setCards, navigate) => {
         ]);
       }
       actions.push(["Deck created"]);
-      navigate(`edit/${newDeckId}`, { replace: true });
+      navigate(`/edit/${newDeckId}`, { replace: true });
     }
     if (deckName === "") actions.push(["Deck name can not be empty", "error"]);
     if (deckName && !newDeckId) {

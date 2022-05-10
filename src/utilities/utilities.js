@@ -58,5 +58,5 @@ export const useMap = (initMap = cardTemplate()) => {
     setMyMap(new Map(myMap).set(key, value));
   };
 
-  return [myMap, setValue];
+  return [myMap, setValue, setMyMap];
 };

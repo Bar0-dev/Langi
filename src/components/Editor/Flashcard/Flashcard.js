@@ -2,6 +2,7 @@ import {
   Box,
   Card,
   Chip,
+  Collapse,
   Grow,
   IconButton,
   Link,
@@ -19,32 +20,33 @@ import { useMap } from "../../../utilities/utilities";
 const ResultViewer = (props) => {
   return (
     <Box sx={styles.results}>
-      <Box sx={styles.suggestions}>
-        <Typography variant="body">Suggestions: </Typography>
-
-        {props.suggestions.length > 0
-          ? props.suggestions.map((value) => (
-              <Grow key={value} in={true} style={{ timeout: 1000 }}>
-                <Chip
-                  key={value}
-                  label={value}
-                  onClick={props.handleTrgtTxtChange}
-                ></Chip>
-              </Grow>
-            ))
-          : "nothing found"}
-      </Box>
-      <Box sx={styles.image}>
-        <Typography>Image:</Typography>
-        {props.imgUrl ? <Link href={props.imgUrl}>open</Link> : "nothing found"}
-      </Box>
+      <Collapse in={props.suggestions.length ? true : false}>
+        <Box sx={styles.suggestions}>
+          <Typography variant="body">Suggestions: </Typography>
+          {props.suggestions.map((value) => (
+            <Grow key={value} in={true} style={{ timeout: 1000 }}>
+              <Chip
+                key={value}
+                id={value}
+                label={value}
+                onClick={props.handleChange}
+              ></Chip>
+            </Grow>
+          ))}
+        </Box>
+      </Collapse>
+      <Collapse in={props.imgUrl ? true : false}>
+        <Box sx={styles.image}>
+          <Typography>Image:</Typography>
+          <Link href={props.imgUrl}>open</Link>
+        </Box>
+      </Collapse>
     </Box>
   );
 };
 
-let inputTimer = null;
 const Flashcard = function (props) {
-  const [card, setCardValue] = useMap(props.data);
+  const [card, setCardValue, setCard] = useMap(props.data);
   const settings = props.settings;
 
   const handleFrontChange = (e) => {
@@ -52,39 +54,45 @@ const Flashcard = function (props) {
   };
 
   const handleBackChange = (e) => {
+    console.log(e.target.value);
     setCardValue("back", e.target.value);
   };
 
-  const emmitRequest = (inputText) => {
-    if (inputTimer) {
-      window.clearTimeout(inputTimer);
-      inputTimer = "null ";
+  const handleChipClick = (e) => {
+    setCardValue("back", e.currentTarget.innerText);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.keyCode === 13) return emmitRequest(card.get("front"));
+    return false;
+  };
+
+  const emmitRequest = async (inputText) => {
+    if (isEmpty(props.dict)) return;
+    if (!inputText) return;
+    const newCard = new Map(card);
+    if (settings.suggestions) {
+      const sugRes = await props.dict.getTranslations(inputText);
+      if (sugRes) {
+        newCard.set("suggestions", sugRes);
+      }
     }
-    if (!isEmpty(props.dict)) {
-      if (inputText)
-        inputTimer = setTimeout(async () => {
-          if (settings.suggestions) {
-            const sugRes = await props.dict.getTranslations(inputText);
-            if (sugRes) {
-              setCardValue("suggestions", sugRes);
-            }
-          }
-          if (settings.addImg) {
-            const [imgurl] = await props.dict.getImageUrls(
-              inputText,
-              "thumbnail",
-              300
-            );
-            console.log(card);
-            setCardValue("picture", [{ url: imgurl }]);
-          }
-        }, 3000);
+    if (settings.addImg) {
+      const imgData = await props.dict.getImageUrls(
+        inputText,
+        "thumbnail",
+        300
+      );
+      if (imgData) {
+        const [imgurl] = imgData;
+        newCard.set("picture", [{ url: imgurl, filename: inputText }]);
+      }
     }
+    setCard(newCard);
   };
 
   useEffect(() => {
     props.handleChange(props.id, card);
-    emmitRequest(card.get("front"));
   }, [card]);
 
   return (
@@ -94,6 +102,7 @@ const Flashcard = function (props) {
           <TextField
             value={card.get("front")}
             onChange={handleFrontChange}
+            onKeyDown={handleKeyPress}
           ></TextField>
           <ArrowForwardIosIcon />
           <TextField
@@ -108,13 +117,13 @@ const Flashcard = function (props) {
             <CloseIcon></CloseIcon>
           </IconButton>
         </Box>
-        {settings.suggestions || settings.addImg ? (
-          <ResultViewer
-            suggestions={card.get("suggestions")}
-            imgUrl={card.get("picture")[0].img}
-            handleTrgtTxtChange={handleBackChange}
-          ></ResultViewer>
-        ) : null}
+        <ResultViewer
+          suggestions={card.get("suggestions")}
+          imgUrl={
+            card.get("picture").length ? card.get("picture")[0].url : null
+          }
+          handleChange={handleChipClick}
+        ></ResultViewer>
       </Card>
     </Zoom>
   );
