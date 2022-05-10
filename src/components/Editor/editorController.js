@@ -71,11 +71,14 @@ const handleSaveRemove = async (cardsInAnki, cards) => {
 };
 
 const handleSaveChange = async (cardsInAnki, cards) => {
-  console.log(cardsInAnki, cards);
   try {
     const cardsChanged = [...cards]
       .filter(([key]) => cardsInAnki.has(key)) //take only already existing cards
-      .filter(([key, value]) => !_.isEqual(value, cardsInAnki.get(key))); //compare stringified objects to detect any changes
+      .filter(
+        ([key, value]) =>
+          value.get("front") !== cardsInAnki.get(key).get("front") ||
+          value.get("back") !== cardsInAnki.get(key).get("back")
+      );
     if (cardsChanged.length) {
       cardsChanged.forEach((card) => updateCard(card));
       return cardsChanged;

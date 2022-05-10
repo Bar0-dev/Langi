@@ -14,6 +14,11 @@ const ankiAPI = async (action, params) => {
   return response;
 };
 
+const frontTemplate = (text) =>
+  `<span id="front-text" style="font-size: 40px;">${text}</span>`;
+const backTemplate = (text) =>
+  `<span id="back-text" style="font-size: 40px;">${text}</span><br>`;
+
 const noteTemplate = (data) => {
   const [id, card] = data;
 
@@ -21,8 +26,8 @@ const noteTemplate = (data) => {
     deckName: card.get("deckName"),
     modelName: "Basic",
     fields: {
-      Front: card.get("front"),
-      Back: card.get("back"),
+      Front: frontTemplate(card.get("front")),
+      Back: backTemplate(card.get("back")),
     },
     options: {
       allowDuplicate: true,
@@ -128,8 +133,8 @@ export const updateCard = async (data) => {
       note: {
         id: id,
         fields: {
-          Front: cardData.get("front"),
-          Back: cardData.get("back"),
+          Front: frontTemplate(cardData.get("front")),
+          Back: backTemplate(cardData.get("back")),
         },
         audio: cardData.get("audio"),
         video: cardData.get("video"),
@@ -144,37 +149,30 @@ export const updateCard = async (data) => {
 
 const parseCardsContent = (cards, deckName) => {
   const htmlParser = new DOMParser();
-
-  const getContentObject = (value) => {
-    const nodes = htmlParser.parseFromString(value, "text/html").body
-      .childNodes;
-    const content = {
-      text: nodes[0].data,
-      pictureUrl: nodes[1] ? nodes[1].outerHTML : undefined,
-    };
-
-    return content;
-  };
-
   const cardsMap = new Map();
   cards.forEach((card) => {
-    const { text: front, pictureUrl: pictureFront } = getContentObject(
-      card.fields.Front.value
+    const frontElements = htmlParser.parseFromString(
+      card.fields.Front.value,
+      "text/html"
+    ).body.childNodes;
+    const [front] = [...frontElements].filter(
+      (element) => element.id === "front-text"
     );
-    const { text: back, pictureUrl: pictureBack } = getContentObject(
-      card.fields.Back.value
+    const backElements = htmlParser.parseFromString(
+      card.fields.Back.value,
+      "text/html"
+    ).body.childNodes;
+    const [back] = [...backElements].filter(
+      (element) => element.id === "back-text"
     );
 
     cardsMap.set(
       card.noteId,
       cardTemplate({
         deckName: deckName,
-        front: front,
-        back: back,
+        front: front.textContent,
+        back: back.textContent,
         tags: card.tags,
-        picture: pictureBack
-          ? [{ url: pictureBack, filename: pictureBack }]
-          : [],
       })
     );
   });
@@ -267,4 +265,19 @@ export const exportDeckTxt = async (deckId) => {
   const cardsString = cardsParsed.join(" \n");
   const blob = new Blob([cardsString], { type: "text/plain;charset=utf-8" });
   saveAs(blob, `${name}.txt`);
+};
+
+//Models
+
+export const createImageModel = async () => {
+  const model = {
+    modelName: "BasicImage",
+    inOrderFields: ["Field1", "Field2", "Field3"],
+    cardTemplates: [
+      {
+        Front: "Front html {{Field1}}",
+        Back: "<div><span>{{Field2}}</span><img/></div>",
+      },
+    ],
+  };
 };
