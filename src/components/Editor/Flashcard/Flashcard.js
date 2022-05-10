@@ -54,7 +54,6 @@ const Flashcard = function (props) {
   };
 
   const handleBackChange = (e) => {
-    console.log(e.target.value);
     setCardValue("back", e.target.value);
   };
 
@@ -85,7 +84,9 @@ const Flashcard = function (props) {
       );
       if (imgData) {
         const [imgurl] = imgData;
-        newCard.set("picture", [{ url: imgurl, filename: inputText }]);
+        newCard.set("picture", [
+          { url: imgurl, filename: `${inputText}.jpg`, fields: ["Back"] },
+        ]);
       }
     }
     setCard(newCard);

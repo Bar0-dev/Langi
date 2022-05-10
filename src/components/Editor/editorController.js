@@ -71,6 +71,7 @@ const handleSaveRemove = async (cardsInAnki, cards) => {
 };
 
 const handleSaveChange = async (cardsInAnki, cards) => {
+  console.log(cardsInAnki, cards);
   try {
     const cardsChanged = [...cards]
       .filter(([key]) => cardsInAnki.has(key)) //take only already existing cards
@@ -95,7 +96,6 @@ const handleSaveNew = async (cardsInAnki, cards, setCards) => {
     });
     setCards(cardsNewIds);
   };
-
   try {
     const cardsMerged = new Map([...cards, ...cardsInAnki]);
     const newKeys = [];
