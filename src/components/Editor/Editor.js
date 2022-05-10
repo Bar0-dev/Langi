@@ -17,7 +17,7 @@ import { getCards, getDecksAndIDs } from "../../utilities/ankiAPI";
 import { useDialog } from "../common/Dialog/DialogContext";
 import ButtonsMenu from "./ButtonsMenu/ButtonsMenu";
 import InLoading from "../common/InLoading/InLoading";
-// import { getCache, setCache } from "../../utilities/utilities";
+import { getCache, setCache } from "../../utilities/utilities";
 
 import styles from "./styles";
 
@@ -27,14 +27,21 @@ const Editor = function (props) {
   const [cards, setCards] = useState(new Map());
   const [dict, setDict] = useState({});
   const [status, setStatus] = useState("loading");
-  const [settings, setSettings] = useState({
-    suggestions: false,
-    addImg: false,
-    addPron: false,
-  });
   const { enqueueSnackbar } = useSnackbar();
   const { setOpen: setDialogOpen, setContent, setData } = useDialog();
   const navigate = useNavigate();
+
+  //cacheing
+  if (!getCache(deckId))
+    setCache(deckId, {
+      suggestions: false,
+      addImage: false,
+      addPron: false,
+      source: null,
+      target: null,
+    });
+  const cachedSettings = getCache(deckId);
+  const [settings, setSettings] = useState(cachedSettings);
 
   const loadCards = useCallback(
     async (id) => {
@@ -75,6 +82,7 @@ const Editor = function (props) {
     return (
       <Container maxWidth="md" sx={styles.mainContainer}>
         <EditorHeader
+          deckId={deckId}
           deckName={deckName ? deckName : ""}
           setDict={setDict}
           handleSetName={handleSetName(setName, deckId)}

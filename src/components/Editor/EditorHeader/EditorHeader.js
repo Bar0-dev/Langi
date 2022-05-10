@@ -12,7 +12,7 @@ import LoopIcon from "@mui/icons-material/Loop";
 import ComboBox from "./ComboBox/ComboBox";
 import styles from "./styles";
 import { useEffect, useState } from "react";
-// import { getCache, setCache } from "../../../utilities/utilities";
+import { getCache, setCache } from "../../../utilities/utilities";
 import WiktTransl from "wiktionary-translations";
 import ISO6391 from "iso-639-1";
 
@@ -30,9 +30,11 @@ const supportedLangs = [
 //PLACEHOLDER
 
 const EditorHeader = function (props) {
+  const cachedSettings = getCache(props.deckId);
+
   const deckName = props.deckName;
-  const [srcLang, setSrcLang] = useState(null);
-  const [trgtLang, setTrgtLang] = useState(null);
+  const [srcLang, setSrcLang] = useState(cachedSettings.source ?? null);
+  const [trgtLang, setTrgtLang] = useState(cachedSettings.target ?? null);
   const [supportSrcLang, setSupportSrcLang] = useState(supportedLangs);
   const [supportTrgtLang, setSupportTrgtLang] = useState(supportedLangs);
 
@@ -41,13 +43,16 @@ const EditorHeader = function (props) {
       setSrcLang(value);
       const tempTrgtLangs = supportedLangs.filter((lang) => lang !== value);
       setSupportTrgtLang(tempTrgtLangs);
+      props.setSettings({ ...props.settings, source: value });
+      setCache(props.deckId, { ...props.settings, source: value });
     } else setSrcLang(null);
   };
 
   const handleTrgtLangChange = (event, value) => {
     if (value) {
       setTrgtLang(value);
-      // setCache("settings", { ...getCache("settings"), trgtLang: value }, 7);
+      props.setSettings({ ...props.settings, target: value });
+      setCache(props.deckId, { ...props.settings, target: value });
     } else setTrgtLang(null);
   };
 
@@ -88,25 +93,31 @@ const EditorHeader = function (props) {
           <FormControlLabel
             control={<Switch />}
             checked={props.settings.suggestions}
-            onChange={(event, value) =>
-              props.setSettings({ ...props.settings, suggestions: value })
-            }
+            onChange={(event, value) => {
+              props.setSettings({ ...props.settings, suggestions: value });
+              setCache(props.deckId, { ...props.settings, suggestions: value });
+            }}
             label="suggestions"
           />
           <FormControlLabel
             control={<Switch />}
-            checked={props.settings.addImg}
-            onChange={(event, value) =>
-              props.setSettings({ ...props.settings, addImg: value })
+            disabled={props.settings.suggestions ? false : true}
+            checked={
+              props.settings.suggestions ? props.settings.addImage : false
             }
+            onChange={(event, value) => {
+              props.setSettings({ ...props.settings, addImage: value });
+              setCache(props.deckId, { ...props.settings, addImage: value });
+            }}
             label="add image"
           />
           <FormControlLabel
             control={<Switch />}
             checked={props.settings.addPron}
-            onChange={(event, value) =>
-              props.setSettings({ ...props.settings, addPron: value })
-            }
+            onChange={(event, value) => {
+              props.setSettings({ ...props.settings, addPron: value });
+              setCache(props.deckId, { ...props.settings, addPron: value });
+            }}
             disabled={true}
             label="add pronunciation"
           />

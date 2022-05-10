@@ -77,7 +77,7 @@ const Flashcard = function (props) {
         newCard.set("suggestions", sugRes);
       }
     }
-    if (settings.addImg) {
+    if (settings.addImage) {
       const imgData = await props.dict.getImageUrls(
         inputText,
         "thumbnail",
