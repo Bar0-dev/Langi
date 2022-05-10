@@ -76,7 +76,7 @@ const Flashcard = function (props) {
               300
             );
             console.log(card);
-            setCardValue("picture", { url: imgurl });
+            setCardValue("picture", [{ url: imgurl }]);
           }
         }, 3000);
     }
@@ -111,7 +111,7 @@ const Flashcard = function (props) {
         {settings.suggestions || settings.addImg ? (
           <ResultViewer
             suggestions={card.get("suggestions")}
-            imgUrl={card.get("picture").url}
+            imgUrl={card.get("picture")[0].img}
             handleTrgtTxtChange={handleBackChange}
           ></ResultViewer>
         ) : null}

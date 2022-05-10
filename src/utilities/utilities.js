@@ -33,7 +33,9 @@ export const cardTemplate = ({
   front = "",
   back = "",
   suggestions = [],
-  picture = { url: "" },
+  picture = [],
+  audio = [],
+  video = [],
   tags = [],
 }) => {
   const card = new Map();
@@ -43,6 +45,8 @@ export const cardTemplate = ({
   card.set("suggestions", suggestions);
   card.set("picture", picture);
   card.set("tags", tags);
+  card.set("audio", audio);
+  card.set("video", video);
 
   return card;
 };

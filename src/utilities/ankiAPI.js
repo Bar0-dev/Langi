@@ -34,9 +34,9 @@ const noteTemplate = (data) => {
       },
     },
     tags: card.get("tags"),
-    audio: [card.get("audio")],
-    video: [card.get("video") ?? []],
-    picture: [card.get("picture")],
+    audio: card.get("audio"),
+    video: card.get("video"),
+    picture: card.get("picture"),
   };
 };
 
@@ -106,7 +106,6 @@ export const addCards = async (cardsData) => {
     const response = await ankiAPI("addNotes", {
       notes: cardsData.map((data) => noteTemplate(data)),
     });
-    console.log(noteTemplate(cardsData[0]));
     if (!response) throw new Error("Adding cards action was unsuccessful");
     return response;
   } catch (error) {
@@ -132,9 +131,9 @@ export const updateCard = async (data) => {
           Front: cardData.get("front"),
           Back: cardData.get("back"),
         },
-        audio: [cardData.get("audio")],
-        video: [cardData.get("video")],
-        picture: [cardData.get("picture")],
+        audio: cardData.get("audio"),
+        video: cardData.get("video"),
+        picture: cardData.get("picture"),
       },
     });
     return response;
@@ -151,9 +150,7 @@ const parseCardsContent = (cards, deckName) => {
       .childNodes;
     const content = {
       text: nodes[0].data,
-      pictureData: {
-        url: nodes[1] ? nodes[1].outerHTML : undefined,
-      },
+      pictureUrl: nodes[1] ? nodes[1].outerHTML : undefined,
     };
 
     return content;
@@ -161,10 +158,10 @@ const parseCardsContent = (cards, deckName) => {
 
   const cardsMap = new Map();
   cards.forEach((card) => {
-    const { text: front, pictureData: pictureFront } = getContentObject(
+    const { text: front, pictureUrl: pictureFront } = getContentObject(
       card.fields.Front.value
     );
-    const { text: back, pictureData: pictureBack } = getContentObject(
+    const { text: back, pictureUrl: pictureBack } = getContentObject(
       card.fields.Back.value
     );
 
@@ -175,10 +172,9 @@ const parseCardsContent = (cards, deckName) => {
         front: front,
         back: back,
         tags: card.tags,
-        picture: {
-          url: pictureBack.url ?? pictureFront.url,
-          filename: "",
-        },
+        picture: pictureBack
+          ? [{ url: pictureBack, filename: pictureBack }]
+          : [],
       })
     );
   });
