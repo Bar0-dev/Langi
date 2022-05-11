@@ -13,7 +13,11 @@ import {
   resetChangeFlag,
 } from "./editorController";
 import { useSnackbar } from "notistack";
-import { getCards, getDecksAndIDs } from "../../utilities/ankiAPI";
+import {
+  exportDeckTxt,
+  getCards,
+  getDecksAndIDs,
+} from "../../utilities/ankiAPI";
 import { useDialog } from "../common/Dialog/DialogContext";
 import ButtonsMenu from "./ButtonsMenu/ButtonsMenu";
 import InLoading from "../common/InLoading/InLoading";
@@ -98,6 +102,9 @@ const Editor = function (props) {
           <AddCircleIcon fontSize="large"></AddCircleIcon>
         </IconButton>
         <ButtonsMenu
+          deckId={deckId}
+          deckName={deckName}
+          cards={cards}
           handleClose={handleClose(
             setDialogOpen,
             setContent,
@@ -112,6 +119,7 @@ const Editor = function (props) {
             enqueueSnackbar,
             navigate
           )}
+          handleExport={exportDeckTxt}
         ></ButtonsMenu>
       </Container>
     );

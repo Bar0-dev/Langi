@@ -16,7 +16,13 @@ export default function ButtonsMenu(props) {
       >
         Save
       </Button>
-      <Button variant="contained" startIcon={<DownloadIcon />}>
+      <Button
+        variant="contained"
+        startIcon={<DownloadIcon />}
+        onClick={() =>
+          props.handleExport(props.deckId, props.deckName, props.cards)
+        }
+      >
         Export
       </Button>
       <Button

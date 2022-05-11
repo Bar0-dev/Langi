@@ -274,14 +274,24 @@ export const importDeckTxt = async (fileData, name) => {
   console.log(response);
 };
 
-export const exportDeckTxt = async (deckId) => {
-  const cards = await getCards(deckId, true);
-  console.log(cards);
-  const name = await getDeckNameByID(deckId);
-  const cardsParsed = cards.map((card) => {
-    return `${card.fields.Front.value}\t${card.fields.Back.value}`;
-  });
+export const exportDeckTxt = async (deckId, deckName, cardsLocal = null) => {
+  let cardsParsed = [];
+  if (deckId === "newDeck") {
+    const cards = [...cardsLocal];
+    cardsParsed = cards.map(([, card]) => {
+      return `${frontTemplate(
+        card.get("front"),
+        card.get("pictureFront")
+      )}\t${backTemplate(card.get("back"), card.get("pictureBack"))}`;
+    });
+  } else {
+    const cards = await getCards(deckId, true);
+    cardsParsed = cards.map((card) => {
+      return `${card.fields.Front.value}\t${card.fields.Back.value}`;
+    });
+  }
+
   const cardsString = cardsParsed.join(" \n");
   const blob = new Blob([cardsString], { type: "text/plain;charset=utf-8" });
-  saveAs(blob, `${name}.txt`);
+  saveAs(blob, `${deckName}.txt`);
 };

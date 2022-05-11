@@ -39,13 +39,17 @@ const ResultViewer = (props) => {
       <Collapse in={props.imgUrlFront ? true : false}>
         <Box sx={styles.image}>
           <Typography>Image Front:</Typography>
-          <Link href={props.imgUrlFront}>open</Link>
+          <Link target="_blank" rel="noreferrer" href={props.imgUrlFront}>
+            open
+          </Link>
         </Box>
       </Collapse>
       <Collapse in={props.imgUrlBack ? true : false}>
         <Box sx={styles.image}>
           <Typography>Image Back:</Typography>
-          <Link href={props.imgUrlBack}>open</Link>
+          <Link target="_blank" rel="noreferrer" href={props.imgUrlBack}>
+            open
+          </Link>
         </Box>
       </Collapse>
     </Box>

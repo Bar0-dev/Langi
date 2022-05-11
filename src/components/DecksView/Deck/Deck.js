@@ -32,7 +32,7 @@ export default function Deck(props) {
         <LinkButton link={`/edit/${props.id}`} text="Edit" />
         <Button
           onClick={() => {
-            props.handleExport(props.id);
+            props.handleExport(props.id, props.name);
           }}
         >
           Export

@@ -21,11 +21,11 @@ if (!appLocalStorage.getItem("mode")) appLocalStorage.setItem("mode", "light");
 
 const links = {
   home: "/",
-  edit: "/edit",
-  newDeck: "/newDeck",
-  decks: "/decks",
-  // about: "/about",
+  // edit: "/edit",
+  "New Deck": "/newDeck",
   import: "/import",
+  "Local Decks": "/decks",
+  // about: "/about",
 };
 
 const comps = {
