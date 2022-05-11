@@ -31,6 +31,7 @@ export default function Deck(props) {
       <CardActions>
         <LinkButton link={`/edit/${props.id}`} text="Edit" />
         <Button
+          color="inherit"
           onClick={() => {
             props.handleExport(props.id, props.name);
           }}

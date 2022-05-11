@@ -15,7 +15,7 @@ const ankiAPI = async (action, params) => {
 };
 
 const imgHtmlTag = (url, side = "back") =>
-  `<img id="image-${side}" src="${url}">`;
+  `<img style="height: 300px" id="image-${side}" src="${url}">`;
 
 const frontTemplate = (text, pictureUrl = null) =>
   `<span id="front-text" style="font-size: 40px;">${text}</span><br>${

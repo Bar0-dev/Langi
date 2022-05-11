@@ -3,6 +3,7 @@ import {
   CircularProgress,
   Container,
   Grid,
+  IconButton,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
@@ -14,6 +15,7 @@ import {
 } from "../../utilities/ankiAPI";
 import { useEffect, useState } from "react";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useSnackbar } from "notistack";
 import styles from "./styles";
 
@@ -64,7 +66,7 @@ export default function DecksView(props) {
           or create new deck offline and export it later on
         </Typography>
         <Box sx={styles.button}>
-          <Button href="../edit/newDeck" variant="outlined">
+          <Button href="../newDeck" variant="outlined">
             New Deck
           </Button>
         </Box>
@@ -87,6 +89,11 @@ export default function DecksView(props) {
             </Grid>
           ))}
         </Grid>
+        <Box sx={styles.buttonWrapper}>
+          <IconButton href="/newDeck">
+            <AddCircleIcon fontSize="large" />
+          </IconButton>
+        </Box>
       </Container>
     );
   }
