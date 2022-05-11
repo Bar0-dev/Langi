@@ -25,6 +25,8 @@ const styles = {
   },
   config: {
     mt: (theme) => theme.spacing(2),
+    display: "flex",
+    flexDirection: "column",
   },
 };
 

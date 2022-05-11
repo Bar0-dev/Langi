@@ -35,7 +35,8 @@ const Editor = function (props) {
   if (!getCache(deckId))
     setCache(deckId, {
       suggestions: false,
-      addImage: false,
+      addImageFront: false,
+      addImageBack: false,
       addPron: false,
       source: null,
       target: null,

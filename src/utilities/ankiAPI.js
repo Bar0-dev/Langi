@@ -14,10 +14,18 @@ const ankiAPI = async (action, params) => {
   return response;
 };
 
-const frontTemplate = (text) =>
-  `<span id="front-text" style="font-size: 40px;">${text}</span>`;
-const backTemplate = (text) =>
-  `<span id="back-text" style="font-size: 40px;">${text}</span><br>`;
+const imgHtmlTag = (url, side = "back") =>
+  `<img id="image-${side}" src="${url}">`;
+
+const frontTemplate = (text, pictureUrl = null) =>
+  `<span id="front-text" style="font-size: 40px;">${text}</span><br>${
+    pictureUrl ? imgHtmlTag(pictureUrl, "front") : ""
+  }`;
+
+const backTemplate = (text, pictureUrl = null) =>
+  `<span id="back-text" style="font-size: 40px;">${text}</span><br>${
+    pictureUrl ? imgHtmlTag(pictureUrl) : ""
+  }`;
 
 const noteTemplate = (data) => {
   const [id, card] = data;
@@ -26,8 +34,8 @@ const noteTemplate = (data) => {
     deckName: card.get("deckName"),
     modelName: "Basic",
     fields: {
-      Front: frontTemplate(card.get("front")),
-      Back: backTemplate(card.get("back")),
+      Front: frontTemplate(card.get("front"), card.get("pictureFront")),
+      Back: backTemplate(card.get("back"), card.get("pictureBack")),
     },
     options: {
       allowDuplicate: true,
@@ -41,7 +49,7 @@ const noteTemplate = (data) => {
     tags: card.get("tags"),
     audio: card.get("audio"),
     video: card.get("video"),
-    picture: card.get("picture"),
+    picture: [],
   };
 };
 
@@ -148,24 +156,33 @@ export const updateCard = async (data) => {
 };
 
 const parseCardsContent = (cards, deckName) => {
-  const htmlParser = new DOMParser();
-  const cardsMap = new Map();
-  cards.forEach((card) => {
-    const frontElements = htmlParser.parseFromString(
+  const getCardElements = (card) => {
+    const htmlParser = new DOMParser();
+    const htmlFrontElements = htmlParser.parseFromString(
       card.fields.Front.value,
       "text/html"
     ).body.childNodes;
-    const [front] = [...frontElements].filter(
+    const [front] = [...htmlFrontElements].filter(
       (element) => element.id === "front-text"
     );
-    const backElements = htmlParser.parseFromString(
+    const [frontImage] = [...htmlFrontElements].filter(
+      (element) => element.id === "image-front"
+    );
+    const htmlBackElements = htmlParser.parseFromString(
       card.fields.Back.value,
       "text/html"
     ).body.childNodes;
-    const [back] = [...backElements].filter(
+    const [back] = [...htmlBackElements].filter(
       (element) => element.id === "back-text"
     );
-
+    const [backImage] = [...htmlBackElements].filter(
+      (element) => element.id === "image-back"
+    );
+    return [front, frontImage, back, backImage];
+  };
+  const cardsMap = new Map();
+  cards.forEach((card) => {
+    const [front, frontImage, back, backImage] = getCardElements(card);
     cardsMap.set(
       card.noteId,
       cardTemplate({
@@ -173,6 +190,8 @@ const parseCardsContent = (cards, deckName) => {
         front: front.textContent,
         back: back.textContent,
         tags: card.tags,
+        pictureFront: frontImage ? frontImage.src : "",
+        pictureBack: backImage ? backImage.src : "",
       })
     );
   });
@@ -180,7 +199,7 @@ const parseCardsContent = (cards, deckName) => {
 };
 
 //Using ankiConnect API it is only possible to search for a deck by name
-export const getCards = async (deckId) => {
+export const getCards = async (deckId, raw = false) => {
   try {
     const deckName = await getDeckNameByID(deckId);
     if (deckName) {
@@ -188,6 +207,7 @@ export const getCards = async (deckId) => {
         query: `deck:"${deckName}"`,
       });
       const cards = await getCardsInfo(cardIds);
+      if (raw) return cards;
       const cardsParsed = parseCardsContent(cards, deckName);
       return cardsParsed;
     } else {
@@ -255,29 +275,13 @@ export const importDeckTxt = async (fileData, name) => {
 };
 
 export const exportDeckTxt = async (deckId) => {
-  const cards = await getCards(deckId);
+  const cards = await getCards(deckId, true);
+  console.log(cards);
   const name = await getDeckNameByID(deckId);
-  const cardsParsed = [...cards].map(
-    ([id, { deckName, sourceText, targetText }]) => {
-      return `${sourceText}\t${targetText}`;
-    }
-  );
+  const cardsParsed = cards.map((card) => {
+    return `${card.fields.Front.value}\t${card.fields.Back.value}`;
+  });
   const cardsString = cardsParsed.join(" \n");
   const blob = new Blob([cardsString], { type: "text/plain;charset=utf-8" });
   saveAs(blob, `${name}.txt`);
-};
-
-//Models
-
-export const createImageModel = async () => {
-  const model = {
-    modelName: "BasicImage",
-    inOrderFields: ["Field1", "Field2", "Field3"],
-    cardTemplates: [
-      {
-        Front: "Front html {{Field1}}",
-        Back: "<div><span>{{Field2}}</span><img/></div>",
-      },
-    ],
-  };
 };

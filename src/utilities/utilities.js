@@ -33,7 +33,8 @@ export const cardTemplate = ({
   front = "",
   back = "",
   suggestions = [],
-  picture = [],
+  pictureFront = "",
+  pictureBack = "",
   audio = [],
   video = [],
   tags = [],
@@ -43,7 +44,8 @@ export const cardTemplate = ({
   card.set("front", front);
   card.set("back", back);
   card.set("suggestions", suggestions);
-  card.set("picture", picture);
+  card.set("pictureFront", pictureFront);
+  card.set("pictureBack", pictureBack);
   card.set("tags", tags);
   card.set("audio", audio);
   card.set("video", video);

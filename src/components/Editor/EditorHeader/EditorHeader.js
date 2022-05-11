@@ -6,6 +6,8 @@ import {
   IconButton,
   Card,
   Collapse,
+  Checkbox,
+  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import LoopIcon from "@mui/icons-material/Loop";
@@ -97,20 +99,56 @@ const EditorHeader = function (props) {
               props.setSettings({ ...props.settings, suggestions: value });
               setCache(props.deckId, { ...props.settings, suggestions: value });
             }}
-            label="suggestions"
+            label="translation suggestions"
           />
-          <FormControlLabel
-            control={<Switch />}
-            disabled={props.settings.suggestions ? false : true}
-            checked={
-              props.settings.suggestions ? props.settings.addImage : false
-            }
-            onChange={(event, value) => {
-              props.setSettings({ ...props.settings, addImage: value });
-              setCache(props.deckId, { ...props.settings, addImage: value });
-            }}
-            label="add image"
-          />
+          <div>
+            {/* <FormControlLabel
+              control={<Switch />}
+              disabled={props.settings.suggestions ? false : true}
+              checked={
+                props.settings.suggestions ? props.settings.addImage : false
+              }
+              onChange={(event, value) => {
+                props.setSettings({ ...props.settings, addImage: value });
+                setCache(props.deckId, { ...props.settings, addImage: value });
+              }}
+              label="add image"
+            /> */}
+            <Typography variant="body1">Add image:</Typography>
+            <FormControlLabel
+              disabled={props.settings.suggestions ? false : true}
+              control={<Checkbox />}
+              label="Front"
+              checked={
+                props.settings.suggestions
+                  ? props.settings.addImageFront
+                  : false
+              }
+              onChange={(event, value) => {
+                props.setSettings({ ...props.settings, addImageFront: value });
+                setCache(props.deckId, {
+                  ...props.settings,
+                  addImageFront: value,
+                });
+              }}
+            />
+            <FormControlLabel
+              disabled={props.settings.suggestions ? false : true}
+              control={<Checkbox />}
+              label="Back"
+              defaultChecked={true}
+              checked={
+                props.settings.suggestions ? props.settings.addImageBack : false
+              }
+              onChange={(event, value) => {
+                props.setSettings({ ...props.settings, addImageBack: value });
+                setCache(props.deckId, {
+                  ...props.settings,
+                  addImageBack: value,
+                });
+              }}
+            />
+          </div>
           <FormControlLabel
             control={<Switch />}
             checked={props.settings.addPron}

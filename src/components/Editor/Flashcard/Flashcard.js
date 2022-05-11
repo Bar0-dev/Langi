@@ -11,9 +11,10 @@ import {
   Zoom,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import TranslateIcon from "@mui/icons-material/Translate";
 import styles from "./styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { isEmpty } from "lodash";
 import { useMap } from "../../../utilities/utilities";
 
@@ -35,10 +36,16 @@ const ResultViewer = (props) => {
           ))}
         </Box>
       </Collapse>
-      <Collapse in={props.imgUrl ? true : false}>
+      <Collapse in={props.imgUrlFront ? true : false}>
         <Box sx={styles.image}>
-          <Typography>Image:</Typography>
-          <Link href={props.imgUrl}>open</Link>
+          <Typography>Image Front:</Typography>
+          <Link href={props.imgUrlFront}>open</Link>
+        </Box>
+      </Collapse>
+      <Collapse in={props.imgUrlBack ? true : false}>
+        <Box sx={styles.image}>
+          <Typography>Image Back:</Typography>
+          <Link href={props.imgUrlBack}>open</Link>
         </Box>
       </Collapse>
     </Box>
@@ -47,6 +54,7 @@ const ResultViewer = (props) => {
 
 const Flashcard = function (props) {
   const [card, setCardValue, setCard] = useMap(props.data);
+  const translateButtonRef = useRef();
   const settings = props.settings;
 
   const handleFrontChange = (e) => {
@@ -62,8 +70,16 @@ const Flashcard = function (props) {
   };
 
   const handleKeyPress = (e) => {
-    if (e.keyCode === 13) return emmitRequest(card.get("front"));
+    if (e.keyCode === 13) {
+      translateButtonRef.current.focus();
+      translateButtonRef.current.click();
+      setTimeout(() => translateButtonRef.current.blur(), 300);
+    }
     return false;
+  };
+
+  const handleTranslateRequest = () => {
+    return emmitRequest(card.get("front"));
   };
 
   const emmitRequest = async (inputText) => {
@@ -76,17 +92,16 @@ const Flashcard = function (props) {
         newCard.set("suggestions", sugRes);
       }
     }
-    if (settings.addImage) {
+    if (settings.addImageBack || settings.addImageFront) {
       const imgData = await props.dict.getImageUrls(
         inputText,
         "thumbnail",
-        300
+        200
       );
       if (imgData) {
         const [imgurl] = imgData;
-        newCard.set("picture", [
-          { url: imgurl, filename: `${inputText}.jpg`, fields: ["Back"] },
-        ]);
+        if (settings.addImageBack) newCard.set("pictureBack", imgurl);
+        if (settings.addImageFront) newCard.set("pictureFront", imgurl);
       }
     }
     setCard(newCard);
@@ -100,11 +115,15 @@ const Flashcard = function (props) {
     <Zoom in={true}>
       <Card key={props.id} sx={styles.card}>
         <Box style={styles.inputs}>
+          <IconButton ref={translateButtonRef} onClick={handleTranslateRequest}>
+            <TranslateIcon></TranslateIcon>
+          </IconButton>
           <TextField
             value={card.get("front")}
             onChange={handleFrontChange}
             onKeyDown={handleKeyPress}
           ></TextField>
+
           <ArrowForwardIosIcon />
           <TextField
             value={card.get("back")}
@@ -120,8 +139,11 @@ const Flashcard = function (props) {
         </Box>
         <ResultViewer
           suggestions={card.get("suggestions")}
-          imgUrl={
-            card.get("picture").length ? card.get("picture")[0].url : null
+          imgUrlBack={
+            card.get("pictureBack").length ? card.get("pictureBack") : null
+          }
+          imgUrlFront={
+            card.get("pictureFront").length ? card.get("pictureFront") : null
           }
           handleChange={handleChipClick}
         ></ResultViewer>
