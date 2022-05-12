@@ -75,6 +75,9 @@ const Editor = function (props) {
       setName("");
       setCards(new Map());
       setStatus("successful");
+      if (props.auxCards) {
+        setCards(props.auxCards);
+      }
     } else {
       loadCards(deckId);
     }

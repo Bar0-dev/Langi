@@ -1,6 +1,7 @@
 import axios from "axios";
 import { saveAs } from "file-saver";
-import { cardTemplate } from "./utilities";
+import { cardTemplate, setCache } from "./utilities";
+import { v4 as uuidv4 } from "uuid";
 
 const ankiAPI = async (action, params) => {
   const response = await axios
@@ -51,6 +52,49 @@ const noteTemplate = (data) => {
     video: card.get("video"),
     picture: [],
   };
+};
+
+const parseCardsContent = (cards, deckName) => {
+  const getCardElements = (card) => {
+    const htmlParser = new DOMParser();
+    const htmlFrontElements = htmlParser.parseFromString(
+      card.fields.Front.value,
+      "text/html"
+    ).body.childNodes;
+    const [front] = [...htmlFrontElements].filter(
+      (element) => element.id === "front-text"
+    );
+    const [frontImage] = [...htmlFrontElements].filter(
+      (element) => element.id === "image-front"
+    );
+    const htmlBackElements = htmlParser.parseFromString(
+      card.fields.Back.value,
+      "text/html"
+    ).body.childNodes;
+    const [back] = [...htmlBackElements].filter(
+      (element) => element.id === "back-text"
+    );
+    const [backImage] = [...htmlBackElements].filter(
+      (element) => element.id === "image-back"
+    );
+    return [front, frontImage, back, backImage];
+  };
+  const cardsMap = new Map();
+  cards.forEach((card) => {
+    const [front, frontImage, back, backImage] = getCardElements(card);
+    cardsMap.set(
+      card.noteId ?? uuidv4(),
+      cardTemplate({
+        deckName: deckName,
+        front: front.textContent,
+        back: back.textContent,
+        tags: card.tags,
+        pictureFront: frontImage ? frontImage.src : "",
+        pictureBack: backImage ? backImage.src : "",
+      })
+    );
+  });
+  return cardsMap;
 };
 
 export const getDecksAndIDs = async () => {
@@ -155,49 +199,6 @@ export const updateCard = async (data) => {
   }
 };
 
-const parseCardsContent = (cards, deckName) => {
-  const getCardElements = (card) => {
-    const htmlParser = new DOMParser();
-    const htmlFrontElements = htmlParser.parseFromString(
-      card.fields.Front.value,
-      "text/html"
-    ).body.childNodes;
-    const [front] = [...htmlFrontElements].filter(
-      (element) => element.id === "front-text"
-    );
-    const [frontImage] = [...htmlFrontElements].filter(
-      (element) => element.id === "image-front"
-    );
-    const htmlBackElements = htmlParser.parseFromString(
-      card.fields.Back.value,
-      "text/html"
-    ).body.childNodes;
-    const [back] = [...htmlBackElements].filter(
-      (element) => element.id === "back-text"
-    );
-    const [backImage] = [...htmlBackElements].filter(
-      (element) => element.id === "image-back"
-    );
-    return [front, frontImage, back, backImage];
-  };
-  const cardsMap = new Map();
-  cards.forEach((card) => {
-    const [front, frontImage, back, backImage] = getCardElements(card);
-    cardsMap.set(
-      card.noteId,
-      cardTemplate({
-        deckName: deckName,
-        front: front.textContent,
-        back: back.textContent,
-        tags: card.tags,
-        pictureFront: frontImage ? frontImage.src : "",
-        pictureBack: backImage ? backImage.src : "",
-      })
-    );
-  });
-  return cardsMap;
-};
-
 //Using ankiConnect API it is only possible to search for a deck by name
 export const getCards = async (deckId, raw = false) => {
   try {
@@ -258,20 +259,14 @@ export const exportDeckApkg = async (deckName, path) => {
 
 export const importDeckTxt = async (fileData, name) => {
   const dataArr = fileData.split("\n");
-  const dataMap = new Map();
   const parsedData = dataArr.map((entry) => entry.replaceAll(/\\t&/g, ""));
-  parsedData.forEach((entry, index) => {
+  //prepare for parsing function
+  const cards = parsedData.map((entry, index) => {
     const [srcTxt, trgtTxt] = entry.split("\t");
-    dataMap.set(index, {
-      deckName: name,
-      sourceText: srcTxt,
-      targetText: trgtTxt,
-    });
+    return { fields: { Front: { value: srcTxt }, Back: { value: trgtTxt } } };
   });
-  console.log([...dataMap]);
-  const deckId = await createDeck(name);
-  const response = await addCards([...dataMap]);
-  console.log(response);
+  const cardsMap = parseCardsContent(cards, name);
+  return cardsMap;
 };
 
 export const exportDeckTxt = async (deckId, deckName, cardsLocal = null) => {

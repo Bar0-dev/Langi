@@ -16,6 +16,7 @@ let deckIsChanged = false;
 export const resetChangeFlag = () => (deckIsChanged = false);
 
 export const cardReactElements = (cards, setCards, dict, settings) => {
+  console.log(cards);
   const elements = [];
   cards.forEach((value, key) => {
     elements.push(
