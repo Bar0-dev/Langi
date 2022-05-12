@@ -16,7 +16,6 @@ let deckIsChanged = false;
 export const resetChangeFlag = () => (deckIsChanged = false);
 
 export const cardReactElements = (cards, setCards, dict, settings) => {
-  console.log(cards);
   const elements = [];
   cards.forEach((value, key) => {
     elements.push(
@@ -166,9 +165,16 @@ const handleSaveNewDeck = async (deckName, cards, setCards, navigate) => {
   try {
     const actions = [];
     const newDeckId = await createDeck(deckName);
+    //update cards deckName property
+    const cardsUdatedName = new Map(cards);
+    cardsUdatedName.forEach((card) => card.set("deckName", deckName));
     if (newDeckId) {
       //saving new cards
-      const newCardsResult = await handleSaveNew(new Map(), cards, setCards);
+      const newCardsResult = await handleSaveNew(
+        new Map(),
+        cardsUdatedName,
+        setCards
+      );
       if (newCardsResult) {
         actions.push([
           `Added ${newCardsResult.length} ${
@@ -232,5 +238,7 @@ export const handleClose =
   };
 
 export const handleSetName = (setName, deckId) => (event) => {
-  if (deckId === "newDeck") setName(event.target.value);
+  if (deckId === "newDeck") {
+    setName(event.target.value);
+  }
 };
