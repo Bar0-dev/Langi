@@ -88,7 +88,7 @@ const Editor = function (props) {
   }
   if (status === "successful") {
     return (
-      <Container maxWidth="md" sx={styles.mainContainer}>
+      <Container maxWidth="md" sx={styles.container}>
         <EditorHeader
           deckId={deckId}
           deckName={deckName ? deckName : ""}

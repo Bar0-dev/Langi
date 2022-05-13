@@ -4,10 +4,9 @@ import {
   Switch,
   FormControlLabel,
   IconButton,
-  Card,
-  Collapse,
   Checkbox,
   Typography,
+  Paper,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import LoopIcon from "@mui/icons-material/Loop";
@@ -66,102 +65,112 @@ const EditorHeader = function (props) {
   }, [srcLang, trgtLang]);
 
   return (
-    <Card sx={styles.root}>
-      <FormGroup>
-        <TextField
-          label="Deck name"
-          value={deckName}
-          variant="standard"
-          onChange={props.handleSetName}
-        ></TextField>
-        <Box sx={styles.langPicker}>
-          <ComboBox
-            value={srcLang}
-            onChange={handleSrcLangChange}
-            label="Source Language"
-            languages={supportSrcLang}
-          />
-          <IconButton>
-            <LoopIcon></LoopIcon>
-          </IconButton>
-          <ComboBox
-            value={trgtLang}
-            onChange={handleTrgtLangChange}
-            label="Target Language"
-            languages={supportTrgtLang}
-          />
-        </Box>
-        <Box sx={styles.config}>
-          <FormControlLabel
-            control={<Switch />}
-            checked={props.settings.suggestions}
-            onChange={(event, value) => {
-              props.setSettings({ ...props.settings, suggestions: value });
-              setCache(props.deckId, { ...props.settings, suggestions: value });
-            }}
-            label="translation suggestions"
-          />
-          <div>
-            {/* <FormControlLabel
+    <Paper elevation={2} sx={styles.paper}>
+      <Box>
+        <Typography gutterBottom variant="h5" component="h3">
+          General settings
+        </Typography>
+        <FormGroup>
+          <TextField
+            label="Deck name"
+            value={deckName}
+            variant="outlined"
+            onChange={props.handleSetName}
+          ></TextField>
+          <Box sx={styles.langPicker}>
+            <ComboBox
+              value={srcLang}
+              onChange={handleSrcLangChange}
+              label="Source Language"
+              languages={supportSrcLang}
+            />
+            <Box sx={styles.swapIcon}>
+              <IconButton>
+                <LoopIcon></LoopIcon>
+              </IconButton>
+            </Box>
+            <ComboBox
+              value={trgtLang}
+              onChange={handleTrgtLangChange}
+              label="Target Language"
+              languages={supportTrgtLang}
+            />
+          </Box>
+        </FormGroup>
+      </Box>
+      <Box>
+        <Typography variant="h5" component="span">
+          Additional settings
+        </Typography>
+        <FormGroup>
+          <Box sx={styles.config}>
+            <FormControlLabel
               control={<Switch />}
-              disabled={props.settings.suggestions ? false : true}
-              checked={
-                props.settings.suggestions ? props.settings.addImage : false
-              }
+              checked={props.settings.suggestions}
               onChange={(event, value) => {
-                props.setSettings({ ...props.settings, addImage: value });
-                setCache(props.deckId, { ...props.settings, addImage: value });
-              }}
-              label="add image"
-            /> */}
-            <Typography variant="body1">Add image:</Typography>
-            <FormControlLabel
-              disabled={props.settings.suggestions ? false : true}
-              control={<Checkbox />}
-              label="Front"
-              checked={
-                props.settings.suggestions
-                  ? props.settings.addImageFront
-                  : false
-              }
-              onChange={(event, value) => {
-                props.setSettings({ ...props.settings, addImageFront: value });
+                props.setSettings({ ...props.settings, suggestions: value });
                 setCache(props.deckId, {
                   ...props.settings,
-                  addImageFront: value,
+                  suggestions: value,
                 });
               }}
+              label="Translation suggestions"
             />
+            <div>
+              <Typography variant="body1">Add image:</Typography>
+              <FormControlLabel
+                disabled={props.settings.suggestions ? false : true}
+                control={<Checkbox />}
+                label="Front"
+                checked={
+                  props.settings.suggestions
+                    ? props.settings.addImageFront
+                    : false
+                }
+                onChange={(event, value) => {
+                  props.setSettings({
+                    ...props.settings,
+                    addImageFront: value,
+                  });
+                  setCache(props.deckId, {
+                    ...props.settings,
+                    addImageFront: value,
+                  });
+                }}
+              />
+              <FormControlLabel
+                disabled={props.settings.suggestions ? false : true}
+                control={<Checkbox />}
+                label="Back"
+                defaultChecked={true}
+                checked={
+                  props.settings.suggestions
+                    ? props.settings.addImageBack
+                    : false
+                }
+                onChange={(event, value) => {
+                  props.setSettings({ ...props.settings, addImageBack: value });
+                  setCache(props.deckId, {
+                    ...props.settings,
+                    addImageBack: value,
+                  });
+                }}
+              />
+            </div>
             <FormControlLabel
-              disabled={props.settings.suggestions ? false : true}
-              control={<Checkbox />}
-              label="Back"
-              defaultChecked={true}
-              checked={
-                props.settings.suggestions ? props.settings.addImageBack : false
-              }
+              control={<Switch />}
+              checked={props.settings.addPron}
               onChange={(event, value) => {
-                props.setSettings({ ...props.settings, addImageBack: value });
-                setCache(props.deckId, {
-                  ...props.settings,
-                  addImageBack: value,
-                });
+                props.setSettings({ ...props.settings, addPron: value });
+                setCache(props.deckId, { ...props.settings, addPron: value });
               }}
+              disabled={true}
+              label="Add pronunciation"
             />
-          </div>
-          <FormControlLabel
-            control={<Switch />}
-            checked={props.settings.addPron}
-            onChange={(event, value) => {
-              props.setSettings({ ...props.settings, addPron: value });
-              setCache(props.deckId, { ...props.settings, addPron: value });
-            }}
-            disabled={true}
-            label="add pronunciation"
-          />
-        </Box>
-      </FormGroup>
-    </Card>
+          </Box>
+        </FormGroup>
+      </Box>
+    </Paper>
   );
 };
 

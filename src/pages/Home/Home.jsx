@@ -15,6 +15,7 @@ import {
   SubHeader,
   Paragraph,
   Header,
+  HeaderAdditional,
 } from "../../components/common/textComps";
 import logo from "../../logo/logo.png";
 import styles from "./styles";
@@ -44,9 +45,9 @@ export default function Home(props) {
         </Box>
         <Box>
           <Header>Langi</Header>
-          <Typography color="GrayText" variant="h2">
+          <HeaderAdditional>
             Easy, responsive and intuitive flashcard editor
-          </Typography>
+          </HeaderAdditional>
         </Box>
       </Box>
       <Masonry columns={3} spacing={4}>

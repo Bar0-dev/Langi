@@ -1,5 +1,6 @@
 const styles = {
   container: {
+    marginTop: (theme) => theme.spacing(4),
     marginBottom: (theme) => theme.spacing(12),
   },
   hero: {
@@ -7,7 +8,6 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     gap: (theme) => theme.spacing(4),
-    marginTop: (theme) => theme.spacing(4),
     marginBottom: (theme) => theme.spacing(4),
   },
   logoWrapper: {

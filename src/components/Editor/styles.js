@@ -1,14 +1,15 @@
 const styles = {
-  mainContainer: {
+  container: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: "10px",
+    gap: (theme) => theme.spacing(2),
+    marginTop: (theme) => theme.spacing(8),
+    marginBottom: (theme) => theme.spacing(8),
   },
   iconAdd: {
-    margin: (theme) => theme.spacing(2),
-    ml: "-2%",
+    marginTop: (theme) => theme.spacing(2),
   },
 };
 

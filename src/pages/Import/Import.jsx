@@ -1,11 +1,13 @@
-import { Button, Container, Typography } from "@mui/material";
+import { Button, Container, Paper, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import { importDeckTxt } from "../../utilities/ankiAPI";
 import {
-  SubHeader,
   Paragraph,
   Header,
+  HeaderAdditional,
+  SubHeader,
 } from "../../components/common/textComps";
+import { Box } from "@mui/system";
 import styles from "./styles";
 import Editor from "../../components/Editor/Editor";
 
@@ -27,18 +29,25 @@ export default function Import(props) {
   };
   if (status === "preload")
     return (
-      <Container>
-        <Header>Importing</Header>
-
-        <SubHeader>File formatting</SubHeader>
-        <Paragraph>
-          Text files should consist with each line as a single flashcard. Each
-          word separated by a tab, where first one is a souce text, second
-          target text and finally tags.
-        </Paragraph>
-        <code>
-          example{"\t"}beispiel{"\t"}
-        </code>
+      <Container sx={styles.container}>
+        <Box>
+          <Header>Importing</Header>
+          <HeaderAdditional>
+            Upload text file with words you always wanted to learn
+          </HeaderAdditional>
+        </Box>
+        <Paper elevation={2}>
+          <SubHeader>File formatting</SubHeader>
+          <Paragraph>
+            In order for this to work you should follow the pattern shown in the
+            code snippet below. Word in source language comes first, then
+            translated separated with tab. Next card shall be seperated with new
+            line.
+          </Paragraph>
+          <code>
+            dog /\t hund <br /> cat katt <br /> horse hast
+          </code>
+        </Paper>
 
         <input
           ref={handleBrowserOpen}

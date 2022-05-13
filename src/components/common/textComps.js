@@ -8,6 +8,14 @@ export const Header = (props) => {
   );
 };
 
+export const HeaderAdditional = (props) => {
+  return (
+    <Typography color="GrayText" variant="h2">
+      {props.children}
+    </Typography>
+  );
+};
+
 export const SubHeader = (props) => {
   return (
     <Typography gutterBottom variant="h4" component="h2">
