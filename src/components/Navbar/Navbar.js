@@ -6,6 +6,8 @@ import Typography from "@mui/material/Typography";
 import StyleIcon from "@mui/icons-material/Style";
 import ModeSwitch from "./ModeSwitch/ModeSwitch";
 import LinkButton from "../common/LinkButton";
+import logo from "../../logo/logo.png";
+import { Link } from "@mui/material";
 
 export default function Navbar(props) {
   return (
@@ -14,16 +16,19 @@ export default function Navbar(props) {
         position="static"
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
-        <Toolbar sx={{ gap: "20px" }}>
-          <StyleIcon edge="start" color="inherit" aria-label="menu" />
-          <Typography
-            align="center"
-            variant="h5"
-            component="div"
-            sx={{ ml: "-15px" }}
+        <Toolbar sx={{ gap: (theme) => theme.spacing(2) }}>
+          <Link
+            href="/"
+            underline="none"
+            color="inherit"
+            sx={{ display: "flex", gap: (theme) => theme.spacing(1) }}
           >
-            Langi
-          </Typography>
+            <img src={logo} style={{ height: "40px" }}></img>
+            <Typography align="center" variant="h4" component="span">
+              Langi
+            </Typography>
+          </Link>
+
           {Object.entries(props.links).map(([key, link]) => (
             <LinkButton key={key} link={link} text={key} />
           ))}

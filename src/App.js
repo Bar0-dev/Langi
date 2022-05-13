@@ -1,7 +1,7 @@
 import Navbar from "./components/Navbar/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home/Home";
-// import About from "./pages/About/About";
+import About from "./pages/About/About";
 import Edit from "./pages/Edit";
 import Decks from "./pages/Decks";
 import Learn from "./pages/Learn";
@@ -20,12 +20,12 @@ const appLocalStorage = window.localStorage;
 if (!appLocalStorage.getItem("mode")) appLocalStorage.setItem("mode", "light");
 
 const links = {
-  home: "/",
+  // home: "/",
   // edit: "/edit",
   "New Deck": "/newDeck",
   import: "/import",
   "Local Decks": "/decks",
-  // about: "/about",
+  about: "/about",
 };
 
 const comps = {
@@ -35,7 +35,7 @@ const comps = {
   "/newDeck": <NewDeck />,
   "/learn": <Learn />,
   "/howtoconnect": <HowToConnect />,
-  // "/about": <About />,
+  "/about": <About />,
   "/import": <Import />,
 };
 

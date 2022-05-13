@@ -42,6 +42,26 @@ export default function HowToConnect(props) {
         JS, MUI, wiktionary-translations, MediaWiki/Wiktionary. NPM packages:
         ISO6931, axios, noistack
       </Paragraph>
+
+      <Paragraph>
+        This application was built in order to facilitate working with Anki for
+        language studying. It can be really tedious to use a plain Anki app and
+        here is why:
+      </Paragraph>
+      <ul>
+        <li>inconvenient cards creator interface</li>
+        <li>an overwhelming amount of different settings</li>
+        <li>hard to add pictures to the flashcard</li>
+        <li>even harder to add pronunciation</li>
+        <li>can't backtrack to previously created cards</li>
+      </ul>
+      <Paragraph>
+        Langi fixes all of these problems giving you easy to use editor with
+        automatic translations based on{" "}
+        <Link href="https://www.wiktionary.org/">wiktionary.org</Link>. If you
+        want to have an image or pronunciation on your card it's a matter of
+        ticking a checkbox. (This feature is in development!)
+      </Paragraph>
     </Container>
   );
 }

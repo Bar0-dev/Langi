@@ -1,24 +1,20 @@
 const styles = {
-  mainContainer: {
-    display: "flex",
-    flexDirection: "column",
+  container: {
+    marginBottom: (theme) => theme.spacing(12),
   },
   hero: {
-    my: (theme) => theme.spacing(4),
-  },
-  content: {
-    width: "60%",
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-  buttonPosition: {
-    display: "flex",
-    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    m: (theme) => theme.spacing(2),
+    gap: (theme) => theme.spacing(4),
+    marginTop: (theme) => theme.spacing(4),
+    marginBottom: (theme) => theme.spacing(4),
   },
+  logoWrapper: {
+    maxWidth: "200px",
+  },
+
+  card: {},
 };
 
 export default styles;
