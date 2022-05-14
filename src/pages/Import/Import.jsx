@@ -30,13 +30,13 @@ export default function Import(props) {
   if (status === "preload")
     return (
       <Container sx={styles.container}>
-        <Box>
+        <Box sx={styles.header}>
           <Header>Importing</Header>
           <HeaderAdditional>
             Upload text file with words you always wanted to learn
           </HeaderAdditional>
         </Box>
-        <Paper elevation={2}>
+        <Paper sx={styles.paper} elevation={2}>
           <SubHeader>File formatting</SubHeader>
           <Paragraph>
             In order for this to work you should follow the pattern shown in the
@@ -44,9 +44,14 @@ export default function Import(props) {
             translated separated with tab. Next card shall be seperated with new
             line.
           </Paragraph>
-          <code>
-            dog /\t hund <br /> cat katt <br /> horse hast
-          </code>
+          <Box sx={styles.codeBox}>
+            <Typography sx={styles.codeTitle} variant="body2">
+              sample.txt
+            </Typography>
+            <code>
+              dog hund <br /> cat katt <br /> horse hast
+            </code>
+          </Box>
         </Paper>
 
         <input
