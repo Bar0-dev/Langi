@@ -11,8 +11,8 @@ const styles = {
   },
   codeBox: {
     marginTop: (theme) => theme.spacing(2),
-    border: "2px solid grey",
-    borderRadius: "20px",
+    border: "1px solid grey",
+    borderRadius: "10px",
     padding: (theme) => theme.spacing(2),
   },
   codeTitle: {

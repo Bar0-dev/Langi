@@ -1,4 +1,4 @@
-import { Button, Container, Paper, Typography } from "@mui/material";
+import { Button, Container, Grid, Paper, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import { importDeckTxt } from "../../utilities/ankiAPI";
 import {
@@ -10,19 +10,26 @@ import {
 import { Box } from "@mui/system";
 import styles from "./styles";
 import Editor from "../../components/Editor/Editor";
+import sample from "./sample.txt";
+import { useSnackbar } from "notistack";
 
 export default function Import(props) {
   const [status, setStatus] = useState("preload");
   const [cards, setCards] = useState(new Map());
   const handleBrowserOpen = useRef(null);
+  const { enqueueSnackbar } = useSnackbar();
   const handleFilePick = async (event) => {
     event.preventDefault();
     const [file] = event.target.files;
     const name = file.name.replace(".txt", "");
     const textData = await file.text();
     const importedCards = await importDeckTxt(textData, name);
-    setCards(importedCards);
-    setStatus("loaded");
+    if (importedCards) {
+      setCards(importedCards);
+      setStatus("loaded");
+    } else {
+      enqueueSnackbar("Import failed - wrong formatting", { variant: "error" });
+    }
   };
   const handleClick = () => {
     handleBrowserOpen.current.click();
@@ -36,23 +43,39 @@ export default function Import(props) {
             Upload text file with words you always wanted to learn
           </HeaderAdditional>
         </Box>
-        <Paper sx={styles.paper} elevation={2}>
-          <SubHeader>File formatting</SubHeader>
-          <Paragraph>
-            In order for this to work you should follow the pattern shown in the
-            code snippet below. Word in source language comes first, then
-            translated separated with tab. Next card shall be seperated with new
-            line.
-          </Paragraph>
-          <Box sx={styles.codeBox}>
-            <Typography sx={styles.codeTitle} variant="body2">
-              sample.txt
-            </Typography>
-            <code>
-              dog hund <br /> cat katt <br /> horse hast
-            </code>
-          </Box>
-        </Paper>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={6}>
+            <Paper sx={styles.paper} elevation={2}>
+              <SubHeader>Plain text file</SubHeader>
+              <Paragraph>
+                Source and target text are seperated by tab character. New card
+                is indicated by a new line. Only source word can be provided
+                aswell.
+              </Paragraph>
+              <Box sx={styles.codeBox}>
+                <Typography sx={styles.codeTitle} variant="body2">
+                  plaintext.txt
+                </Typography>
+                <iframe frameBorder="0" src={sample}></iframe>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Paper sx={styles.paper} elevation={2}>
+              <SubHeader>Text file with HTML tags</SubHeader>
+              <Paragraph>
+                Source and target text are seperated by tab character. Every
+                card starting with new line.
+              </Paragraph>
+              <Box sx={styles.codeBox}>
+                <Typography sx={styles.codeTitle} variant="body2">
+                  sample.txt
+                </Typography>
+                <iframe frameBorder="0" src={sample}></iframe>
+              </Box>
+            </Paper>
+          </Grid>
+        </Grid>
 
         <input
           ref={handleBrowserOpen}

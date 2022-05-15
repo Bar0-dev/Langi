@@ -54,7 +54,7 @@ const noteTemplate = (data) => {
   };
 };
 
-const parseCardsContent = (cards, deckName) => {
+const parseHtmlCardsContent = (cards, deckName) => {
   const getCardElements = (card) => {
     const htmlParser = new DOMParser();
     const htmlFrontElements = htmlParser.parseFromString(
@@ -82,6 +82,7 @@ const parseCardsContent = (cards, deckName) => {
   const cardsMap = new Map();
   cards.forEach((card) => {
     const [front, frontImage, back, backImage] = getCardElements(card);
+    if (!front) return false;
     cardsMap.set(
       card.noteId ?? uuidv4(),
       cardTemplate({
@@ -92,6 +93,20 @@ const parseCardsContent = (cards, deckName) => {
         pictureFront: frontImage ? frontImage.src : "",
         pictureBack: backImage ? backImage.src : "",
       })
+    );
+  });
+  return cardsMap;
+};
+
+const parseTextCardContent = (cards, deckName) => {
+  const cardsMap = new Map();
+  cards.forEach((card) => {
+    const front = card.fields.Front.value;
+    const back = card.fields.Back.value;
+    if (!front) return false;
+    cardsMap.set(
+      card.noteId ?? uuidv4(),
+      cardTemplate({ deckName: deckName, front: front, back: back })
     );
   });
   return cardsMap;
@@ -209,7 +224,7 @@ export const getCards = async (deckId, raw = false) => {
       });
       const cards = await getCardsInfo(cardIds);
       if (raw) return cards;
-      const cardsParsed = parseCardsContent(cards, deckName);
+      const cardsParsed = parseHtmlCardsContent(cards, deckName);
       return cardsParsed;
     } else {
       return false;
@@ -265,8 +280,11 @@ export const importDeckTxt = async (fileData, name) => {
     const [srcTxt, trgtTxt] = entry.split("\t");
     return { fields: { Front: { value: srcTxt }, Back: { value: trgtTxt } } };
   });
-  const cardsMap = parseCardsContent(cards, name);
-  return cardsMap;
+  const cardsMapFromHtml = parseHtmlCardsContent(cards, name);
+  if (cardsMapFromHtml.length) return cardsMapFromHtml;
+  const cardsMapFromText = parseTextCardContent(cards, name);
+  if (cardsMapFromText) return cardsMapFromText;
+  return false;
 };
 
 export const exportDeckTxt = async (deckId, deckName, cardsLocal = null) => {

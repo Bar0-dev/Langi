@@ -1,0 +1,3 @@
+dog	hund
+horse	hast
+cat	kat
