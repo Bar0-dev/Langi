@@ -10,7 +10,8 @@ import {
 import { Box } from "@mui/system";
 import styles from "./styles";
 import Editor from "../../components/Editor/Editor";
-import sample from "./sample.txt";
+import samplePlainTxt from "./samplePlainText.txt";
+import sampleHtml from "./sampleHtml.txt";
 import { useSnackbar } from "notistack";
 
 export default function Import(props) {
@@ -48,15 +49,17 @@ export default function Import(props) {
             <Paper sx={styles.paper} elevation={2}>
               <SubHeader>Plain text file</SubHeader>
               <Paragraph>
-                Source and target text are seperated by tab character. New card
-                is indicated by a new line. Only source word can be provided
-                aswell.
+                Fields shall always be separated with the tab key. The new card
+                starts with a new line. Single-word per line would be considered
+                as a source word.
               </Paragraph>
               <Box sx={styles.codeBox}>
-                <Typography sx={styles.codeTitle} variant="body2">
-                  plaintext.txt
-                </Typography>
-                <iframe frameBorder="0" src={sample}></iframe>
+                <iframe
+                  width="100%"
+                  frameBorder="0"
+                  src={samplePlainTxt}
+                ></iframe>
+                <Typography variant="body2">plaintext.txt</Typography>
               </Box>
             </Paper>
           </Grid>
@@ -64,14 +67,16 @@ export default function Import(props) {
             <Paper sx={styles.paper} elevation={2}>
               <SubHeader>Text file with HTML tags</SubHeader>
               <Paragraph>
-                Source and target text are seperated by tab character. Every
-                card starting with new line.
+                Each field shall be separated with a tab key. HTML tags can't
+                have any separators unless it's a tab separator between two
+                fields. Using id props as in the example can significantly help
+                the algorithm recognize appropriate fields.
               </Paragraph>
               <Box sx={styles.codeBox}>
+                <iframe width="100%" frameBorder="0" src={sampleHtml}></iframe>
                 <Typography sx={styles.codeTitle} variant="body2">
-                  sample.txt
+                  htmlTagsText.txt
                 </Typography>
-                <iframe frameBorder="0" src={sample}></iframe>
               </Box>
             </Paper>
           </Grid>
@@ -84,7 +89,9 @@ export default function Import(props) {
           onChange={handleFilePick}
           style={{ display: "none" }}
         />
-        <Button onClick={handleClick}>Import</Button>
+        <Button variant="contained" onClick={handleClick}>
+          Import
+        </Button>
       </Container>
     );
   if (status === "loaded")

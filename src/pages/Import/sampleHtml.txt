@@ -1,0 +1,3 @@
+<span id="front-text" style="font-size: 40px;">dog</span><br>	<span id="back-text" style="font-size: 40px;">hund</span><br><img style="height: 300px" id="image-back" src="https://upload.wikimedia.org/wikipedia/commons/6/60/YellowLabradorLooking.jpg"> 
+<span id="front-text" style="font-size: 40px;">horse</span><br>	<span id="back-text" style="font-size: 40px;">häst</span><br><img style="height: 300px" id="image-back" src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Holsteiner_Apfelschimmel-2005.jpg"> 
+<span id="front-text" style="font-size: 40px;">cat</span><br>	<span id="back-text" style="font-size: 40px;">katt</span><br><img style="height: 300px" id="image-back" src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg">

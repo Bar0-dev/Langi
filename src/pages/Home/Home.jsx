@@ -59,26 +59,26 @@ export default function Home(props) {
           Follow how to connect tutorial to set up your local Anki program to
           work with this app.
         </HomeElement>
-        <HomeElement title="Why langi?" buttonText="About" buttonLink="/about">
-          To learn more how this app was built, what features it has or what
-          technologies were used please explore the about page.
-        </HomeElement>
         <HomeElement
           title="Create a deck"
           buttonText="New Deck"
           buttonLink="/newDeck"
         >
-          Dont have time for setting up a connection between local app? Start
-          with creating your deck here and export it later on.
+          Don't have time for setting up a connection between the local and web
+          app? Go ahead create your deck and export it later on.
         </HomeElement>
         <HomeElement title="Importing" buttonText="Import" buttonLink="/import">
-          If you already have text file with words you want to learn go ahead
-          and import it. Use translation feature and maybe use some pictures to
-          your flashcard.
+          If you already have a text file with words you want to learn go ahead
+          and import it. Use the translation feature and maybe use some pictures
+          on your flashcard.
         </HomeElement>
         <HomeElement title="Local decks" buttonText="Decks" buttonLink="/decks">
-          When the Anki program is running with AnkiConnect addon and proper
-          config, it is time to expolore local decks.
+          When the Anki program is running with the AnkiConnect addon and proper
+          config, it is time to explore local decks.
+        </HomeElement>
+        <HomeElement title="Why langi?" buttonText="About" buttonLink="/about">
+          To learn more about how this app was built, what features it has or
+          what technologies were used please explore the about page.
         </HomeElement>
       </Masonry>
     </Container>

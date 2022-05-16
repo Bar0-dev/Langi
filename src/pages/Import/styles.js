@@ -11,12 +11,7 @@ const styles = {
   },
   codeBox: {
     marginTop: (theme) => theme.spacing(2),
-    border: "1px solid grey",
-    borderRadius: "10px",
     padding: (theme) => theme.spacing(2),
-  },
-  codeTitle: {
-    transform: "translateY(-14px)",
   },
 };
 
