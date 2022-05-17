@@ -1,12 +1,12 @@
 import {
   Button,
   Card,
+  CardActions,
   CardContent,
   Container,
   Link,
   Typography,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import styles from "./styles";
 import {
   SubHeader,
@@ -14,6 +14,8 @@ import {
   Header,
   HeaderAdditional,
 } from "../../components/common/textComps";
+import { Masonry } from "@mui/lab";
+import { Box } from "@mui/system";
 
 const AboutCard = (props) => {
   return (
@@ -28,43 +30,77 @@ const AboutCard = (props) => {
 
 export default function HowToConnect(props) {
   return (
-    <Container maxWidth="md" sx={styles.mainContainer}>
-      <Header>About</Header>
-      <HeaderAdditional>Langi - flashcard app</HeaderAdditional>
-      <AboutCard title="Disclaimer">
-        This app is not a final product. It has been created as a part of a
-        portfolio, nevertheless, it is a functional app that can facilitate
-        language learning experience with Anki. Translations in an app are
-        provided by a wiktionary scraper which is not perfect. Therefore this
-        feature might be refined by using Google Translate as a translation
-        engine.
-      </AboutCard>
-      <AboutCard title="Why Langi?">
-        It is proven that Anki is way more efficient than just regular studying.
-        Moreover, it is more efficient than traditional flashcards. Spaced
-        repetition based on SM-2 algorithm allows you to memorize terms quickly
-        and for good. Unfortunately, before we can even sit and study it is
-        necessary to create a deck first. Many people share the same opinion
-        that the Anki deck creation experience is not one of the best. Therefore
-        this app comes in handy for those who are using Anki for studying
-        languages.This application was built in order to facilitate working with
-        Anki for language studying. It can be really tedious to use a plain Anki
-        app and here is why:
-        <ul>
-          <li>inconvenient cards creator interface</li>
-          <li>an overwhelming amount of different settings</li>
-          <li>hard to add pictures to the flashcard</li>
-          <li>even harder to add pronunciation</li>
-          <li>can't backtrack to previously created cards</li>
-        </ul>
-      </AboutCard>
-      <AboutCard title="Technologies used">
-        JS, MUI, wiktionary-translations, MediaWiki/Wiktionary. NPM packages:
-        ISO6931, axios, noistack
-      </AboutCard>
-      <AboutCard title="Contribute to the project">
-        Looking for help with a project
-      </AboutCard>
+    <Container sx={styles.container}>
+      <Box sx={styles.title}>
+        <Header>About</Header>
+        <HeaderAdditional>Langi - flashcard app</HeaderAdditional>
+      </Box>
+      <Masonry columns={2} spacing={4}>
+        <AboutCard title="Disclaimer">
+          This app is not a final product. It has been created as a part of a
+          portfolio, nevertheless, it is a functional app that can facilitate
+          language learning experience with Anki. Translations in an app are
+          provided by a wiktionary scraper which is not perfect. Therefore this
+          feature might be refined in the future by using Google Translate as a
+          translation engine.
+        </AboutCard>
+        <AboutCard title="Why Langi?">
+          Anki is way more efficient than just regular studying. Moreover, it is
+          more efficient than traditional flashcards. Spaced repetition based on
+          SM-2 algorithm allows you to memorize terms quickly. Before studying
+          though, it is necessary to create a deck first. This app comes in
+          handy for those who find creating a personal deck in Anki hard.
+        </AboutCard>
+        <AboutCard title="Contribution">
+          For those who are more interested in how this app was built, I
+          encourage you to visit my GitHub page and review the source code. If
+          you feel like you could contribute to the project and make It better
+          please do not hesitate to contact me or even go straight to creating a
+          pull request. To make things easier for contributors, here is a list
+          of used technologies:
+          <ul>
+            <li>
+              <Link href="https://reactjs.org/">ReactJS</Link>
+            </li>
+            <li>
+              <Link href="https://reactrouter.com/">React Router</Link>
+            </li>
+            <li>
+              <Link href="https://mui.com/">MUI</Link>
+            </li>
+            <li>
+              <Link href="https://foosoft.net/projects/anki-connect/">
+                AnkiConnect
+              </Link>
+            </li>
+            <li>
+              <Link href="https://axios-http.com/docs/intro">Axios</Link>
+            </li>
+            <li>
+              <Typography variant="body1">
+                more NPM packages to be reviewd in the source code
+              </Typography>
+            </li>
+          </ul>
+          <CardActions>
+            <Button variant="outlined" href="https://github.com/Bar0-dev/Langi">
+              Open repository
+            </Button>
+          </CardActions>
+        </AboutCard>
+        <AboutCard title="About the author">
+          I am an emerging Web Developer who simply learned coding by making
+          apps like this one. Coming from automation and mechanical engineering
+          makes me a pragmatic programmer for whom understanding and
+          implementation of algorithms comes easy. To check out more projects of
+          mine follow the link to my portfolio webpage.
+          <CardActions>
+            <Button variant="outlined" href="">
+              Portfolio
+            </Button>
+          </CardActions>
+        </AboutCard>
+      </Masonry>
     </Container>
   );
 }
