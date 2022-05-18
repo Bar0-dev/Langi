@@ -23,6 +23,7 @@ const AboutCard = (props) => {
       <CardContent>
         <SubHeader>{props.title}</SubHeader>
         <Paragraph>{props.children}</Paragraph>
+        {props.list ?? null}
       </CardContent>
       <CardActions>{props.controlls}</CardActions>
     </Card>
@@ -59,6 +60,28 @@ export default function HowToConnect(props) {
               Open repository
             </Button>
           }
+          list={
+            <ul>
+              <li>
+                <Link href="https://reactjs.org/">ReactJS</Link>
+              </li>
+              <li>
+                <Link href="https://reactrouter.com/">React Router</Link>
+              </li>
+              <li>
+                <Link href="https://mui.com/">MUI</Link>
+              </li>
+              <li>
+                <Link href="https://foosoft.net/projects/anki-connect/">
+                  AnkiConnect
+                </Link>
+              </li>
+              <li>
+                <Link href="https://axios-http.com/docs/intro">Axios</Link>
+              </li>
+              <li>more NPM packages to be reviewd in the source code</li>
+            </ul>
+          }
         >
           For those who are more interested in how this app was built, I
           encourage you to visit my GitHub page and review the source code. If
@@ -66,30 +89,6 @@ export default function HowToConnect(props) {
           please do not hesitate to contact me or even go straight to creating a
           pull request. To make things easier for contributors, here is a list
           of used technologies:
-          <ul>
-            <li>
-              <Link href="https://reactjs.org/">ReactJS</Link>
-            </li>
-            <li>
-              <Link href="https://reactrouter.com/">React Router</Link>
-            </li>
-            <li>
-              <Link href="https://mui.com/">MUI</Link>
-            </li>
-            <li>
-              <Link href="https://foosoft.net/projects/anki-connect/">
-                AnkiConnect
-              </Link>
-            </li>
-            <li>
-              <Link href="https://axios-http.com/docs/intro">Axios</Link>
-            </li>
-            <li>
-              <Typography variant="body1">
-                more NPM packages to be reviewd in the source code
-              </Typography>
-            </li>
-          </ul>
         </AboutCard>
         <AboutCard
           title="About the author"
