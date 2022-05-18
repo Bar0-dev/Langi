@@ -1,9 +1,10 @@
 const styles = {
-  mainContainer: { marginTop: (theme) => theme.spacing(2) },
-  centeringBox: {
-    display: "flex",
-    justifyContent: "center",
-    margin: (theme) => theme.spacing(4),
+  container: {
+    marginTop: (theme) => theme.spacing(4),
+    marginBottom: (theme) => theme.spacing(12),
+  },
+  header: {
+    marginBottom: (theme) => theme.spacing(4),
   },
 };
 

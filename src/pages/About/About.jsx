@@ -24,6 +24,7 @@ const AboutCard = (props) => {
         <SubHeader>{props.title}</SubHeader>
         <Paragraph>{props.children}</Paragraph>
       </CardContent>
+      <CardActions>{props.controlls}</CardActions>
     </Card>
   );
 };
@@ -51,7 +52,14 @@ export default function HowToConnect(props) {
           though, it is necessary to create a deck first. This app comes in
           handy for those who find creating a personal deck in Anki hard.
         </AboutCard>
-        <AboutCard title="Contribution">
+        <AboutCard
+          title="Contribution"
+          controlls={
+            <Button variant="outlined" href="https://github.com/Bar0-dev/Langi">
+              Open repository
+            </Button>
+          }
+        >
           For those who are more interested in how this app was built, I
           encourage you to visit my GitHub page and review the source code. If
           you feel like you could contribute to the project and make It better
@@ -82,23 +90,20 @@ export default function HowToConnect(props) {
               </Typography>
             </li>
           </ul>
-          <CardActions>
-            <Button variant="outlined" href="https://github.com/Bar0-dev/Langi">
-              Open repository
-            </Button>
-          </CardActions>
         </AboutCard>
-        <AboutCard title="About the author">
+        <AboutCard
+          title="About the author"
+          controlls={
+            <Button variant="outlined" href="">
+              Portfolio
+            </Button>
+          }
+        >
           I am an emerging Web Developer who simply learned coding by making
           apps like this one. Coming from automation and mechanical engineering
           makes me a pragmatic programmer for whom understanding and
           implementation of algorithms comes easy. To check out more projects of
           mine follow the link to my portfolio webpage.
-          <CardActions>
-            <Button variant="outlined" href="">
-              Portfolio
-            </Button>
-          </CardActions>
         </AboutCard>
       </Masonry>
     </Container>

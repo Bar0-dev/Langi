@@ -1,19 +1,16 @@
+import { Masonry } from "@mui/lab";
 import { Button, Container, List, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import LightbulbIcon from "@mui/icons-material/Lightbulb";
+import { Header } from "../../components/common/textComps";
 import styles from "./styles";
 
 export default function HowToConnect(props) {
   return (
-    <Container maxWidth="md" sx={styles.mainContainer}>
-      <Box sx={styles.centeringBox}>
-        <LightbulbIcon sx={styles.icon} fontSize="large"></LightbulbIcon>
+    <Container sx={styles.container}>
+      <Box sx={styles.header}>
+        <Header>Connect Anki app</Header>
       </Box>
-
-      <Typography align="center" variant="h5" gutterBottom>
-        How to connect
-      </Typography>
-
+      <Masonry columns={2}></Masonry>
       <Typography align="center" variant="h6">
         Langi utilizes AnkiConnect Add-on for the desktop Anki application.
         Install the addon by followig the official AnkiConnect page.
