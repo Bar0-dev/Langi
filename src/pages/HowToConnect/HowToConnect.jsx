@@ -20,6 +20,7 @@ import {
 } from "../../components/common/textComps";
 import styles from "./styles";
 import config from "./config.txt";
+import CommonContainer from "../../components/common/CommonContainer/CommonContainer";
 
 const steps = [
   {
@@ -103,7 +104,7 @@ export default function HowToConnect(props) {
     setActiveStep(0);
   };
   return (
-    <Container sx={styles.container}>
+    <CommonContainer>
       <Box sx={styles.header}>
         <Header>Connect Anki app</Header>
       </Box>
@@ -147,6 +148,6 @@ export default function HowToConnect(props) {
           </Card>
         ) : null}
       </Box>
-    </Container>
+    </CommonContainer>
   );
 }

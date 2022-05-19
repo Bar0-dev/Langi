@@ -1,18 +1,23 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+
+const styles = {
+  header: {
+    marginBottom: (theme) => theme.spacing(4),
+  },
+};
 
 export const Header = (props) => {
   return (
-    <Typography variant="h1" component="h1">
-      {props.children}
-    </Typography>
-  );
-};
-
-export const HeaderAdditional = (props) => {
-  return (
-    <Typography color="GrayText" variant="h2">
-      {props.children}
-    </Typography>
+    <Box sx={styles.header}>
+      <Typography variant="h1" component="h1">
+        {props.children}
+      </Typography>
+      {props.subtext ? (
+        <Typography color="GrayText" variant="h2">
+          {props.subtext}
+        </Typography>
+      ) : null}
+    </Box>
   );
 };
 

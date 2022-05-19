@@ -5,6 +5,7 @@ import About from "./pages/About/About";
 import Edit from "./pages/Edit";
 import Decks from "./pages/Decks";
 import Learn from "./pages/Learn";
+import NotSupported from "./pages/NotSupported/NotSupported";
 import HowToConnect from "./pages/HowToConnect/HowToConnect";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState, useMemo } from "react";
@@ -37,6 +38,7 @@ const comps = {
   "/howtoconnect": <HowToConnect />,
   "/about": <About />,
   "/import": <Import />,
+  "/notSupported": <NotSupported />,
 };
 
 const App = function (props) {

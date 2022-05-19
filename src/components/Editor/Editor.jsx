@@ -24,6 +24,7 @@ import InLoading from "../common/InLoading/InLoading";
 import { getCache, setCache } from "../../utilities/utilities";
 
 import styles from "./styles";
+import CommonContainer from "../common/CommonContainer/CommonContainer";
 
 const Editor = function (props) {
   const [deckId, setDeckId] = useState(useParams().deckId);
@@ -52,8 +53,12 @@ const Editor = function (props) {
     async (id) => {
       try {
         const response = await getCards(id);
-        if (!response) {
+        if (response === "deckNotFound") {
           navigate("../404");
+          return false;
+        }
+        if (response === "deckNotSupported") {
+          navigate("../notSupported");
           return false;
         }
         setCards(response);
@@ -88,7 +93,7 @@ const Editor = function (props) {
   }
   if (status === "successful") {
     return (
-      <Container sx={styles.container}>
+      <CommonContainer sx={styles.container}>
         <EditorHeader
           deckId={deckId}
           deckName={deckName ? deckName : ""}
@@ -124,7 +129,7 @@ const Editor = function (props) {
           )}
           handleExport={exportDeckTxt}
         ></ButtonsMenu>
-      </Container>
+      </CommonContainer>
     );
   }
 };

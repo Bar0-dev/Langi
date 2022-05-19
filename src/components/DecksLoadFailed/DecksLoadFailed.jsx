@@ -1,28 +1,13 @@
-import {
-  Container,
-  Typography,
-  Button,
-  Grid,
-  Card,
-  CardActions,
-  CardContent,
-} from "@mui/material";
+import { Button, Card, CardActions, CardContent, Grid } from "@mui/material";
 import { Box } from "@mui/system";
-import {
-  Header,
-  HeaderAdditional,
-  Paragraph,
-  SubHeader,
-} from "../common/textComps";
+import CommonContainer from "../common/CommonContainer/CommonContainer";
+import { Header, Paragraph, SubHeader } from "../common/textComps";
 import styles from "./styles";
 
 export default function DecksLoadFailed(props) {
   return (
-    <Container sx={styles.container}>
-      <Box sx={styles.header}>
-        <Header>Loading Error</Header>
-        <HeaderAdditional>Couldn't connect to Anki app</HeaderAdditional>
-      </Box>
+    <CommonContainer>
+      <Header subtext="Couldn't connect to Anki app">Loading Error</Header>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
           <Card>
@@ -59,6 +44,6 @@ export default function DecksLoadFailed(props) {
           </Card>
         </Grid>
       </Grid>
-    </Container>
+    </CommonContainer>
   );
 }

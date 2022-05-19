@@ -1,8 +1,7 @@
 const styles = {
-  buttons: {
-    display: "flex",
-    gap: (theme) => theme.spacing(2),
+  container: {
     marginTop: (theme) => theme.spacing(4),
+    marginBottom: (theme) => theme.spacing(12),
   },
 };
 

@@ -58,12 +58,13 @@ const parseHtmlCardsContent = (cards, deckName) => {
   const getCardElements = (card) => {
     const htmlParser = new DOMParser();
     const htmlFrontElements = htmlParser.parseFromString(
-      card.fields.Front.value,
+      card.fields?.Front?.value,
       "text/html"
     ).body.childNodes;
     const [front] = [...htmlFrontElements].filter(
       (element) => element.id === "front-text"
     );
+    if (!front) return false;
     const [frontImage] = [...htmlFrontElements].filter(
       (element) => element.id === "image-front"
     );
@@ -81,8 +82,9 @@ const parseHtmlCardsContent = (cards, deckName) => {
   };
   const cardsMap = new Map();
   cards.forEach((card) => {
-    const [front, frontImage, back, backImage] = getCardElements(card);
-    if (!front) return false;
+    const cardElements = getCardElements(card);
+    if (!cardElements) return false;
+    const [front, frontImage, back, backImage] = cardElements;
     cardsMap.set(
       card.noteId ?? uuidv4(),
       cardTemplate({
@@ -95,10 +97,12 @@ const parseHtmlCardsContent = (cards, deckName) => {
       })
     );
   });
+  if (!cardsMap.length) return false;
   return cardsMap;
 };
 
 const parseTextCardContent = (cards, deckName) => {
+  if (!cards[0].fields.Front) return false;
   const cardsMap = new Map();
   cards.forEach((card) => {
     const front = card.fields.Front.value;
@@ -223,11 +227,15 @@ export const getCards = async (deckId, raw = false) => {
         query: `deck:"${deckName}"`,
       });
       const cards = await getCardsInfo(cardIds);
+      console.log(cards);
       if (raw) return cards;
-      const cardsParsed = parseHtmlCardsContent(cards, deckName);
-      return cardsParsed;
+      const cardsHtmlParsed = parseHtmlCardsContent(cards, deckName);
+      if (cardsHtmlParsed) return cardsHtmlParsed;
+      const cardsTextParsed = parseTextCardContent(cards, deckName);
+      if (cardsTextParsed) return cardsTextParsed;
+      return "deckNotSupported";
     } else {
-      return false;
+      return "deckNotFound";
     }
   } catch (error) {
     console.log(error);

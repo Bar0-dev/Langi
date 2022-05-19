@@ -2,10 +2,11 @@ import { Container, Typography, Button } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Box } from "@mui/system";
 import styles from "./styles";
+import CommonContainer from "../../components/common/CommonContainer/CommonContainer";
 
 export default function NotFound(props) {
   return (
-    <Container maxWidth="md" sx={styles.mainContainer}>
+    <CommonContainer>
       <Box sx={styles.errorIcon}>
         <ErrorOutlineIcon fontSize="large"></ErrorOutlineIcon>
       </Box>
@@ -20,6 +21,6 @@ export default function NotFound(props) {
           Go back
         </Button>
       </Box>
-    </Container>
+    </CommonContainer>
   );
 }

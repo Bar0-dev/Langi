@@ -11,11 +11,11 @@ import {
   Grid,
 } from "@mui/material";
 import { Box, width } from "@mui/system";
+import CommonContainer from "../../components/common/CommonContainer/CommonContainer";
 import {
   SubHeader,
   Paragraph,
   Header,
-  HeaderAdditional,
 } from "../../components/common/textComps";
 import logo from "../../logo/logo.png";
 import styles from "./styles";
@@ -38,17 +38,14 @@ const HomeElement = (props) => {
 
 export default function Home(props) {
   return (
-    <Container sx={styles.container}>
+    <CommonContainer>
       <Box sx={styles.hero}>
         <Box sx={styles.logoWrapper}>
           <img style={{ width: "200px" }} className="logo" src={logo}></img>
         </Box>
-        <Box>
-          <Header>Langi</Header>
-          <HeaderAdditional>
-            Easy, responsive and intuitive flashcard editor
-          </HeaderAdditional>
-        </Box>
+        <Header subtext="Easy, responsive and intuitive flashcard editor">
+          Langi
+        </Header>
       </Box>
       <Masonry columns={3} spacing={4}>
         <HomeElement
@@ -81,6 +78,6 @@ export default function Home(props) {
           what technologies were used please explore the about page.
         </HomeElement>
       </Masonry>
-    </Container>
+    </CommonContainer>
   );
 }

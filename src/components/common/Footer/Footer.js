@@ -6,7 +6,7 @@ import styles from "./styles";
 
 export default function Footer(props) {
   return (
-    <Paper sx={styles.mainContainer}>
+    <Paper sx={styles.paper}>
       <Box>
         <IconButton href="https://www.linkedin.com/in/bartoszpietrzak/">
           <LinkedInIcon />

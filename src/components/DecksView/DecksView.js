@@ -1,4 +1,4 @@
-import { Container, Grid, IconButton } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import Deck from "./Deck/Deck";
 import {
@@ -12,6 +12,7 @@ import { useSnackbar } from "notistack";
 import styles from "./styles";
 import InLoading from "../common/InLoading/InLoading";
 import DecksLoadFailed from "../DecksLoadFailed/DecksLoadFailed";
+import CommonContainer from "../common/CommonContainer/CommonContainer";
 
 export default function DecksView(props) {
   const [decks, setDecks] = useState(null);
@@ -39,7 +40,7 @@ export default function DecksView(props) {
   }
   if (status === "loaded") {
     return (
-      <Container maxWidth="md" sx={styles.mainContainer}>
+      <CommonContainer sx={styles.mainContainer}>
         <Grid container spacing={2} direction="row" justifyContent="center">
           {Object.entries(decks).map(([key, value]) => (
             <Grid item xs={"auto"} key={key}>
@@ -58,7 +59,7 @@ export default function DecksView(props) {
             <AddCircleIcon fontSize="large" />
           </IconButton>
         </Box>
-      </Container>
+      </CommonContainer>
     );
   }
 }

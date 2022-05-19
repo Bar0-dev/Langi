@@ -1,18 +1,11 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Container,
-  Link,
-  Typography,
-} from "@mui/material";
+import { Button, Card, CardActions, CardContent, Link } from "@mui/material";
+import CommonContainer from "../../components/common/CommonContainer/CommonContainer";
+
 import styles from "./styles";
 import {
   SubHeader,
   Paragraph,
   Header,
-  HeaderAdditional,
 } from "../../components/common/textComps";
 import { Masonry } from "@mui/lab";
 import { Box } from "@mui/system";
@@ -32,11 +25,8 @@ const AboutCard = (props) => {
 
 export default function HowToConnect(props) {
   return (
-    <Container sx={styles.container}>
-      <Box sx={styles.title}>
-        <Header>About</Header>
-        <HeaderAdditional>Langi - flashcard app</HeaderAdditional>
-      </Box>
+    <CommonContainer>
+      <Header subtext="Langi - flashcard app">About</Header>
       <Masonry columns={2} spacing={4}>
         <AboutCard title="Disclaimer">
           This app is not a final product. It has been created as a part of a
@@ -105,6 +95,6 @@ export default function HowToConnect(props) {
           mine follow the link to my portfolio webpage.
         </AboutCard>
       </Masonry>
-    </Container>
+    </CommonContainer>
   );
 }

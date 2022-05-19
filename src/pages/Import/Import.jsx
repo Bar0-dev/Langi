@@ -4,7 +4,6 @@ import { importDeckTxt } from "../../utilities/ankiAPI";
 import {
   Paragraph,
   Header,
-  HeaderAdditional,
   SubHeader,
 } from "../../components/common/textComps";
 import { Box } from "@mui/system";
@@ -13,6 +12,7 @@ import Editor from "../../components/Editor/Editor";
 import samplePlainTxt from "./samplePlainText.txt";
 import sampleHtml from "./sampleHtml.txt";
 import { useSnackbar } from "notistack";
+import CommonContainer from "../../components/common/CommonContainer/CommonContainer";
 
 export default function Import(props) {
   const [status, setStatus] = useState("preload");
@@ -37,13 +37,10 @@ export default function Import(props) {
   };
   if (status === "preload")
     return (
-      <Container sx={styles.container}>
-        <Box sx={styles.header}>
-          <Header>Importing</Header>
-          <HeaderAdditional>
-            Upload text file with words you always wanted to learn
-          </HeaderAdditional>
-        </Box>
+      <CommonContainer>
+        <Header subtext="Upload text file with words you always wanted to learn">
+          Importing
+        </Header>
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
             <Paper sx={styles.paper} elevation={2}>
@@ -92,7 +89,7 @@ export default function Import(props) {
         <Button variant="contained" onClick={handleClick}>
           Import
         </Button>
-      </Container>
+      </CommonContainer>
     );
   if (status === "loaded")
     return <Editor newDeck={true} auxCards={cards}></Editor>;
