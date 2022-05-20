@@ -29,7 +29,7 @@ export default function Deck(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <LinkButton link={`/edit/${props.id}`} text="Edit" />
+        <LinkButton to={`/edit/${props.id}`}>Edit</LinkButton>
         <Button
           color="inherit"
           onClick={() => {

@@ -1,10 +1,11 @@
-import { Card, CardActions, CardContent, Button, Grid } from "@mui/material";
+import { Card, CardActions, CardContent, Grid } from "@mui/material";
 import CommonContainer from "../../components/common/CommonContainer/CommonContainer";
 import {
   Header,
   Paragraph,
   SubHeader,
 } from "../../components/common/textComps";
+import LinkButton from "../../components/common/LinkButton";
 
 export default function NotSupported(props) {
   return (
@@ -37,7 +38,7 @@ export default function NotSupported(props) {
               </Paragraph>
             </CardContent>
             <CardActions>
-              <Button href="/newDeck">New deck</Button>
+              <LinkButton to="/newDeck">New deck</LinkButton>
             </CardActions>
           </Card>
         </Grid>

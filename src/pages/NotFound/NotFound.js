@@ -1,4 +1,5 @@
-import { Container, Typography, Button } from "@mui/material";
+import { Typography } from "@mui/material";
+import LinkButton from "../../components/common/LinkButton";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Box } from "@mui/system";
 import styles from "./styles";
@@ -17,9 +18,9 @@ export default function NotFound(props) {
         This page does not exist
       </Typography>
       <Box sx={styles.button}>
-        <Button href="/" variant="contained">
+        <LinkButton to="/" variant="contained">
           Go back
-        </Button>
+        </LinkButton>
       </Box>
     </CommonContainer>
   );

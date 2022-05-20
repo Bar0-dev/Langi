@@ -6,6 +6,7 @@ import {
   exportDeckTxt,
   getDecksAndIDs,
 } from "../../utilities/ankiAPI";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useSnackbar } from "notistack";
@@ -55,7 +56,7 @@ export default function DecksView(props) {
           ))}
         </Grid>
         <Box sx={styles.buttonWrapper}>
-          <IconButton href="/newDeck">
+          <IconButton component={Link} to="/newDeck">
             <AddCircleIcon fontSize="large" />
           </IconButton>
         </Box>

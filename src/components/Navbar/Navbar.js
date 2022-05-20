@@ -3,11 +3,11 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import StyleIcon from "@mui/icons-material/Style";
 import ModeSwitch from "./ModeSwitch/ModeSwitch";
 import LinkButton from "../common/LinkButton";
-import logo from "../../logo/logo.png";
+import StyleIcon from "@mui/icons-material/Style";
 import { Link } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
 export default function Navbar(props) {
   return (
@@ -18,19 +18,27 @@ export default function Navbar(props) {
       >
         <Toolbar sx={{ gap: (theme) => theme.spacing(2) }}>
           <Link
-            href="/"
+            component={RouterLink}
+            to="/"
             underline="none"
             color="inherit"
-            sx={{ display: "flex", gap: (theme) => theme.spacing(1) }}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: (theme) => theme.spacing(1),
+            }}
           >
-            <img src={logo} style={{ height: "40px" }}></img>
+            <StyleIcon fontSize="large"></StyleIcon>
             <Typography align="center" variant="h4" component="span">
               Langi
             </Typography>
           </Link>
 
           {Object.entries(props.links).map(([key, link]) => (
-            <LinkButton key={key} link={link} text={key} />
+            <LinkButton key={key} to={link} color="inherit">
+              {key}
+            </LinkButton>
           ))}
           <Box sx={{ flexGrow: 1 }}></Box>
           <ModeSwitch checked={props.darkIsOn} onChange={props.toggleMode} />

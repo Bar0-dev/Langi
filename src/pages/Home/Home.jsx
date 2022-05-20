@@ -1,15 +1,5 @@
 import { Masonry } from "@mui/lab";
-import {
-  Container,
-  Typography,
-  Button,
-  Link,
-  Card,
-  CardContent,
-  CardHeader,
-  CardActions,
-  Grid,
-} from "@mui/material";
+import { Card, CardContent, CardActions } from "@mui/material";
 import { Box, width } from "@mui/system";
 import CommonContainer from "../../components/common/CommonContainer/CommonContainer";
 import {
@@ -17,8 +7,9 @@ import {
   Paragraph,
   Header,
 } from "../../components/common/textComps";
-import logo from "../../logo/logo.png";
+import logo from "../../logo/logo.svg";
 import styles from "./styles";
+import LinkButton from "../../components/common/LinkButton";
 
 const HomeElement = (props) => {
   return (
@@ -28,9 +19,9 @@ const HomeElement = (props) => {
         <Paragraph>{props.children}</Paragraph>
       </CardContent>
       <CardActions>
-        <Button variant="outlined" href={props.buttonLink}>
+        <LinkButton variant="outlined" to={props.buttonLink}>
           {props.buttonText}
-        </Button>
+        </LinkButton>
       </CardActions>
     </Card>
   );

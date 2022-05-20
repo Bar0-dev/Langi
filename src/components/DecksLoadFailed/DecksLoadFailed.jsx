@@ -1,8 +1,7 @@
-import { Button, Card, CardActions, CardContent, Grid } from "@mui/material";
-import { Box } from "@mui/system";
+import { Card, CardActions, CardContent, Grid } from "@mui/material";
 import CommonContainer from "../common/CommonContainer/CommonContainer";
+import LinkButton from "../common/LinkButton";
 import { Header, Paragraph, SubHeader } from "../common/textComps";
-import styles from "./styles";
 
 export default function DecksLoadFailed(props) {
   return (
@@ -19,9 +18,9 @@ export default function DecksLoadFailed(props) {
               </Paragraph>
             </CardContent>
             <CardActions>
-              <Button href="/howtoconnect" variant="outlined">
+              <LinkButton to="/howtoconnect" variant="outlined">
                 How to connect
-              </Button>
+              </LinkButton>
             </CardActions>
           </Card>
         </Grid>
@@ -37,9 +36,9 @@ export default function DecksLoadFailed(props) {
               </Paragraph>
             </CardContent>
             <CardActions>
-              <Button href="../newDeck" variant="outlined">
+              <LinkButton to="/newDeck" variant="outlined">
                 New Deck
-              </Button>
+              </LinkButton>
             </CardActions>
           </Card>
         </Grid>
