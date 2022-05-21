@@ -82,7 +82,7 @@ const App = function (props) {
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
-            <Footer />
+            {/* <Footer /> */}
           </DialogProvider>
         </SnackbarProvider>
       </BrowserRouter>

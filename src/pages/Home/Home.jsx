@@ -1,6 +1,6 @@
 import { Masonry } from "@mui/lab";
 import { Card, CardContent, CardActions } from "@mui/material";
-import { Box, width } from "@mui/system";
+import { Box } from "@mui/system";
 import CommonContainer from "../../components/common/CommonContainer/CommonContainer";
 import {
   SubHeader,
@@ -10,6 +10,7 @@ import {
 import logo from "../../logo/logo.svg";
 import styles from "./styles";
 import LinkButton from "../../components/common/LinkButton";
+import { useMediaQuery, breakPoints } from "../../utilities/utilities";
 
 const HomeElement = (props) => {
   return (
@@ -28,6 +29,8 @@ const HomeElement = (props) => {
 };
 
 export default function Home(props) {
+  const mediaQuery = useMediaQuery(breakPoints.tablet);
+
   return (
     <CommonContainer>
       <Box sx={styles.hero}>
@@ -38,7 +41,7 @@ export default function Home(props) {
           Langi
         </Header>
       </Box>
-      <Masonry columns={3} spacing={4}>
+      <Masonry columns={mediaQuery ? 1 : 3} spacing={4}>
         <HomeElement
           title="Get started"
           buttonText="How to connect"

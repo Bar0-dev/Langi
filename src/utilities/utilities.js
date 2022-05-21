@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const snackbarDispatcher = (actions, invokeSnackbar) => {
   actions.forEach(([message, variant]) =>
@@ -61,4 +61,19 @@ export const useMap = (initMap = cardTemplate()) => {
   };
 
   return [myMap, setValue, setMyMap];
+};
+
+export const useMediaQuery = (query) => {
+  const mediaQuery = window.matchMedia(query);
+  const [matching, setMatching] = useState(mediaQuery.matches);
+  window.onresize = () => {
+    setMatching(mediaQuery.matches);
+  };
+
+  return matching;
+};
+
+export const breakPoints = {
+  mobile: "(max-width: 450px)",
+  tablet: "(max-width: 600px)",
 };
