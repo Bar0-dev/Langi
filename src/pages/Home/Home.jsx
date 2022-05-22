@@ -12,6 +12,32 @@ import styles from "./styles";
 import LinkButton from "../../components/common/LinkButton";
 import { useMediaQuery, breakPoints } from "../../utilities/utilities";
 
+const HomeHeader = (props) => {
+  if (props.mobileQuery) {
+    return (
+      <Box sx={{ ...styles.header, ...styles.headerMobile }}>
+        <Box sx={styles.logoWrapper}>
+          <img style={{ width: "200px" }} className="logo" src={logo}></img>
+        </Box>
+        <Header subtext="Easy, responsive and intuitive flashcard editor">
+          Langi
+        </Header>
+      </Box>
+    );
+  } else {
+    return (
+      <Box sx={styles.header}>
+        <Box sx={styles.logoWrapper}>
+          <img style={{ width: "200px" }} className="logo" src={logo}></img>
+        </Box>
+        <Header subtext="Easy, responsive and intuitive flashcard editor">
+          Langi
+        </Header>
+      </Box>
+    );
+  }
+};
+
 const HomeElement = (props) => {
   return (
     <Card sx={styles.card}>
@@ -29,19 +55,12 @@ const HomeElement = (props) => {
 };
 
 export default function Home(props) {
-  const mediaQuery = useMediaQuery(breakPoints.tablet);
+  const mobileQuery = useMediaQuery(breakPoints.mobile);
 
   return (
     <CommonContainer>
-      <Box sx={styles.hero}>
-        <Box sx={styles.logoWrapper}>
-          <img style={{ width: "200px" }} className="logo" src={logo}></img>
-        </Box>
-        <Header subtext="Easy, responsive and intuitive flashcard editor">
-          Langi
-        </Header>
-      </Box>
-      <Masonry columns={mediaQuery ? 1 : 3} spacing={4}>
+      <HomeHeader mobileQuery={mobileQuery}></HomeHeader>
+      <Masonry sx={styles.masonry} columns={mobileQuery ? 1 : 3} spacing={4}>
         <HomeElement
           title="Get started"
           buttonText="How to connect"

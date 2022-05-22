@@ -66,14 +66,21 @@ export const useMap = (initMap = cardTemplate()) => {
 export const useMediaQuery = (query) => {
   const mediaQuery = window.matchMedia(query);
   const [matching, setMatching] = useState(mediaQuery.matches);
-  window.onresize = () => {
+  const handleResize = () => {
     setMatching(mediaQuery.matches);
   };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [mediaQuery.matches, handleResize]);
 
   return matching;
 };
 
 export const breakPoints = {
-  mobile: "(max-width: 450px)",
-  tablet: "(max-width: 600px)",
+  mobile: "(max-width: 600px)",
+  tablet: "(max-width: 1200px)",
 };

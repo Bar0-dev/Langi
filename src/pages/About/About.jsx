@@ -1,4 +1,11 @@
-import { Button, Card, CardActions, CardContent, Link } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Link,
+  useMediaQuery,
+} from "@mui/material";
 import CommonContainer from "../../components/common/CommonContainer/CommonContainer";
 
 import styles from "./styles";
@@ -9,6 +16,7 @@ import {
 } from "../../components/common/textComps";
 import { Masonry } from "@mui/lab";
 import { Box } from "@mui/system";
+import { breakPoints } from "../../utilities/utilities";
 
 const AboutCard = (props) => {
   return (
@@ -24,10 +32,12 @@ const AboutCard = (props) => {
 };
 
 export default function HowToConnect(props) {
+  const mobileQuery = useMediaQuery(breakPoints.mobile);
+
   return (
     <CommonContainer>
       <Header subtext="Langi - flashcard app">About</Header>
-      <Masonry columns={2} spacing={4}>
+      <Masonry sx={styles.masonry} columns={mobileQuery ? 1 : 2} spacing={4}>
         <AboutCard title="Disclaimer">
           This app is not a final product. It has been created as a part of a
           portfolio, nevertheless, it is a functional app that can facilitate
