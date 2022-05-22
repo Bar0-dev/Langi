@@ -6,6 +6,7 @@ import {
   Grow,
   IconButton,
   Link,
+  Paper,
   TextField,
   Typography,
   Zoom,
@@ -16,7 +17,11 @@ import styles from "./styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useEffect, useRef } from "react";
 import { isEmpty } from "lodash";
-import { useMap } from "../../../utilities/utilities";
+import {
+  useMap,
+  useMediaQuery,
+  breakPoints,
+} from "../../../utilities/utilities";
 
 const ResultViewer = (props) => {
   return (
@@ -57,6 +62,8 @@ const ResultViewer = (props) => {
 };
 
 const Flashcard = function (props) {
+  const mobileQuery = useMediaQuery(breakPoints.mobile);
+
   const [card, setCardValue, setCard] = useMap(props.data);
   const translateButtonRef = useRef();
   const settings = props.settings;
@@ -116,43 +123,47 @@ const Flashcard = function (props) {
   }, [card]);
 
   return (
-    <Zoom in={true}>
-      <Card key={props.id} sx={styles.card}>
-        <Box style={styles.inputs}>
-          <IconButton ref={translateButtonRef} onClick={handleTranslateRequest}>
-            <TranslateIcon></TranslateIcon>
-          </IconButton>
-          <TextField
-            value={card.get("front")}
-            onChange={handleFrontChange}
-            onKeyDown={handleKeyPress}
-          ></TextField>
+    <Paper key={props.id} sx={styles.flashcard}>
+      <Box
+        style={
+          mobileQuery
+            ? { ...styles.inputs, ...styles.inputsMobile }
+            : styles.inputs
+        }
+      >
+        <IconButton ref={translateButtonRef} onClick={handleTranslateRequest}>
+          <TranslateIcon></TranslateIcon>
+        </IconButton>
+        <TextField
+          value={card.get("front")}
+          onChange={handleFrontChange}
+          onKeyDown={handleKeyPress}
+        ></TextField>
 
-          <ArrowForwardIosIcon />
-          <TextField
-            value={card.get("back")}
-            onChange={handleBackChange}
-          ></TextField>
-          <IconButton
-            onClick={() => {
-              props.handleDeleteCard(props.id);
-            }}
-          >
-            <CloseIcon></CloseIcon>
-          </IconButton>
-        </Box>
-        <ResultViewer
-          suggestions={card.get("suggestions")}
-          imgUrlBack={
-            card.get("pictureBack").length ? card.get("pictureBack") : null
-          }
-          imgUrlFront={
-            card.get("pictureFront").length ? card.get("pictureFront") : null
-          }
-          handleChange={handleChipClick}
-        ></ResultViewer>
-      </Card>
-    </Zoom>
+        <ArrowForwardIosIcon />
+        <TextField
+          value={card.get("back")}
+          onChange={handleBackChange}
+        ></TextField>
+        <IconButton
+          onClick={() => {
+            props.handleDeleteCard(props.id);
+          }}
+        >
+          <CloseIcon></CloseIcon>
+        </IconButton>
+      </Box>
+      <ResultViewer
+        suggestions={card.get("suggestions")}
+        imgUrlBack={
+          card.get("pictureBack").length ? card.get("pictureBack") : null
+        }
+        imgUrlFront={
+          card.get("pictureFront").length ? card.get("pictureFront") : null
+        }
+        handleChange={handleChipClick}
+      ></ResultViewer>
+    </Paper>
   );
 };
 export default Flashcard;

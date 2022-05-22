@@ -1,5 +1,5 @@
 const styles = {
-  card: {
+  flashcard: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -13,6 +13,9 @@ const styles = {
     alignItems: "center",
     gap: "20px",
   },
+  inputsMobile: {
+    flexDirection: "column",
+  },
   results: {
     width: "100%",
     display: "flex",
@@ -23,6 +26,8 @@ const styles = {
     display: "flex",
     gap: "1rem",
     alignItems: "center",
+    maxWidth: "100%",
+    flexWrap: "wrap",
   },
   image: {
     display: "flex",

@@ -5,6 +5,9 @@ const styles = {
     padding: (theme) => theme.spacing(4),
     gap: (theme) => theme.spacing(4),
   },
+  paperMobile: {
+    flexDirection: "column",
+  },
   langPicker: {
     display: "flex",
     justifyContent: "center",

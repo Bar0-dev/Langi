@@ -13,7 +13,12 @@ import LoopIcon from "@mui/icons-material/Loop";
 import ComboBox from "./ComboBox/ComboBox";
 import styles from "./styles";
 import { useEffect, useState } from "react";
-import { getCache, setCache } from "../../../utilities/utilities";
+import {
+  getCache,
+  setCache,
+  useMediaQuery,
+  breakPoints,
+} from "../../../utilities/utilities";
 import WiktTransl from "wiktionary-translations";
 import ISO6391 from "iso-639-1";
 
@@ -31,6 +36,7 @@ const supportedLangs = [
 //PLACEHOLDER
 
 const EditorHeader = function (props) {
+  const mobileQuery = useMediaQuery(breakPoints.mobile);
   const cachedSettings = getCache(props.deckId);
 
   const deckName = props.deckName;
@@ -65,7 +71,12 @@ const EditorHeader = function (props) {
   }, [srcLang, trgtLang]);
 
   return (
-    <Paper elevation={2} sx={styles.paper}>
+    <Paper
+      elevation={2}
+      sx={
+        mobileQuery ? { ...styles.paper, ...styles.paperMobile } : styles.paper
+      }
+    >
       <Box>
         <Typography gutterBottom variant="h5" component="h3">
           General settings
