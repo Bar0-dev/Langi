@@ -3,22 +3,15 @@ import {
   FormGroup,
   Switch,
   FormControlLabel,
-  IconButton,
   Checkbox,
   Typography,
   Paper,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import LoopIcon from "@mui/icons-material/Loop";
 import ComboBox from "./ComboBox/ComboBox";
 import styles from "./styles";
 import { useEffect, useState } from "react";
-import {
-  getCache,
-  setCache,
-  useMediaQuery,
-  breakPoints,
-} from "../../../utilities/utilities";
+import { getCache, setCache } from "../../../utilities/utilities";
 import WiktTransl from "wiktionary-translations";
 import ISO6391 from "iso-639-1";
 
@@ -36,7 +29,6 @@ const supportedLangs = [
 //PLACEHOLDER
 
 const EditorHeader = function (props) {
-  const mobileQuery = useMediaQuery(breakPoints.mobile);
   const cachedSettings = getCache(props.deckId);
 
   const deckName = props.deckName;
@@ -74,32 +66,41 @@ const EditorHeader = function (props) {
     <Paper
       elevation={2}
       sx={
-        mobileQuery ? { ...styles.paper, ...styles.paperMobile } : styles.paper
+        props.mobileQuery
+          ? { ...styles.paper, ...styles.paperMobile }
+          : styles.paper
       }
     >
-      <Box>
+      <Box
+        sx={
+          props.mobileQuery
+            ? { ...styles.headerColumn, ...styles.headerColumnMobile }
+            : styles.headerColumn
+        }
+      >
         <Typography gutterBottom variant="h5" component="h3">
           General settings
         </Typography>
-        <FormGroup>
+        <FormGroup sx={styles.form}>
           <TextField
             label="Deck name"
             value={deckName}
             variant="outlined"
             onChange={props.handleSetName}
           ></TextField>
-          <Box sx={styles.langPicker}>
+          <Box
+            sx={
+              props.mobileQuery
+                ? { ...styles.langPicker, ...styles.langPickerMobile }
+                : styles.langPicker
+            }
+          >
             <ComboBox
               value={srcLang}
               onChange={handleSrcLangChange}
               label="Source Language"
               languages={supportSrcLang}
             />
-            <Box sx={styles.swapIcon}>
-              <IconButton>
-                <LoopIcon></LoopIcon>
-              </IconButton>
-            </Box>
             <ComboBox
               value={trgtLang}
               onChange={handleTrgtLangChange}
@@ -109,7 +110,13 @@ const EditorHeader = function (props) {
           </Box>
         </FormGroup>
       </Box>
-      <Box>
+      <Box
+        sx={
+          props.mobileQuery
+            ? { ...styles.headerColumn, ...styles.headerColumnMobile }
+            : styles.headerColumn
+        }
+      >
         <Typography variant="h5" component="span">
           Additional settings
         </Typography>

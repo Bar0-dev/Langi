@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
-import { IconButton, List, Container } from "@mui/material";
+import { IconButton, List, Container, Stack } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditorHeader from "./EditorHeader/EditorHeader";
 import {
@@ -21,12 +21,18 @@ import {
 import { useDialog } from "../common/Dialog/DialogContext";
 import ButtonsMenu from "./ButtonsMenu/ButtonsMenu";
 import InLoading from "../common/InLoading/InLoading";
-import { getCache, setCache } from "../../utilities/utilities";
+import {
+  breakPoints,
+  getCache,
+  setCache,
+  useMediaQuery,
+} from "../../utilities/utilities";
 
 import styles from "./styles";
 import CommonContainer from "../common/CommonContainer/CommonContainer";
 
 const Editor = function (props) {
+  const mobileQuery = useMediaQuery(breakPoints.mobile);
   const [deckId, setDeckId] = useState(useParams().deckId);
   const [deckName, setName] = useState("");
   const [cards, setCards] = useState(new Map());
@@ -101,9 +107,13 @@ const Editor = function (props) {
           handleSetName={handleSetName(setName, deckId)}
           settings={settings}
           setSettings={setSettings}
+          mobileQuery={mobileQuery}
         ></EditorHeader>
-        <List>{cardReactElements(cards, setCards, dict, settings)}</List>
+        <Stack sx={mobileQuery ? { width: "100%" } : null} spacing={2}>
+          {cardReactElements(cards, setCards, dict, settings)}
+        </Stack>
         <IconButton
+          size="large"
           sx={styles.iconAdd}
           onClick={handleAddCard(deckName, cards, setCards)}
         >
@@ -113,6 +123,7 @@ const Editor = function (props) {
           deckId={deckId}
           deckName={deckName}
           cards={cards}
+          mobileQuery={mobileQuery}
           handleClose={handleClose(
             setDialogOpen,
             setContent,

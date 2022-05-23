@@ -7,7 +7,7 @@ const styles = {
     gap: (theme) => theme.spacing(2),
   },
   iconAdd: {
-    marginTop: (theme) => theme.spacing(2),
+    margin: (theme) => theme.spacing(2),
   },
 };
 

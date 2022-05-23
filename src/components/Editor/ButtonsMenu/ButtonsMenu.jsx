@@ -7,7 +7,13 @@ import styles from "./styles";
 
 export default function ButtonsMenu(props) {
   return (
-    <FormControl sx={styles.buttonsMenu}>
+    <FormControl
+      sx={
+        props.mobileQuery
+          ? { ...styles.buttonsMenu, ...styles.buttonsMenuMobile }
+          : styles.buttonsMenu
+      }
+    >
       <Button
         size="large"
         variant="contained"

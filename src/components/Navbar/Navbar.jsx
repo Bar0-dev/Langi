@@ -19,6 +19,10 @@ const NavBarMobile = (props) => {
     setOpen(open ? false : true);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -27,6 +31,7 @@ const NavBarMobile = (props) => {
       >
         <Box sx={styles.upperBar}>
           <Link
+            onClick={handleClose}
             component={RouterLink}
             to="/"
             underline="none"
@@ -48,7 +53,13 @@ const NavBarMobile = (props) => {
         <Collapse in={open}>
           <Toolbar sx={{ ...styles.toolbar, ...styles.toolbarMobile }}>
             {Object.entries(props.links).map(([key, link]) => (
-              <LinkButton key={key} to={link} color="inherit">
+              <LinkButton
+                size="large"
+                onClick={handleClose}
+                key={key}
+                to={link}
+                color="inherit"
+              >
                 {key}
               </LinkButton>
             ))}

@@ -19,16 +19,15 @@ export const cardReactElements = (cards, setCards, dict, settings) => {
   const elements = [];
   cards.forEach((value, key) => {
     elements.push(
-      <ListItem key={key}>
-        <Flashcard
-          id={key}
-          data={value}
-          handleChange={handleChange(cards, setCards)}
-          handleDeleteCard={handleDeleteCard(cards, setCards)}
-          dict={dict}
-          settings={settings}
-        />
-      </ListItem>
+      <Flashcard
+        key={key}
+        id={key}
+        data={value}
+        handleChange={handleChange(cards, setCards)}
+        handleDeleteCard={handleDeleteCard(cards, setCards)}
+        dict={dict}
+        settings={settings}
+      />
     );
   });
   return elements;

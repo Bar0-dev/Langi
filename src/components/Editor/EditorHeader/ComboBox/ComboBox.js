@@ -10,7 +10,7 @@ export default function ComboBox(props) {
       disablePortal
       id={`select-language-${props.label}`}
       options={props.languages}
-      sx={{ width: 200, mt: "15px" }}
+      sx={{ width: "100%" }}
       renderInput={(params) => <TextField {...params} label={props.label} />}
     />
   );

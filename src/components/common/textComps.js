@@ -9,11 +9,11 @@ const styles = {
 export const Header = (props) => {
   return (
     <Box sx={styles.header}>
-      <Typography variant="h1" component="h1">
+      <Typography variant="h2" component="h1">
         {props.children}
       </Typography>
       {props.subtext ? (
-        <Typography color="GrayText" variant="h2">
+        <Typography color="GrayText" variant="h3" component="h2">
           {props.subtext}
         </Typography>
       ) : null}

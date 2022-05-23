@@ -7,6 +7,9 @@ const styles = {
     gap: "10px",
     padding: (theme) => theme.spacing(4),
   },
+  flashcardMobile: {
+    width: "100%",
+  },
   inputs: {
     display: "flex",
     justifyContent: "center",
@@ -15,6 +18,7 @@ const styles = {
   },
   inputsMobile: {
     flexDirection: "column",
+    width: "100%",
   },
   results: {
     width: "100%",
@@ -33,6 +37,16 @@ const styles = {
     display: "flex",
     gap: "1rem",
     alignItems: "centet",
+  },
+  buttonsWrapper: {
+    marginTop: (theme) => theme.spacing(2),
+    width: "100%",
+    display: "flex",
+    gap: (theme) => theme.spacing(4),
+    justifyContent: "flex-end",
+  },
+  textField: {
+    width: "100%",
   },
 };
 

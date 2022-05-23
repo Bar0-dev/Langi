@@ -122,48 +122,96 @@ const Flashcard = function (props) {
     props.handleChange(props.id, card);
   }, [card]);
 
-  return (
-    <Paper key={props.id} sx={styles.flashcard}>
-      <Box
-        style={
-          mobileQuery
-            ? { ...styles.inputs, ...styles.inputsMobile }
-            : styles.inputs
-        }
+  if (mobileQuery) {
+    return (
+      <Paper
+        key={props.id}
+        sx={{ ...styles.flashcard, ...styles.flashcardMobile }}
       >
-        <IconButton ref={translateButtonRef} onClick={handleTranslateRequest}>
-          <TranslateIcon></TranslateIcon>
-        </IconButton>
-        <TextField
-          value={card.get("front")}
-          onChange={handleFrontChange}
-          onKeyDown={handleKeyPress}
-        ></TextField>
-
-        <ArrowForwardIosIcon />
-        <TextField
-          value={card.get("back")}
-          onChange={handleBackChange}
-        ></TextField>
-        <IconButton
-          onClick={() => {
-            props.handleDeleteCard(props.id);
-          }}
-        >
-          <CloseIcon></CloseIcon>
-        </IconButton>
-      </Box>
-      <ResultViewer
-        suggestions={card.get("suggestions")}
-        imgUrlBack={
-          card.get("pictureBack").length ? card.get("pictureBack") : null
-        }
-        imgUrlFront={
-          card.get("pictureFront").length ? card.get("pictureFront") : null
-        }
-        handleChange={handleChipClick}
-      ></ResultViewer>
-    </Paper>
-  );
+        <Box sx={{ ...styles.inputs, ...styles.inputsMobile }}>
+          <TextField
+            sx={styles.textField}
+            placeholder="source text"
+            value={card.get("front")}
+            onChange={handleFrontChange}
+            onKeyDown={handleKeyPress}
+          ></TextField>
+          {mobileQuery ? null : <ArrowForwardIosIcon />}
+          <TextField
+            sx={styles.textField}
+            placeholder="target text"
+            value={card.get("back")}
+            onChange={handleBackChange}
+          ></TextField>
+        </Box>
+        <ResultViewer
+          suggestions={card.get("suggestions")}
+          imgUrlBack={
+            card.get("pictureBack").length ? card.get("pictureBack") : null
+          }
+          imgUrlFront={
+            card.get("pictureFront").length ? card.get("pictureFront") : null
+          }
+          handleChange={handleChipClick}
+        ></ResultViewer>
+        <Box sx={styles.buttonsWrapper}>
+          <IconButton
+            size="large"
+            ref={translateButtonRef}
+            onClick={handleTranslateRequest}
+          >
+            <TranslateIcon fontSize="large"></TranslateIcon>
+          </IconButton>
+          <IconButton
+            size="large"
+            onClick={() => {
+              props.handleDeleteCard(props.id);
+            }}
+          >
+            <CloseIcon fontSize="large"></CloseIcon>
+          </IconButton>
+        </Box>
+      </Paper>
+    );
+  } else {
+    return (
+      <Paper key={props.id} sx={styles.flashcard}>
+        <Box sx={styles.inputs}>
+          <IconButton ref={translateButtonRef} onClick={handleTranslateRequest}>
+            <TranslateIcon></TranslateIcon>
+          </IconButton>
+          <TextField
+            placeholder="source text"
+            value={card.get("front")}
+            onChange={handleFrontChange}
+            onKeyDown={handleKeyPress}
+          ></TextField>
+          {mobileQuery ? null : <ArrowForwardIosIcon />}
+          <TextField
+            placeholder="target text"
+            value={card.get("back")}
+            onChange={handleBackChange}
+          ></TextField>
+          <IconButton
+            onClick={() => {
+              props.handleDeleteCard(props.id);
+            }}
+          >
+            <CloseIcon></CloseIcon>
+          </IconButton>
+        </Box>
+        <ResultViewer
+          suggestions={card.get("suggestions")}
+          imgUrlBack={
+            card.get("pictureBack").length ? card.get("pictureBack") : null
+          }
+          imgUrlFront={
+            card.get("pictureFront").length ? card.get("pictureFront") : null
+          }
+          handleChange={handleChipClick}
+        ></ResultViewer>
+      </Paper>
+    );
+  }
 };
 export default Flashcard;

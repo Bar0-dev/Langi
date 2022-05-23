@@ -1,5 +1,5 @@
 import { Masonry } from "@mui/lab";
-import { Card, CardContent, CardActions } from "@mui/material";
+import { Card, CardContent, CardActions, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import CommonContainer from "../../components/common/CommonContainer/CommonContainer";
 import {
@@ -7,17 +7,30 @@ import {
   Paragraph,
   Header,
 } from "../../components/common/textComps";
-import logo from "../../logo/logo.svg";
 import styles from "./styles";
 import LinkButton from "../../components/common/LinkButton";
-import { useMediaQuery, breakPoints } from "../../utilities/utilities";
+import {
+  useMediaQuery,
+  breakPoints,
+  getCache,
+} from "../../utilities/utilities";
+
+const Logo = (props) => {
+  const { palette } = useTheme();
+  return (
+    <img
+      src="logo/logo.svg"
+      style={palette.mode === "dark" ? styles.logoFilter : null}
+    ></img>
+  );
+};
 
 const HomeHeader = (props) => {
   if (props.mobileQuery) {
     return (
       <Box sx={{ ...styles.header, ...styles.headerMobile }}>
         <Box sx={styles.logoWrapper}>
-          <img style={{ width: "200px" }} className="logo" src={logo}></img>
+          <Logo />
         </Box>
         <Header subtext="Easy, responsive and intuitive flashcard editor">
           Langi
@@ -28,7 +41,7 @@ const HomeHeader = (props) => {
     return (
       <Box sx={styles.header}>
         <Box sx={styles.logoWrapper}>
-          <img style={{ width: "200px" }} className="logo" src={logo}></img>
+          <Logo />
         </Box>
         <Header subtext="Easy, responsive and intuitive flashcard editor">
           Langi
