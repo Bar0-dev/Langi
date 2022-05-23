@@ -44,7 +44,7 @@ export default function Import(props) {
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
             <Paper sx={styles.paper} elevation={2}>
-              <SubHeader>Plain text file</SubHeader>
+              <SubHeader>Plain text file formatting</SubHeader>
               <Paragraph>
                 Fields shall always be separated with the tab key. The new card
                 starts with a new line. Single-word per line would be considered
@@ -62,7 +62,7 @@ export default function Import(props) {
           </Grid>
           <Grid item xs={12} md={6}>
             <Paper sx={styles.paper} elevation={2}>
-              <SubHeader>Text file with HTML tags</SubHeader>
+              <SubHeader>Text file with HTML tags formatting</SubHeader>
               <Paragraph>
                 Each field shall be separated with a tab key. HTML tags can't
                 have any separators unless it's a tab separator between two
@@ -77,8 +77,21 @@ export default function Import(props) {
               </Box>
             </Paper>
           </Grid>
+          <Grid item xs={12} md={6}>
+            <Paper sx={styles.paper} elevation={2}>
+              <SubHeader>Import in Anki app</SubHeader>
+              <Paragraph>
+                While importing in Anki app do not forget to tick a checkbox
+                "Allow HTML in fields".
+              </Paragraph>
+            </Paper>
+          </Grid>
         </Grid>
-
+        <Box sx={styles.buttonWrapper}>
+          <Button variant="contained" onClick={handleClick}>
+            Import
+          </Button>
+        </Box>
         <input
           ref={handleBrowserOpen}
           type="file"
@@ -86,9 +99,6 @@ export default function Import(props) {
           onChange={handleFilePick}
           style={{ display: "none" }}
         />
-        <Button variant="contained" onClick={handleClick}>
-          Import
-        </Button>
       </CommonContainer>
     );
   if (status === "loaded")
